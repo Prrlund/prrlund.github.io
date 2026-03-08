@@ -4,7 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Plund Media</title>
+
   <style>
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
       font-family: Arial, sans-serif;
@@ -12,19 +17,94 @@
       color: white;
       line-height: 1.6;
     }
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(15, 15, 16, 0.95);
+      border-bottom: 1px solid #222;
+    }
+
+    .nav {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 18px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    .menu {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .menu a {
+      color: white;
+      text-decoration: none;
+      font-size: 16px;
+      opacity: 0.85;
+    }
+
+    .menu a:hover {
+      opacity: 1;
+    }
+
+    .socials {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .socials a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .socials img {
+      width: 22px;
+      height: 22px;
+      filter: invert(1);
+      opacity: 0.85;
+      transition: opacity 0.2s ease;
+    }
+
+    .socials img:hover {
+      opacity: 1;
+    }
+
     .wrap {
       max-width: 900px;
       margin: 0 auto;
       padding: 60px 24px;
     }
+
     h1 {
       font-size: 48px;
       margin-bottom: 12px;
     }
+
+    h2 {
+      font-size: 34px;
+      margin-bottom: 16px;
+    }
+
     p {
       font-size: 20px;
       color: #d0d0d0;
     }
+
     .btn {
       display: inline-block;
       margin-top: 24px;
@@ -35,49 +115,116 @@
       border-radius: 12px;
       font-weight: bold;
     }
+
     .section {
       margin-top: 64px;
       padding-top: 24px;
       border-top: 1px solid #2a2a2a;
     }
+
     .card {
       background: #17181a;
       padding: 18px;
       border-radius: 16px;
       margin-top: 16px;
     }
-    a {
+
+    .card a {
       color: white;
+    }
+
+    .footer {
+      border-top: 1px solid #222;
+      margin-top: 80px;
+      padding: 40px 24px;
+      text-align: center;
+      color: #aaa;
+    }
+
+    .footer p {
+      margin: 8px 0;
+      font-size: 16px;
+      color: #aaa;
+    }
+
+    @media (max-width: 700px) {
+      h1 {
+        font-size: 38px;
+      }
+
+      .nav {
+        align-items: flex-start;
+      }
+
+      .menu {
+        width: 100%;
+      }
+
+      .socials {
+        width: 100%;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <h1>Plund Media 🔎</h1>
-    <p>Underhållande videos där företag blir intressanta på riktigt.</p>
-    <p>Jag besöker företag, testar jobbet och visar vad som egentligen händer bakom kulisserna.</p>
 
-    <a class="btn" href="mailto:par@plundmedia.com">Kontakta mig</a>
+  <header class="header">
+    <div class="nav">
+      <div class="logo">Plund Media 🔎</div>
 
-    <div class="section">
-      <h2>Portfolio</h2>
-      <div class="card">
-        <strong>Reload Vending</strong>
-        <p>Pär utforskar hur vending machines egentligen funkar.</p>
-        <a href="#">Lägg in videolänk här</a>
+      <div class="menu">
+        <a href="#portfolio">Portfolio</a>
+        <a href="#about">Om mig</a>
+        <a href="#contact">Kontakt</a>
+      </div>
+
+      <div class="socials">
+        <a href="https://instagram.com/prrlund" target="_blank">
+          <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/instagram.svg" alt="Instagram">
+        </a>
+
+        <a href="https://tiktok.com/@prrlund" target="_blank">
+          <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/tiktok.svg" alt="TikTok">
+        </a>
       </div>
     </div>
+  </header>
 
-    <div class="section">
-      <h2>Om mig</h2>
-      <p>Jag heter Pär och bygger Plund Media. Jag gillar att förstå hur företag fungerar och berätta historier om människorna bakom dem.</p>
-    </div>
+  <main>
+    <div class="wrap">
+      <h1>Plund Media 🔎</h1>
+      <p>Underhållande videos där företag blir intressanta på riktigt.</p>
+      <p>Jag besöker företag, testar jobbet och visar vad som egentligen händer bakom kulisserna.</p>
 
-    <div class="section">
-      <h2>Boka möte</h2>
-      <p>Vill du att jag kommer och gör en video om ert företag?</p>
-      <a class="btn" href="#">Lägg in bokningslänk här</a>
+      <a class="btn" href="mailto:par@plundmedia.com">Kontakta mig</a>
+
+      <div class="section" id="portfolio">
+        <h2>Portfolio</h2>
+
+        <div class="card">
+          <strong>Reload Vending</strong>
+          <p>Pär utforskar hur vending machines egentligen funkar.</p>
+          <a href="#">Lägg in videolänk här</a>
+        </div>
+      </div>
+
+      <div class="section" id="about">
+        <h2>Om mig</h2>
+        <p>Jag heter Pär och bygger Plund Media. Jag gillar att förstå hur företag fungerar och berätta historier om människorna bakom dem.</p>
+      </div>
+
+      <div class="section" id="contact">
+        <h2>Kontakt</h2>
+        <p>Vill du att jag kommer och gör en video om ert företag?</p>
+        <a class="btn" href="mailto:par@plundmedia.com">Maila mig</a>
+      </div>
     </div>
-  </div>
+  </main>
+
+  <footer class="footer">
+    <p>© 2026 Plund Media</p>
+    <p>par@plundmedia.com</p>
+  </footer>
+
 </body>
 </html>
