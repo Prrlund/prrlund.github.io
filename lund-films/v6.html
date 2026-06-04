@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lund Films — v6</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@400;500;600&display=swap');
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{--bg:#101012;--fg:#f0eef2;--muted:#86838c;--line:#242428;--pink:#e8593a;}
+    html{scroll-behavior:smooth;}
+    body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;}
+    a{color:inherit;text-decoration:none;}
+    nav{display:flex;justify-content:space-between;align-items:center;padding:22px 30px;position:sticky;top:0;background:rgba(16,16,18,.8);backdrop-filter:blur(10px);z-index:9;border-bottom:1px solid var(--line);}
+    nav .lg{font-family:'Syne',sans-serif;font-weight:800;letter-spacing:-.01em;}
+    nav .lk{display:flex;gap:24px;font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;}
+    nav .lk a:hover{color:var(--pink);}
+    .hero{padding:70px 30px 50px;text-align:center;}
+    .hero h1{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(3.4rem,13vw,12rem);line-height:.9;letter-spacing:-.03em;}
+    .hero h1 em{font-style:normal;color:var(--pink);}
+    .hero p{margin-top:18px;color:var(--muted);font-size:.9rem;letter-spacing:.04em;max-width:520px;margin-left:auto;margin-right:auto;line-height:1.7;}
+    .gal{columns:3;column-gap:16px;padding:30px;max-width:1300px;margin:0 auto;}
+    .card{break-inside:avoid;margin-bottom:16px;border-radius:10px;overflow:hidden;position:relative;cursor:pointer;}
+    .card .ph{width:100%;display:block;transition:transform .5s;}
+    .card:hover .ph{transform:scale(1.05);}
+    .card .info{position:absolute;left:0;right:0;bottom:0;padding:16px;background:linear-gradient(to top,rgba(0,0,0,.8),transparent);opacity:0;transition:opacity .3s;}
+    .card:hover .info{opacity:1;}
+    .card .t{font-family:'Syne',sans-serif;font-weight:700;font-size:1.15rem;}
+    .card .c{font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--pink);margin-top:2px;}
+    .ftr{padding:80px 30px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:24px;}
+    .ftr .big{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(2rem,7vw,5.5rem);line-height:.9;letter-spacing:-.02em;}
+    .ftr .big em{font-style:normal;color:var(--pink);}
+    .ftr .ct{text-align:right;font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;line-height:2;color:var(--muted);}
+    .ftr .ct a:hover{color:var(--fg);}
+    @media(max-width:900px){.gal{columns:2;}}
+    @media(max-width:560px){.gal{columns:1;}nav .lk{display:none;}.ftr{flex-direction:column;align-items:flex-start;}.ftr .ct{text-align:left;}}
+  </style>
+</head>
+<body>
+  <nav>
+    <span class="lg">Lund Films</span>
+    <div class="lk"><a href="#gal">Work</a><a href="mailto:hello@lund.films">Mail</a><a href="https://instagram.com/lund.films">IG ↗</a></div>
+  </nav>
+
+  <section class="hero">
+    <h1>Lund <em>Films</em></h1>
+    <p>Algot Lund — cinematographer &amp; editor in Helsinki. A visual studio for films, commercials, photography and 3D.</p>
+  </section>
+
+  <section class="gal" id="gal">
+    <div class="card"><div class="ph" style="aspect-ratio:4/5;background:linear-gradient(135deg,#7a4a1a,#160e07);"></div><div class="info"><div class="t">Stinging Rocko</div><div class="c">Video</div></div></div>
+    <div class="card"><div class="ph" style="aspect-ratio:1/1;background:linear-gradient(135deg,#1a3a5a,#080d12);"></div><div class="info"><div class="t">SP Cables</div><div class="c">3D Render</div></div></div>
+    <div class="card"><div class="ph" style="aspect-ratio:3/4;background:linear-gradient(135deg,#5a1a2a,#0d0608);"></div><div class="info"><div class="t">Joel Sundkvist</div><div class="c">Promo Photos</div></div></div>
+    <div class="card"><div class="ph" style="aspect-ratio:1/1;background:linear-gradient(135deg,#2a4a2a,#070d07);"></div><div class="info"><div class="t">Heal From You</div><div class="c">Album Cover</div></div></div>
+    <div class="card"><div class="ph" style="aspect-ratio:4/5;background:linear-gradient(135deg,#4a2a5a,#0a060d);"></div><div class="info"><div class="t">8th Road Home</div><div class="c">Album Cover</div></div></div>
+    <div class="card"><div class="ph" style="aspect-ratio:3/4;background:linear-gradient(135deg,#5a4a1a,#0d0a05);"></div><div class="info"><div class="t">Cat</div><div class="c">Cat</div></div></div>
+    <div class="card"><div class="ph" style="aspect-ratio:1/1;background:linear-gradient(135deg,#333,#0d0d0f);"></div><div class="info"><div class="t">Projekt</div><div class="c">Projekt</div></div></div>
+    <div class="card"><div class="ph" style="aspect-ratio:4/5;background:linear-gradient(135deg,#6a3520,#140a07);"></div><div class="info"><div class="t">Untitled</div><div class="c">Film</div></div></div>
+  </section>
+
+  <footer class="ftr">
+    <div class="big">Lund <em>Films</em></div>
+    <div class="ct">
+      <a href="mailto:hello@lund.films">hello@lund.films</a><br>
+      <a href="https://instagram.com/lund.films">Instagram ↗</a><br>
+      © 2026 · Helsinki
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lund Films — Algot Lund</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:    #000;
+      --fg:    #f3f3ef;
+      --muted: #777;
+      --line:  #1e1e1e;
+      --accent:#f0e8d8;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: 'Inter', Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* ── SIDE NAV ── */
+    .side {
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      width: 56px;
+      border-right: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      padding: 22px 0;
+      z-index: 50;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(6px);
+    }
+    .side .mark {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 0.8rem;
+      writing-mode: vertical-rl;
+      letter-spacing: 0.05em;
+    }
+    .side .vlinks {
+      display: flex;
+      flex-direction: column;
+      gap: 26px;
+      writing-mode: vertical-rl;
+    }
+    .side .vlinks a {
+      font-size: 0.62rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+    .side .vlinks a:hover { color: var(--fg); }
+    .side .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--fg); }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      height: 100vh;
+      margin-left: 56px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.7)),
+        radial-gradient(ellipse at 50% 45%, #9c6f2a 0%, #5a3f18 25%, #1c150d 60%, #000 100%);
+    }
+    .hero-bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: 0.06;
+    }
+
+    .hero-title {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      font-family: 'Archivo Black', sans-serif;
+      line-height: 0.78;
+      letter-spacing: -0.02em;
+      mix-blend-mode: screen;
+    }
+    .hero-title span {
+      display: block;
+      font-size: clamp(4.5rem, 22vw, 21rem);
+    }
+    .hero-title .films { color: var(--accent); -webkit-text-stroke: 0; }
+
+    .hero-meta {
+      position: absolute;
+      bottom: 32px; left: 36px; right: 36px;
+      z-index: 3;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      font-size: 0.7rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .hero-meta .role { max-width: 240px; line-height: 1.7; }
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--fg);
+      border: 1px solid var(--line);
+      padding: 12px 22px;
+      border-radius: 40px;
+      font-weight: 600;
+      transition: background 0.2s, color 0.2s;
+    }
+    .hero-cta:hover { background: var(--accent); color: #000; }
+
+    .scrollcue {
+      position: absolute;
+      top: 28px; right: 36px;
+      z-index: 3;
+      font-size: 0.62rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ── MARQUEE ── */
+    .marquee {
+      margin-left: 56px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      overflow: hidden;
+      padding: 16px 0;
+    }
+    .marquee-track {
+      display: flex;
+      width: max-content;
+      animation: scroll 24s linear infinite;
+    }
+    .marquee-track span {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      padding: 0 28px;
+      color: var(--fg);
+      opacity: 0.85;
+    }
+    .marquee-track span.o { color: transparent; -webkit-text-stroke: 1px var(--muted); }
+    @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* ── WORK ── */
+    .work {
+      margin-left: 56px;
+      padding: 90px 36px 40px;
+    }
+    .work-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 30px;
+    }
+    .work-head h2 {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: clamp(1.6rem, 4vw, 3rem);
+      letter-spacing: -0.01em;
+    }
+    .work-head .count { font-size: 0.7rem; letter-spacing: 0.2em; color: var(--muted); text-transform: uppercase; }
+
+    .work-row {
+      position: relative;
+      display: grid;
+      grid-template-columns: 40px 1fr auto;
+      gap: 20px;
+      align-items: center;
+      padding: 26px 8px;
+      border-top: 1px solid var(--line);
+      cursor: pointer;
+      transition: padding-left 0.25s, background 0.25s;
+    }
+    .work-row:last-child { border-bottom: 1px solid var(--line); }
+    .work-row:hover { padding-left: 22px; }
+    .work-row .idx { font-size: 0.7rem; color: var(--muted); letter-spacing: 0.1em; }
+    .work-row .name {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: clamp(1.3rem, 3.4vw, 2.6rem);
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .work-row .meta {
+      font-size: 0.68rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: right;
+    }
+    /* hover color wash */
+    .work-row::after {
+      content: '';
+      position: absolute; left: 0; top: 0; bottom: 0;
+      width: 3px; background: var(--accent);
+      transform: scaleY(0); transform-origin: top;
+      transition: transform 0.3s ease;
+    }
+    .work-row:hover::after { transform: scaleY(1); }
+
+    /* floating preview thumbnail */
+    .preview {
+      position: fixed;
+      width: 280px; height: 180px;
+      pointer-events: none;
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.92);
+      transition: opacity 0.18s, transform 0.18s;
+      z-index: 40;
+      border: 1px solid var(--line);
+      background-size: cover; background-position: center;
+    }
+    .preview.show { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+
+    /* ── FOOTER ── */
+    footer {
+      margin-left: 56px;
+      padding: 80px 36px 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      border-top: 1px solid var(--line);
+    }
+    .foot-big {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: clamp(2rem, 7vw, 6rem);
+      line-height: 0.85;
+      letter-spacing: -0.02em;
+    }
+    .foot-big .films { color: var(--accent); }
+    .foot-links { display: flex; flex-direction: column; gap: 8px; text-align: right; font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+    .foot-links a:hover { color: var(--fg); }
+
+    @media (max-width: 700px) {
+      .side { width: 42px; }
+      .hero, .marquee, .work, footer { margin-left: 42px; }
+      .hero-meta { flex-direction: column; gap: 14px; align-items: flex-start; }
+      .work-row { grid-template-columns: 1fr; gap: 6px; }
+      .work-row .meta { text-align: left; }
+      .work-row .idx { display: none; }
+      footer { flex-direction: column; align-items: flex-start; gap: 24px; }
+      .foot-links { text-align: left; }
+      .preview { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SIDE NAV -->
+  <div class="side">
+    <div class="mark">LF</div>
+    <div class="vlinks">
+      <a href="#work">Work</a>
+      <a href="#">Info</a>
+      <a href="https://instagram.com/lund.films">IG</a>
+      <a href="mailto:hello@lund.films">Mail</a>
+    </div>
+    <div class="dot"></div>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="scrollcue">Scroll ↓</div>
+    <h1 class="hero-title">
+      <span>LUND</span>
+      <span class="films">FILMS</span>
+    </h1>
+    <div class="hero-meta">
+      <div class="role">Algot Lund — Cinematographer &amp; Editor based in Helsinki. Films, commercials &amp; content.</div>
+      <a href="#work" class="hero-cta">View work →</a>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee">
+    <div class="marquee-track">
+      <span>Films</span><span class="o">✦</span><span>Commercials</span><span class="o">✦</span><span>Photography</span><span class="o">✦</span><span>3D</span><span class="o">✦</span><span>Helsinki</span><span class="o">✦</span>
+      <span>Films</span><span class="o">✦</span><span>Commercials</span><span class="o">✦</span><span>Photography</span><span class="o">✦</span><span>3D</span><span class="o">✦</span><span>Helsinki</span><span class="o">✦</span>
+    </div>
+  </div>
+
+  <!-- WORK -->
+  <section class="work" id="work">
+    <div class="work-head">
+      <h2>Selected Work</h2>
+      <span class="count">07 Projects · 2023—25</span>
+    </div>
+
+    <div class="work-row" data-c="#7a4a1a">
+      <span class="idx">01</span><span class="name">Stinging Rocko</span><span class="meta">Video · 2025</span>
+    </div>
+    <div class="work-row" data-c="#1a3a5a">
+      <span class="idx">02</span><span class="name">SP Cables</span><span class="meta">3D Render · 2025</span>
+    </div>
+    <div class="work-row" data-c="#5a1a2a">
+      <span class="idx">03</span><span class="name">Joel Sundkvist</span><span class="meta">Promo Photos · 2024</span>
+    </div>
+    <div class="work-row" data-c="#2a4a2a">
+      <span class="idx">04</span><span class="name">Heal From You</span><span class="meta">Album Cover · 2024</span>
+    </div>
+    <div class="work-row" data-c="#4a2a5a">
+      <span class="idx">05</span><span class="name">8th Road Home</span><span class="meta">Album Cover · 2024</span>
+    </div>
+    <div class="work-row" data-c="#5a4a1a">
+      <span class="idx">06</span><span class="name">Cat</span><span class="meta">Cat · 2023</span>
+    </div>
+    <div class="work-row" data-c="#333">
+      <span class="idx">07</span><span class="name">Projekt</span><span class="meta">Projekt · —</span>
+    </div>
+  </section>
+
+  <!-- FLOATING PREVIEW -->
+  <div class="preview" id="preview"></div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="foot-big">LUND<br><span class="films">FILMS</span></div>
+    <div class="foot-links">
+      <a href="mailto:hello@lund.films">hello@lund.films</a>
+      <a href="https://instagram.com/lund.films">Instagram ↗</a>
+      <a href="#">© 2026 Algot Lund</a>
+    </div>
+  </footer>
+
+  <script>
+    // Floating color preview that follows the cursor on hover
+    var preview = document.getElementById('preview');
+    document.querySelectorAll('.work-row').forEach(function (row) {
+      row.addEventListener('mouseenter', function () {
+        preview.style.background = row.dataset.c;
+        preview.classList.add('show');
+      });
+      row.addEventListener('mouseleave', function () { preview.classList.remove('show'); });
+      row.addEventListener('mousemove', function (e) {
+        preview.style.left = e.clientX + 'px';
+        preview.style.top = e.clientY + 'px';
+      });
+    });
+  </script>
+
+</body>
+</html>

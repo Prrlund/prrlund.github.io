@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lund Films — Website Concepts</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&display=swap');
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{--bg:#0c0c0c;--fg:#f2f2ef;--muted:#7d7d7d;--line:#222;--amber:#e6b94a;}
+    body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;padding:40px 26px 70px;}
+    a{color:inherit;text-decoration:none;}
+    .head{max-width:1200px;margin:0 auto 40px;}
+    .eye{font-size:.72rem;letter-spacing:.3em;text-transform:uppercase;color:var(--amber);margin-bottom:16px;}
+    h1{font-family:'Archivo Black',sans-serif;font-size:clamp(2.4rem,8vw,6rem);line-height:.86;letter-spacing:-.02em;text-transform:uppercase;}
+    .intro{margin-top:18px;color:var(--muted);font-size:.92rem;line-height:1.7;max-width:560px;}
+    .grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+    .card{border:1px solid var(--line);border-radius:12px;overflow:hidden;transition:border-color .2s,transform .2s;background:#111;}
+    .card:hover{border-color:var(--amber);transform:translateY(-4px);}
+    .thumb{aspect-ratio:16/10;position:relative;overflow:hidden;border-bottom:1px solid var(--line);}
+    .thumb iframe{position:absolute;top:0;left:0;width:200%;height:200%;transform:scale(.5);transform-origin:top left;border:0;pointer-events:none;}
+    .label{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;}
+    .label .n{font-weight:700;font-size:.95rem;}
+    .label .tag{font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);}
+    .card:hover .tag{color:var(--amber);}
+    .open{display:block;padding:0 18px 16px;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);}
+    .ftr{max-width:1200px;margin:50px auto 0;color:var(--muted);font-size:.76rem;letter-spacing:.06em;text-transform:uppercase;border-top:1px solid var(--line);padding-top:24px;}
+    @media(max-width:900px){.grid{grid-template-columns:1fr 1fr;}}
+    @media(max-width:600px){.grid{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+  <div class="head">
+    <div class="eye">For Algot — pick your favourite</div>
+    <h1>Lund Films<br>Website Concepts</h1>
+    <p class="intro">Six different design directions for the same site. Click any card to open the full version. Same content (projects, contact) — different vibe. Tell me which one you like and I'll finish it.</p>
+  </div>
+
+  <div class="grid">
+    <a class="card" href="v1.html">
+      <div class="thumb"><iframe src="v1.html" scrolling="no"></iframe></div>
+      <div class="label"><span class="n">01 — Minimal</span><span class="tag">Dark / List</span></div>
+      <span class="open">Open →</span>
+    </a>
+    <a class="card" href="v2.html">
+      <div class="thumb"><iframe src="v2.html" scrolling="no"></iframe></div>
+      <div class="label"><span class="n">02 — Fullscreen</span><span class="tag">Hero / Sidenav</span></div>
+      <span class="open">Open →</span>
+    </a>
+    <a class="card" href="v3.html">
+      <div class="thumb"><iframe src="v3.html" scrolling="no"></iframe></div>
+      <div class="label"><span class="n">03 — Poster</span><span class="tag">Light / Editorial</span></div>
+      <span class="open">Open →</span>
+    </a>
+    <a class="card" href="v4.html">
+      <div class="thumb"><iframe src="v4.html" scrolling="no"></iframe></div>
+      <div class="label"><span class="n">04 — Terminal</span><span class="tag">Mono / Bold</span></div>
+      <span class="open">Open →</span>
+    </a>
+    <a class="card" href="v5.html">
+      <div class="thumb"><iframe src="v5.html" scrolling="no"></iframe></div>
+      <div class="label"><span class="n">05 — Cinematic</span><span class="tag">Reel / Grid</span></div>
+      <span class="open">Open →</span>
+    </a>
+    <a class="card" href="v6.html">
+      <div class="thumb"><iframe src="v6.html" scrolling="no"></iframe></div>
+      <div class="label"><span class="n">06 — Gallery</span><span class="tag">Masonry / Soft</span></div>
+      <span class="open">Open →</span>
+    </a>
+  </div>
+
+  <div class="ftr">Lund Films · Algot Lund · Helsinki — concepts by Pär</div>
+</body>
+</html>
