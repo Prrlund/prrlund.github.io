@@ -28,6 +28,7 @@
       font-size: 17px;
       line-height: 1.7;
       -webkit-font-smoothing: antialiased;
+      overflow-x: hidden; /* förhindrar horisontell scroll på hela sidan */
     }
     .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
     section { padding: 100px 0; }
@@ -164,14 +165,24 @@
     }
     .sektion-beskrivning { color: var(--text-dimpad); max-width: 500px; margin-bottom: 56px; }
     .carousel-wrapper { position: relative; }
-    .carousel-fönster { overflow: hidden; border-radius: 16px; }
+    .carousel-fönster {
+      overflow-x: auto;
+      overflow-y: hidden;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .carousel-fönster::-webkit-scrollbar { display: none; }
     .carousel-band {
       display: flex;
-      gap: 24px;
-      transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      gap: 16px;
+      /* litet padding så första/sista kortet inte klistrar mot kanten */
+      padding: 0 4px 8px;
     }
     .video-kort {
-      flex: 0 0 320px;
+      flex: 0 0 300px;
+      scroll-snap-align: center;
+      scroll-snap-stop: always;
       background: var(--yta);
       border: 1px solid var(--kant);
       border-radius: 16px;
@@ -330,8 +341,11 @@
       .om-mig-grid { grid-template-columns: 1fr; gap: 48px; }
       .kontakt-inner { grid-template-columns: 1fr; gap: 48px; }
       .footer-inner { flex-direction: column; text-align: center; }
-      .video-kort { flex: 0 0 260px; }
+      /* Mobil: korten tar upp ~85% av skärmens bredd, en i taget */
+      .video-kort { flex: 0 0 85vw; max-width: 340px; }
       .kontakt-foto-wrapper { display: none; }
+      /* Pilar döljs på mobil — swipen räcker */
+      .carousel-pilar { display: none; }
     }
   </style>
 </head>
@@ -539,35 +553,12 @@ Idag gör jag content för Svenska Kulturfonden och Yle Watt. Jag driver också 
     setTimeout(function() { el.classList.add('synlig'); }, 80);
   });
 
-  var aktuelltIndex = 0;
   function scrollaCarousel(riktning) {
-    var band = document.getElementById('carousel-band');
-    var kort = band.querySelectorAll('.video-kort');
-    var kortBredd = 320 + 24;
-    var totalKort = kort.length;
-    aktuelltIndex = aktuelltIndex + riktning;
-    if (aktuelltIndex < 0) aktuelltIndex = 0;
-    if (aktuelltIndex > totalKort - 1) aktuelltIndex = totalKort - 1;
-    band.style.transform = 'translateX(-' + (aktuelltIndex * kortBredd) + 'px)';
+    var fönster = document.querySelector('.carousel-fönster');
+    var kort = fönster.querySelector('.video-kort');
+    var kortBredd = kort.getBoundingClientRect().width + 16; /* 16 = gap */
+    fönster.scrollBy({ left: riktning * kortBredd, behavior: 'smooth' });
   }
-
-  (function() {
-    var band = document.getElementById('carousel-band');
-    var startX = 0;
-    var dragging = false;
-    band.addEventListener('touchstart', function(e) {
-      startX = e.touches[0].clientX;
-      dragging = true;
-    }, { passive: true });
-    band.addEventListener('touchend', function(e) {
-      if (!dragging) return;
-      var diff = startX - e.changedTouches[0].clientX;
-      if (Math.abs(diff) > 40) {
-        scrollaCarousel(diff > 0 ? 1 : -1);
-      }
-      dragging = false;
-    }, { passive: true });
-  })();
 </script>
 </body>
 </html>
