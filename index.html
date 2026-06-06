@@ -3,1105 +3,570 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Plund Media — Video Content</title>
+  <title>Plund Media</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;0,9..40,900;1,9..40,300&family=Playfair+Display:ital,wght@1,700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg:        #090909;
-      --surface:   #111111;
-      --border:    #1d1d1d;
-      --gold:      #f5c540;
-      --gold-dim:  rgba(245, 197, 64, 0.09);
-      --text:      #f0f0f0;
-      --muted:     #4a4a4a;
-      --muted2:    #7a7a7a;
+      --bakgrund:      #0a0a0a;
+      --yta:           #111111;
+      --yta-hover:     #1a1a1a;
+      --kant:          #222222;
+      --text-huvud:    #f0f0f0;
+      --text-dimpad:   #888888;
+      --accent:        #ffbf32;
+      --accent-mjuk:   rgba(255, 191, 50, 0.08);
     }
 
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
     body {
-      background: var(--bg);
-      color: var(--text);
+      background-color: var(--bakgrund);
+      color: var(--text-huvud);
       font-family: 'DM Sans', sans-serif;
+      font-size: 17px;
+      line-height: 1.7;
       -webkit-font-smoothing: antialiased;
-      overflow-x: hidden;
+      overflow-x: hidden; /* förhindrar horisontell scroll på hela sidan */
     }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+    section { padding: 100px 0; }
 
-    /* ── HEADER ───────────────────────────────────── */
+    /* HEADER */
     header {
       position: fixed;
       top: 0; left: 0; right: 0;
-      z-index: 200;
+      z-index: 1000;
+      background: rgba(10, 10, 10, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--kant);
+      padding: 12px 0;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      opacity: 1;
+      transform: translateY(0);
+    }
+    header.dold {
+      opacity: 0;
+      transform: translateY(-100%);
+      pointer-events: none;
+    }
+    .header-inner {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 28px 48px;
-      transition: background 0.35s, padding 0.35s, border-color 0.35s;
-      border-bottom: 1px solid transparent;
     }
-    header.scrolled {
-      background: rgba(9,9,9,0.90);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      padding: 18px 48px;
-      border-color: var(--border);
+
+    .logo-svg {
+      height: 46px;
+      width: auto;
+      display: block;
+      margin-left: 24px;
     }
-    .logo img { height: 40px; display: block; }
-    nav { display: flex; gap: 44px; }
+
+    nav { display: flex; gap: 32px; }
     nav a {
-      font-size: 0.78rem;
-      font-weight: 500;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted2);
+      color: var(--text-dimpad);
       text-decoration: none;
-      transition: color 0.2s;
-    }
-    nav a:hover { color: var(--text); }
-    .h-cta {
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: var(--bg);
-      background: var(--gold);
-      padding: 11px 26px;
-      border-radius: 100px;
-      text-decoration: none;
-      transition: opacity 0.2s, transform 0.2s;
-      letter-spacing: -0.01em;
-    }
-    .h-cta:hover { opacity: 0.85; transform: translateY(-1px); }
-
-    /* ── HERO ─────────────────────────────────────── */
-    #hero {
-      min-height: 100vh;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      align-items: center;
-      padding: 140px 48px 100px;
-      gap: 64px;
-      position: relative;
-    }
-    #hero::after {
-      content: '';
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      height: 1px;
-      background: var(--border);
-    }
-
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 0.68rem;
-      font-weight: 700;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 44px;
-    }
-    .hero-badge::before {
-      content: '';
-      display: block;
-      width: 24px; height: 1px;
-      background: var(--gold);
-      flex-shrink: 0;
-    }
-
-    h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(3rem, 5.5vw, 6rem);
-      font-weight: 700;
-      font-style: italic;
-      line-height: 1.02;
-      letter-spacing: -0.025em;
-      margin-bottom: 32px;
-    }
-    h1 strong {
-      font-style: normal;
-      color: var(--gold);
-      display: block;
-    }
-
-    .hero-desc {
-      font-size: 1.05rem;
-      color: var(--muted2);
-      line-height: 1.85;
-      max-width: 440px;
-      margin-bottom: 52px;
-    }
-
-    .btn-row { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
-    .btn-primary {
-      font-size: 0.9rem;
-      font-weight: 700;
-      color: var(--bg);
-      background: var(--gold);
-      padding: 18px 40px;
-      border-radius: 100px;
-      text-decoration: none;
-      letter-spacing: -0.01em;
-      transition: opacity 0.2s, transform 0.2s;
-    }
-    .btn-primary:hover { opacity: 0.88; transform: translateY(-2px); }
-    .btn-ghost {
       font-size: 0.9rem;
       font-weight: 500;
-      color: var(--muted2);
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      letter-spacing: 0.02em;
       transition: color 0.2s;
     }
-    .btn-ghost svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-    .btn-ghost:hover { color: var(--text); }
+    nav a:hover { color: var(--text-huvud); }
 
-    /* Hero video mosaic */
-    .hero-mosaic {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: 1.6fr 1fr;
-      gap: 10px;
-      height: 68vh;
-      max-height: 680px;
-    }
-    .mosaic-main { grid-row: span 2; }
-    .mosaic-cell {
-      border-radius: 14px;
-      overflow: hidden;
-      position: relative;
-      cursor: pointer;
-      background: var(--surface);
-    }
-    .mosaic-cell img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      transition: transform 0.5s ease, filter 0.3s;
-      filter: brightness(0.88);
-    }
-    .mosaic-cell:hover img { transform: scale(1.04); filter: brightness(0.65); }
-    .mosaic-overlay {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-    .mosaic-cell:hover .mosaic-overlay { opacity: 1; }
-    .play-circle {
-      width: 60px; height: 60px;
-      background: rgba(245, 197, 64, 0.92);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .play-circle svg { width: 22px; height: 22px; fill: #090909; margin-left: 3px; }
-    .mosaic-label {
-      position: absolute;
-      bottom: 14px; left: 14px;
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-      color: #fff;
-      background: rgba(0,0,0,0.55);
-      backdrop-filter: blur(6px);
-      padding: 5px 12px;
-      border-radius: 100px;
-    }
-
-    /* Scroll cue */
-    .scroll-cue {
-      position: absolute;
-      bottom: 36px; left: 48px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      font-size: 0.66rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-    .scroll-track {
-      width: 44px; height: 1px;
-      background: var(--border);
-      position: relative;
-      overflow: hidden;
-    }
-    .scroll-track::after {
-      content: '';
-      position: absolute;
-      top: 0; left: -100%;
-      width: 100%; height: 100%;
-      background: var(--gold);
-      animation: track 2.2s ease-in-out infinite;
-    }
-    @keyframes track { 0%{left:-100%} 50%{left:0} 100%{left:100%} }
-
-    /* ── TICKER ───────────────────────────────────── */
-    .ticker-wrap {
-      overflow: hidden;
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      padding: 18px 0;
-      background: var(--surface);
-    }
-    .ticker {
-      display: flex;
-      gap: 0;
-      white-space: nowrap;
-      animation: ticker 28s linear infinite;
-      will-change: transform;
-    }
-    .ticker span {
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--muted2);
-      padding: 0 32px;
-    }
-    .ticker span.dot { color: var(--gold); padding: 0 8px; }
-    @keyframes ticker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
-
-    /* ── PORTFOLIO ────────────────────────────────── */
-    #portfolio { padding: 110px 48px; }
-
-    .section-kicker {
-      font-size: 0.68rem;
-      font-weight: 700;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 14px;
-    }
-    .section-h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2.2rem, 4vw, 3.8rem);
-      font-style: italic;
-      font-weight: 700;
-      line-height: 1.08;
-      letter-spacing: -0.025em;
-    }
-    .section-head {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      margin-bottom: 48px;
-    }
-
-    /* Category filter — inspired by ajalund.fi nav */
-    .filter-nav {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 40px;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 32px;
-    }
-    .filter-btn {
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.78rem;
-      font-weight: 500;
-      color: var(--muted2);
-      background: transparent;
-      border: 1px solid var(--border);
-      padding: 9px 22px;
-      border-radius: 100px;
-      cursor: pointer;
+    .social-icons { display: flex; gap: 16px; align-items: center; }
+    .social-icons a {
+      color: var(--text-dimpad);
+      text-decoration: none;
+      width: 36px; height: 36px;
+      border: 1px solid var(--kant);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
       transition: all 0.2s;
-      letter-spacing: 0.03em;
     }
-    .filter-btn:hover { color: var(--text); border-color: var(--muted); }
-    .filter-btn.aktiv {
-      background: var(--gold);
-      color: var(--bg);
-      border-color: var(--gold);
-      font-weight: 700;
-    }
+    .social-icons a:hover { color: var(--accent); border-color: var(--accent); }
+    .social-icons svg { width: 16px; height: 16px; fill: currentColor; }
 
-    /* Project grid — clean like ajalund.fi */
-    .project-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 3px;
-    }
-    .project-wrap { display: flex; flex-direction: column; }
-    .project-thumb {
+    /* HERO */
+    #hero {
+      padding-top: 180px;
+      padding-bottom: 120px;
       position: relative;
-      aspect-ratio: 3/4;
       overflow: hidden;
-      cursor: pointer;
-      background: var(--surface);
-      border-radius: 4px;
     }
-    .project-thumb img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      filter: brightness(0.9);
-      transition: transform 0.55s ease, filter 0.35s;
-    }
-    .project-thumb:hover img {
-      transform: scale(1.06);
-      filter: brightness(0.55);
-    }
-    .project-hover {
+    #hero::before {
+      content: '';
       position: absolute;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding: 28px 24px;
-      background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 50%, transparent 100%);
-      opacity: 0;
-      transition: opacity 0.35s;
+      top: -100px; left: -100px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(255, 191, 50, 0.06) 0%, transparent 70%);
+      pointer-events: none;
     }
-    .project-thumb:hover .project-hover { opacity: 1; }
-    .project-cat {
-      font-size: 0.62rem;
-      font-weight: 700;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 6px;
-    }
-    .project-hover-name {
-      font-size: 1.15rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      margin-bottom: 14px;
-    }
-    .project-play-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
+    .hero-etikett {
+      display: inline-block;
       font-size: 0.75rem;
       font-weight: 600;
-      color: var(--gold);
-    }
-    .project-play-row svg { width: 14px; height: 14px; fill: var(--gold); }
-
-    .project-meta {
-      padding: 14px 4px 4px;
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-    }
-    .project-title { font-size: 0.9rem; font-weight: 600; }
-    .project-tag {
-      font-size: 0.7rem;
-      color: var(--muted2);
-      font-weight: 400;
-    }
-
-    /* ── TJÄNSTER ─────────────────────────────────── */
-    #tjanster {
-      padding: 110px 48px;
-      border-top: 1px solid var(--border);
-    }
-    .services-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2px;
-      margin-top: 64px;
-    }
-    .service-card {
-      padding: 56px 44px;
-      border: 1px solid var(--border);
-      position: relative;
-      overflow: hidden;
-      transition: background 0.3s;
-    }
-    .service-card::after {
-      content: '';
-      position: absolute;
-      top: 0; left: 0;
-      width: 0; height: 2px;
-      background: var(--gold);
-      transition: width 0.45s ease;
-    }
-    .service-card:hover { background: rgba(17,17,17,0.7); }
-    .service-card:hover::after { width: 100%; }
-    .service-num {
-      font-size: 0.65rem;
-      font-weight: 700;
-      letter-spacing: 0.18em;
-      color: var(--muted);
-      margin-bottom: 28px;
-      font-variant-numeric: tabular-nums;
-    }
-    .service-name {
-      font-size: 1.35rem;
-      font-weight: 700;
-      letter-spacing: -0.025em;
-      margin-bottom: 16px;
-    }
-    .service-desc {
-      font-size: 0.88rem;
-      color: var(--muted2);
-      line-height: 1.8;
-    }
-
-    /* ── OM MIG ───────────────────────────────────── */
-    #om-mig {
-      padding: 110px 48px;
-      border-top: 1px solid var(--border);
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 100px;
-      align-items: center;
-    }
-    .om-foto { position: relative; }
-    .om-foto img {
-      width: 100%;
-      height: 640px;
-      object-fit: cover;
-      object-position: center top;
-      border-radius: 4px;
-      display: block;
-    }
-    .om-caption {
-      margin-top: 16px;
-      font-size: 0.8rem;
-      color: var(--muted);
-      font-style: italic;
-    }
-    .om-text .section-kicker { margin-bottom: 10px; }
-    .om-text .section-h2 { margin-bottom: 40px; }
-    .om-text p {
-      font-size: 1rem;
-      color: var(--muted2);
-      line-height: 1.95;
-      margin-bottom: 20px;
-    }
-    .om-text p strong { color: var(--text); font-weight: 600; }
-    .om-stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 28px;
-      margin-top: 52px;
-      padding-top: 52px;
-      border-top: 1px solid var(--border);
-    }
-    .stat-num {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.8rem;
-      font-style: italic;
-      color: var(--gold);
-      line-height: 1;
-      margin-bottom: 8px;
-    }
-    .stat-label { font-size: 0.8rem; color: var(--muted2); line-height: 1.5; }
-
-    /* ── KONTAKT ──────────────────────────────────── */
-    #kontakt {
-      padding: 110px 48px;
-      border-top: 1px solid var(--border);
-    }
-    .kontakt-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 100px;
-      align-items: start;
-    }
-    .kontakt-h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2.2rem, 4vw, 3.8rem);
-      font-style: italic;
-      font-weight: 700;
-      line-height: 1.08;
-      letter-spacing: -0.025em;
-      margin-bottom: 24px;
-    }
-    .kontakt-h2 em { font-style: normal; color: var(--gold); }
-    .kontakt-desc {
-      font-size: 1rem;
-      color: var(--muted2);
-      line-height: 1.85;
-      margin-bottom: 52px;
-    }
-    .k-links { display: flex; flex-direction: column; gap: 12px; }
-    .k-link {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      padding: 24px 28px;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      text-decoration: none;
-      color: var(--text);
-      transition: border-color 0.25s, background 0.25s, transform 0.25s;
-    }
-    .k-link:hover {
-      border-color: var(--gold);
-      background: var(--gold-dim);
-      transform: translateX(5px);
-    }
-    .k-icon {
-      width: 44px; height: 44px;
-      background: var(--gold-dim);
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-    .k-icon svg {
-      width: 18px; height: 18px;
-      stroke: var(--gold);
-      fill: none;
-      stroke-width: 1.75;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-    .k-info small {
-      display: block;
-      font-size: 0.68rem;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.15em;
       text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 4px;
-    }
-    .k-info span { font-size: 0.95rem; font-weight: 600; }
-
-    .kontakt-right { padding-top: 8px; }
-    .social-h {
-      font-size: 0.68rem;
-      font-weight: 700;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 20px;
-    }
-    .social-row { display: flex; gap: 12px; margin-bottom: 56px; }
-    .social-btn {
-      width: 54px; height: 54px;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      color: var(--muted2);
-      transition: border-color 0.2s, color 0.2s, background 0.2s;
-    }
-    .social-btn:hover { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
-    .social-btn svg { width: 18px; height: 18px; fill: currentColor; }
-
-    /* Big CTA block */
-    .cta-block {
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 48px 44px;
-      background: var(--surface);
-      position: relative;
-      overflow: hidden;
-    }
-    .cta-block::before {
-      content: '';
-      position: absolute;
-      top: -60px; right: -60px;
-      width: 200px; height: 200px;
-      background: radial-gradient(circle, rgba(245,197,64,0.08) 0%, transparent 70%);
-      pointer-events: none;
-    }
-    .cta-block h3 {
-      font-size: 1.3rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      margin-bottom: 12px;
-    }
-    .cta-block p {
-      font-size: 0.88rem;
-      color: var(--muted2);
-      line-height: 1.75;
+      color: var(--accent);
+      border: 1px solid rgba(255, 191, 50, 0.3);
+      padding: 6px 14px;
+      border-radius: 100px;
       margin-bottom: 32px;
     }
-
-    /* ── FOOTER ───────────────────────────────────── */
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 40px 48px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 16px;
+    .hero-rubrik {
+      font-size: clamp(2rem, 8vw, 4.5rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.04em;
+      max-width: 100%;
+      margin-bottom: 28px;
+      word-break: break-word;
     }
-    .footer-logo img { height: 32px; display: block; }
-    .footer-mid {
-      font-size: 0.82rem;
-      color: var(--muted);
-      text-align: center;
+    .hero-rubrik em { font-style: normal; color: var(--accent); }
+    .hero-text {
+      font-size: 1.1rem;
+      color: var(--text-dimpad);
+      max-width: 560px;
+      margin-bottom: 48px;
+      line-height: 1.8;
     }
-    .footer-mid a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
-    .footer-mid a:hover { color: var(--gold); }
-    .footer-copy { font-size: 0.78rem; color: var(--muted); opacity: 0.55; }
-
-    /* ── LIGHTBOX ─────────────────────────────────── */
-    .lightbox {
-      position: fixed;
-      inset: 0;
-      z-index: 500;
-      background: rgba(0,0,0,0.96);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s;
-    }
-    .lightbox.open { opacity: 1; pointer-events: auto; }
-    .lb-inner {
-      position: relative;
-      max-width: min(400px, 88vw);
-      width: 100%;
-    }
-    .lb-close {
-      position: absolute;
-      top: -52px; right: 0;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 8px;
-      color: #fff;
-      width: 40px; height: 40px;
-      font-size: 1.3rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.2s;
+    .knapp-primär {
+      background: var(--accent);
+      color: #0a0a0a;
+      border: none;
+      padding: 16px 32px;
+      font-size: 0.95rem;
+      font-weight: 700;
       font-family: 'DM Sans', sans-serif;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      letter-spacing: -0.01em;
+      text-decoration: none;
+      display: inline-block;
     }
-    .lb-close:hover { background: rgba(255,255,255,0.16); }
-    #lb-video {
+    .knapp-primär:hover { background: #ffd060; transform: translateY(-1px); }
+
+    /* PORTFOLIO */
+    #portfolio { border-top: 1px solid var(--kant); }
+    .sektion-rubrik {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+    .sektion-titel {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 16px;
+    }
+    .sektion-beskrivning { color: var(--text-dimpad); max-width: 500px; margin-bottom: 56px; }
+    .carousel-wrapper { position: relative; }
+    .carousel-fönster {
+      overflow-x: auto;
+      overflow-y: hidden;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .carousel-fönster::-webkit-scrollbar { display: none; }
+    .carousel-band {
+      display: flex;
+      gap: 16px;
+      /* litet padding så första/sista kortet inte klistrar mot kanten */
+      padding: 0 4px 8px;
+    }
+    .video-kort {
+      flex: 0 0 300px;
+      scroll-snap-align: center;
+      scroll-snap-stop: always;
+      background: var(--yta);
+      border: 1px solid var(--kant);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .video-kort:hover { border-color: rgba(255, 191, 50, 0.3); }
+    .video-embed-plats {
       width: 100%;
       aspect-ratio: 9/16;
+      background: #0f0f0f;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .video-info { padding: 20px; }
+    .video-info h3 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+    .video-info p { font-size: 0.85rem; color: var(--text-dimpad); }
+    .carousel-pilar { display: flex; gap: 12px; margin-top: 32px; }
+    .carousel-pil {
+      width: 48px; height: 48px;
+      background: var(--yta);
+      border: 1px solid var(--kant);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: var(--text-huvud);
+    }
+    .carousel-pil:hover { border-color: var(--accent); color: var(--accent); }
+    .carousel-pil svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* OM MIG */
+    #om-mig { border-top: 1px solid var(--kant); }
+    .om-mig-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .om-mig-text p { color: var(--text-dimpad); margin-bottom: 20px; font-size: 1.05rem; line-height: 1.85; }
+    .om-mig-text p strong { color: var(--text-huvud); font-weight: 600; }
+    .fakta-kort-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .fakta-kort {
+      background: var(--yta);
+      border: 1px solid var(--kant);
+      border-radius: 14px;
+      padding: 28px 24px;
+      transition: border-color 0.2s;
+    }
+    .fakta-kort:hover { border-color: rgba(255, 191, 50, 0.25); }
+    .fakta-kort.stor { grid-column: span 2; }
+    .fakta-siffra { font-size: 2.5rem; font-weight: 800; letter-spacing: -0.04em; color: var(--accent); line-height: 1; margin-bottom: 8px; }
+    .fakta-etikett { font-size: 0.85rem; color: var(--text-dimpad); }
+
+    /* KONTAKT */
+    #kontakt { border-top: 1px solid var(--kant); }
+    .kontakt-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+    .kontakt-text .stor-rubrik {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 24px;
+    }
+    .kontakt-text .stor-rubrik em { font-style: normal; color: var(--accent); }
+    .kontakt-text p { color: var(--text-dimpad); font-size: 1.05rem; line-height: 1.8; }
+    .kontakt-info-lista { display: flex; flex-direction: column; gap: 16px; margin-top: 40px; }
+    .kontakt-rad {
+      display: flex; align-items: center; gap: 16px;
+      background: var(--yta);
+      border: 1px solid var(--kant);
       border-radius: 12px;
-      background: #000;
+      padding: 20px 24px;
+      text-decoration: none;
+      color: var(--text-huvud);
+      transition: all 0.2s;
+    }
+    .kontakt-rad:hover { border-color: var(--accent); }
+    .kontakt-ikon {
+      width: 40px; height: 40px;
+      background: var(--accent-mjuk);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .kontakt-ikon svg { width: 18px; height: 18px; stroke: var(--accent); fill: none; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; }
+    .kontakt-rad-text small { font-size: 0.75rem; color: var(--text-dimpad); display: block; margin-bottom: 2px; }
+    .kontakt-rad-text span { font-weight: 600; font-size: 0.95rem; }
+
+    /* FOTO-KORT i kontakt */
+    .kontakt-foto-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .kontakt-foto-wrapper::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, rgba(255,191,50,0.4) 0%, transparent 60%);
+      z-index: 0;
+    }
+    .kontakt-foto {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 380px;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      border-radius: 20px;
+      border: 1px solid var(--kant);
       display: block;
     }
-    .lb-title {
-      text-align: center;
+    .kontakt-foto-plats {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 380px;
+      aspect-ratio: 3/4;
+      background: var(--yta);
+      border: 1px solid var(--kant);
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      color: var(--text-dimpad);
       font-size: 0.9rem;
-      font-weight: 600;
-      color: rgba(255,255,255,0.7);
-      margin-top: 16px;
     }
+    .kontakt-foto-plats svg { width: 40px; height: 40px; stroke: var(--kant); fill: none; stroke-width: 1.5; }
 
-    /* ── SCROLL REVEAL ────────────────────────────── */
-    .reveal {
+    /* FOOTER */
+    footer { border-top: 1px solid var(--kant); padding: 48px 0; }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+    .footer-logo { display: flex; align-items: center; text-decoration: none; }
+    .footer-logo-svg { height: 60px; width: auto; }
+    .footer-info { font-size: 0.85rem; color: var(--text-dimpad); text-align: center; }
+    .footer-info a { color: var(--text-dimpad); text-decoration: none; }
+    .footer-info a:hover { color: var(--accent); }
+    .footer-copy { font-size: 0.8rem; color: var(--text-dimpad); opacity: 0.6; }
+
+    /* SCROLL-ANIMATIONER */
+    .fade-up {
       opacity: 0;
-      transform: translateY(28px);
-      transition: opacity 0.65s ease, transform 0.65s ease;
+      transform: translateY(32px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
     }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
-
-    /* ── RESPONSIVE ───────────────────────────────── */
-    @media (max-width: 1024px) {
-      #hero { padding: 120px 32px 80px; gap: 40px; }
-      #portfolio, #tjanster, #om-mig, #kontakt { padding: 90px 32px; }
-      footer { padding: 36px 32px; }
-      header, header.scrolled { padding-left: 32px; padding-right: 32px; }
+    .fade-up.synlig {
+      opacity: 1;
+      transform: translateY(0);
     }
 
-    @media (max-width: 860px) {
-      header { padding: 20px 24px; }
-      header.scrolled { padding: 14px 24px; }
-      nav, .h-cta { display: none; }
-
-      #hero {
-        grid-template-columns: 1fr;
-        min-height: auto;
-        padding: 108px 24px 72px;
-      }
-      .hero-mosaic { display: none; }
-      .scroll-cue { display: none; }
-
-      #portfolio { padding: 80px 24px; }
-      .project-grid { grid-template-columns: 1fr 1fr; gap: 3px; }
-
-      #tjanster { padding: 80px 24px; }
-      .services-grid { grid-template-columns: 1fr; gap: 2px; }
-      .service-card { padding: 40px 28px; }
-
-      #om-mig {
-        padding: 80px 24px;
-        grid-template-columns: 1fr;
-        gap: 48px;
-      }
-      .om-foto img { height: 420px; }
-
-      #kontakt { padding: 80px 24px; }
-      .kontakt-grid { grid-template-columns: 1fr; gap: 56px; }
-
-      footer { padding: 32px 24px; flex-direction: column; text-align: center; }
-    }
-
-    @media (max-width: 520px) {
-      .project-grid { grid-template-columns: 1fr; }
-      .project-thumb { aspect-ratio: 4/5; }
-      h1 { font-size: 3rem; }
+    @media (max-width: 768px) {
+      nav { display: none; }
+      .om-mig-grid { grid-template-columns: 1fr; gap: 40px; }
+      .kontakt-inner { grid-template-columns: 1fr; gap: 40px; }
+      .footer-inner { flex-direction: column; text-align: center; }
+      /* Mobil: korten tar upp ~85% av skärmens bredd, en i taget */
+      .video-kort { flex: 0 0 85vw; max-width: 340px; }
+      /* Pilar döljs på mobil — swipen räcker */
+      .carousel-pilar { display: none; }
+      /* Faktakort i en kolumn på mobil */
+      .fakta-kort-grid { grid-template-columns: 1fr; }
+      .fakta-kort.stor { grid-column: span 1; }
+      /* Ankbilden mindre på mobil så den inte tar hela skärmen */
+      .om-foto-wrapper .kontakt-foto { max-width: 300px; margin: 0 auto; }
     }
   </style>
 </head>
 <body>
 
-<!-- HEADER -->
-<header id="site-header">
-  <a href="#" class="logo" aria-label="Plund Media">
-    <img src="Plund_logo.svg" alt="Plund Media" />
-  </a>
-  <nav>
-    <a href="#portfolio">Portfolio</a>
-    <a href="#tjanster">Tjänster</a>
-    <a href="#om-mig">Om mig</a>
-  </nav>
-  <a href="#kontakt" class="h-cta">Ta kontakt</a>
-</header>
-
-<!-- HERO -->
-<section id="hero">
-  <div class="hero-left reveal">
-    <div class="hero-badge">Video Content Studio</div>
-    <h1>
-      Mindre reklam.<br>
-      Mer <span style="color:var(--gold)">Pär</span>sonlighet.
-    </h1>
-    <p class="hero-desc">
-      Traditionell reklam är tråkig. Jag gör autentiska bakom-kulisserna videos som folk faktiskt vill se — och delar.
-    </p>
-    <div class="btn-row">
-      <a href="#portfolio" class="btn-primary">Se arbeten</a>
-      <a href="#kontakt" class="btn-ghost">
-        Ta kontakt
-        <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+<header>
+  <div class="container">
+    <div class="header-inner">
+      <a href="#" aria-label="Plund Media">
+        <img src="Plund_logo.svg" alt="Plund Media" class="logo-svg" />
       </a>
-    </div>
-  </div>
-
-  <div class="hero-mosaic reveal" style="transition-delay:0.15s">
-    <div class="mosaic-cell mosaic-main" onclick="openLightbox('kaffia.mp4','Kaffia')">
-      <img src="Kaffia.png" alt="Kaffia" />
-      <div class="mosaic-overlay"><div class="play-circle"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div></div>
-      <span class="mosaic-label">Kaffia</span>
-    </div>
-    <div class="mosaic-cell" onclick="openLightbox('Pär besöker Sekasin.mp4','Sekasin')">
-      <img src="Sekasin.png" alt="Sekasin" />
-      <div class="mosaic-overlay"><div class="play-circle"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div></div>
-      <span class="mosaic-label">Sekasin</span>
-    </div>
-    <div class="mosaic-cell" onclick="openLightbox('reload.mp4','Reload Vending')">
-      <img src="Reload.png" alt="Reload Vending" />
-      <div class="mosaic-overlay"><div class="play-circle"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div></div>
-      <span class="mosaic-label">Reload</span>
-    </div>
-  </div>
-
-  <div class="scroll-cue">
-    <div class="scroll-track"></div>
-    Scrolla
-  </div>
-</section>
-
-<!-- TICKER -->
-<div class="ticker-wrap" aria-hidden="true">
-  <div class="ticker">
-    <span>Bakom Kulisserna</span><span class="dot">·</span>
-    <span>Autentiskt Content</span><span class="dot">·</span>
-    <span>Videoproduktion</span><span class="dot">·</span>
-    <span>Social Media</span><span class="dot">·</span>
-    <span>Företagsvideo</span><span class="dot">·</span>
-    <span>Bakom Kulisserna</span><span class="dot">·</span>
-    <span>Autentiskt Content</span><span class="dot">·</span>
-    <span>Videoproduktion</span><span class="dot">·</span>
-    <span>Social Media</span><span class="dot">·</span>
-    <span>Företagsvideo</span><span class="dot">·</span>
-  </div>
-</div>
-
-<!-- PORTFOLIO -->
-<section id="portfolio">
-  <div class="section-head reveal">
-    <div>
-      <p class="section-kicker">Arbeten</p>
-      <h2 class="section-h2">Portfolio</h2>
-    </div>
-  </div>
-
-  <div class="filter-nav reveal" style="transition-delay:0.1s">
-    <button class="filter-btn aktiv" data-filter="alla">Alla</button>
-    <button class="filter-btn" data-filter="cafe">Café &amp; mat</button>
-    <button class="filter-btn" data-filter="tjanst">Tjänster</button>
-    <button class="filter-btn" data-filter="handel">Detaljhandel</button>
-  </div>
-
-  <div class="project-grid reveal" style="transition-delay:0.2s">
-
-    <div class="project-wrap" data-category="cafe">
-      <div class="project-thumb" onclick="openLightbox('kaffia.mp4','Kaffia')">
-        <img src="Kaffia.png" alt="Kaffia" loading="lazy" />
-        <div class="project-hover">
-          <p class="project-cat">Café &amp; mat</p>
-          <p class="project-hover-name">Kaffia</p>
-          <span class="project-play-row">
-            <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
-            Se video
-          </span>
-        </div>
-      </div>
-      <div class="project-meta">
-        <span class="project-title">Kaffia</span>
-        <span class="project-tag">Café &amp; mat</span>
-      </div>
-    </div>
-
-    <div class="project-wrap" data-category="tjanst">
-      <div class="project-thumb" onclick="openLightbox('Pär besöker Sekasin.mp4','Sekasin')">
-        <img src="Sekasin.png" alt="Sekasin" loading="lazy" />
-        <div class="project-hover">
-          <p class="project-cat">Tjänster</p>
-          <p class="project-hover-name">Sekasin</p>
-          <span class="project-play-row">
-            <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
-            Se video
-          </span>
-        </div>
-      </div>
-      <div class="project-meta">
-        <span class="project-title">Sekasin</span>
-        <span class="project-tag">Tjänster</span>
-      </div>
-    </div>
-
-    <div class="project-wrap" data-category="handel">
-      <div class="project-thumb" onclick="openLightbox('reload.mp4','Reload Vending')">
-        <img src="Reload.png" alt="Reload Vending" loading="lazy" />
-        <div class="project-hover">
-          <p class="project-cat">Detaljhandel</p>
-          <p class="project-hover-name">Reload Vending</p>
-          <span class="project-play-row">
-            <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
-            Se video
-          </span>
-        </div>
-      </div>
-      <div class="project-meta">
-        <span class="project-title">Reload Vending</span>
-        <span class="project-tag">Detaljhandel</span>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- TJÄNSTER -->
-<section id="tjanster">
-  <div class="reveal">
-    <p class="section-kicker">Vad jag gör</p>
-    <h2 class="section-h2">Tjänster</h2>
-  </div>
-  <div class="services-grid">
-
-    <div class="service-card reveal" style="transition-delay:0.1s">
-      <p class="service-num">01</p>
-      <h3 class="service-name">Bakom kulisserna</h3>
-      <p class="service-desc">Jag kommer in i ert företag som en nyfiken outsider och fångar hur det faktiskt ser ut — inga manus, ingen reklamkänsla.</p>
-    </div>
-
-    <div class="service-card reveal" style="transition-delay:0.18s">
-      <p class="service-num">02</p>
-      <h3 class="service-name">Reels &amp; Shorts</h3>
-      <p class="service-desc">Vertikala kortvideor anpassade för Instagram och TikTok. Snabba, roliga och klickbara — format som faktiskt funkar på sociala medier.</p>
-    </div>
-
-    <div class="service-card reveal" style="transition-delay:0.26s">
-      <p class="service-num">03</p>
-      <h3 class="service-name">Grundarporträtt</h3>
-      <p class="service-desc">Låter personen bakom företaget berätta sin historia. Äkta, personligt och långt ifrån det typiska "VD-citatet".</p>
-    </div>
-
-    <div class="service-card reveal" style="transition-delay:0.34s">
-      <p class="service-num">04</p>
-      <h3 class="service-name">Eventdokumentation</h3>
-      <p class="service-desc">Öppningar, lanseringar, pop-ups — jag fångar stämningen och känslan på ett sätt som räcker längre än kvällen.</p>
-    </div>
-
-  </div>
-</section>
-
-<!-- OM MIG -->
-<section id="om-mig">
-  <div class="om-foto reveal">
-    <img src="anka.JPG" alt="Pär Lund" />
-    <p class="om-caption">O jåå, ja kan no typ va seriös.</p>
-  </div>
-  <div class="om-text">
-    <p class="section-kicker reveal">Vem är jag?</p>
-    <h2 class="section-h2 reveal" style="transition-delay:0.08s">Bakom<br>kameran</h2>
-    <p class="reveal" style="transition-delay:0.16s">
-      <strong>Pär här hej.</strong> Jag är från Purmo, studerar socialpsykologi i Helsingfors och har skapat videos sedan jag var 12.
-    </p>
-    <p class="reveal" style="transition-delay:0.22s">
-      Idag gör jag content för <strong>Svenska Kulturfonden</strong> och <strong>Yle Watt</strong>. Jag driver också Plund Media för att företagsreklam är genuint tråkig — och kan göras mycket roligare.
-    </p>
-    <div class="om-stats reveal" style="transition-delay:0.28s">
-      <div>
-        <div class="stat-num">14+</div>
-        <div class="stat-label">År av videoproduktion</div>
-      </div>
-      <div>
-        <div class="stat-num">100%</div>
-        <div class="stat-label">Autentiskt, utan manus</div>
-      </div>
-      <div>
-        <div class="stat-num">3</div>
-        <div class="stat-label">Publicerade företagsvideor</div>
-      </div>
-      <div>
-        <div class="stat-num">∞</div>
-        <div class="stat-label">Nyfikenhet på företag</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- KONTAKT -->
-<section id="kontakt">
-  <div class="kontakt-grid">
-    <div>
-      <p class="section-kicker reveal">Kom igång</p>
-      <h2 class="kontakt-h2 reveal" style="transition-delay:0.08s">
-        Vill ni att jag gör en video om <em>ert företag?</em>
-      </h2>
-      <p class="kontakt-desc reveal" style="transition-delay:0.16s">
-        Hör av er så pratar vi om hur det kan se ut för just ert företag.
-      </p>
-      <div class="k-links reveal" style="transition-delay:0.22s">
-        <a href="mailto:plundcollab@gmail.com" class="k-link">
-          <div class="k-icon">
-            <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-          </div>
-          <div class="k-info">
-            <small>E-post</small>
-            <span>plundcollab@gmail.com</span>
-          </div>
-        </a>
-        <a href="tel:+35844240042" class="k-link">
-          <div class="k-icon">
-            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 010 1.18 2 2 0 012 3.17v3a2 2 0 01-1.44 1.93 16 16 0 01-4.4 1.16A16.18 16.18 0 0117 14.4a2 2 0 011.92-1.44z"/></svg>
-          </div>
-          <div class="k-info">
-            <small>Telefon</small>
-            <span>+358 44 2404042</span>
-          </div>
-        </a>
-      </div>
-    </div>
-
-    <div class="kontakt-right reveal" style="transition-delay:0.2s">
-      <p class="social-h">Följ arbetet</p>
-      <div class="social-row">
-        <a class="social-btn" href="https://www.instagram.com/prrlund" target="_blank" rel="noopener" title="Instagram">
+      <nav>
+        <a href="#portfolio">Portfolio</a>
+        <a href="#om-mig">Om mig</a>
+        <a href="#kontakt">Kontakt</a>
+      </nav>
+      <div class="social-icons">
+        <a href="https://www.instagram.com/prrlund" target="_blank" title="Instagram">
           <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
         </a>
-        <a class="social-btn" href="https://www.tiktok.com/@prrlund" target="_blank" rel="noopener" title="TikTok">
+        <a href="https://www.tiktok.com/@prrlund" target="_blank" title="TikTok">
           <svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.79 1.54V6.79a4.85 4.85 0 01-1.02-.1z"/></svg>
         </a>
       </div>
+    </div>
+  </div>
+</header>
 
-      <div class="cta-block">
-        <h3>Pilotpris för nya kunder</h3>
-        <p>Just nu tar jag emot ett fåtal nya företag till ett reducerat pilotpris. Hör av dig tidigt — platserna är begränsade.</p>
-        <a href="mailto:plundcollab@gmail.com" class="btn-primary" style="display:inline-block">Skicka ett mejl →</a>
+<section id="hero">
+  <div class="container">
+    <div class="hero-etikett fade-up">PÄR UTFORSKAR FÖRETAG</div>
+    <h1 class="hero-rubrik fade-up" style="transition-delay:0.1s">
+      Mindre reklam. Mer <em>Pär.</em>
+    </h1>
+    <p class="hero-text fade-up" style="transition-delay:0.2s">
+      Traditionell företagsreklam är tråkig. Därför gör jag något annat — jag kommer in, ställer frågor,
+      spelar lite dum och gör content folk faktiskt skrattar åt och minns.
+    </p>
+    <a href="#kontakt" class="knapp-primär fade-up" style="transition-delay:0.3s">Ta kontakt →</a>
+  </div>
+</section>
+
+<section id="portfolio">
+  <div class="container">
+    <p class="sektion-rubrik fade-up">Mina videor</p>
+    <h2 class="sektion-titel fade-up" style="transition-delay:0.1s">Portfolio</h2>
+    <p class="sektion-beskrivning fade-up" style="transition-delay:0.15s">Bakom kulisserna-videos där jag utforskar företag som en nyfiken outsider.</p>
+    <div class="carousel-wrapper fade-up" style="transition-delay:0.25s">
+      <div class="carousel-fönster">
+        <div class="carousel-band" id="carousel-band">
+
+          <div class="video-kort">
+            <div class="video-embed-plats">
+              <video style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover;" controls poster="Kaffia.png">
+                <source src="kaffia.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-info">
+              <h3>Kaffia</h3>
+            </div>
+          </div>
+
+          <div class="video-kort">
+            <div class="video-embed-plats">
+              <video style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover;" controls poster="Sekasin.png">
+                <source src="Pär besöker Sekasin.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-info">
+              <h3>Sekasin</h3>
+            </div>
+          </div>
+
+          <div class="video-kort">
+            <div class="video-embed-plats">
+              <video style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover;" controls poster="Reload.png">
+                <source src="reload.mp4" type="video/mp4">
+              </video>
+            </div>
+            <div class="video-info">
+              <h3>Reload Vending</h3>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="carousel-pilar">
+        <button class="carousel-pil" onclick="scrollaCarousel(-1)" title="Föregående">
+          <svg viewBox="0 0 24 24"><polyline points="15,18 9,12 15,6"/></svg>
+        </button>
+        <button class="carousel-pil" onclick="scrollaCarousel(1)" title="Nästa">
+          <svg viewBox="0 0 24 24"><polyline points="9,18 15,12 9,6"/></svg>
+        </button>
       </div>
     </div>
   </div>
 </section>
 
-<!-- FOOTER -->
-<footer>
-  <a href="#" class="footer-logo" aria-label="Plund Media">
-    <img src="Plund_logo.svg" alt="Plund Media" />
-  </a>
-  <div class="footer-mid">
-    <a href="mailto:plundcollab@gmail.com">plundcollab@gmail.com</a>
-    &nbsp;·&nbsp;
-    <a href="tel:+35844240042">+358 44 2404042</a>
+<section id="om-mig">
+  <div class="container">
+    <div class="om-mig-grid">
+      <div class="om-mig-text fade-up">
+        <p class="sektion-rubrik">Vem är jag?</p>
+        <h2 class="sektion-titel">Bakom kameran</h2>
+        <p>Pär här hej. Jag är från Purmo, studerar socialpsykologi i Helsingfors och har skapat videor sedan jag var 12.
+Idag gör jag content för Svenska Kulturfonden och Yle Watt. Jag driver också Plund Media för att företagsreklam är genuint tråkig och kan göras mycket roligare.</p>
+      </div>
+      <div class="fade-up" style="transition-delay:0.15s; display:flex; flex-direction:column; align-items:center; gap:16px;">
+        <div class="kontakt-foto-wrapper om-foto-wrapper" style="width:100%;">
+          <img src="anka.JPG" alt="Pär Lund" class="kontakt-foto" style="max-width:100%;" />
+        </div>
+        <p style="color: #555; font-size: 0.9rem; text-align:center; font-style:italic;">O jåå, ja kan no typ va seriös.</p>
+      </div>
+    </div>
   </div>
-  <div class="footer-copy">© 2026 Plund Media</div>
+</section>
+
+<section id="kontakt">
+  <div class="container">
+    <div class="kontakt-inner">
+      <div class="kontakt-text fade-up">
+        <p class="sektion-rubrik">Kom igång</p>
+        <h2 class="stor-rubrik">
+          Vill ni att jag kommer och gör en video om <em>ert företag?</em>
+        </h2>
+        <p>Hör av er så pratar vi om hur det kan se ut för just ert företag.</p>
+        <div class="kontakt-info-lista">
+          <a href="mailto:plundcollab@gmail.com" class="kontakt-rad">
+            <div class="kontakt-ikon">
+              <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </div>
+            <div class="kontakt-rad-text">
+              <small>E-post</small>
+              <span>plundcollab@gmail.com</span>
+            </div>
+          </a>
+          <a href="tel:+35844240042" class="kontakt-rad">
+            <div class="kontakt-ikon">
+              <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 0117 1.18 2 2 0 0119.1 3.17v3a2 2 0 01-1.44 1.93 16 16 0 01-4.4 1.16A16.18 16.18 0 0117 14.4a2 2 0 011.92-1.44z"/></svg>
+            </div>
+            <div class="kontakt-rad-text">
+              <small>Telefon</small>
+              <span>+358 44 2404042</span>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="fakta-kort-grid fade-up" style="transition-delay:0.2s">
+        <div class="fakta-kort">
+          <div class="fakta-siffra">100%</div>
+          <div class="fakta-etikett">Autentiskt content, inget manus och ingen reklam-känsla</div>
+        </div>
+        <div class="fakta-kort">
+          <div class="fakta-siffra">Bakom kulisserna</div>
+          <div class="fakta-etikett">Så här funkar företaget på riktigt.</div>
+        </div>
+        <div class="fakta-kort stor">
+          <div class="fakta-siffra">Underhållning</div>
+          <div class="fakta-etikett">Videor folk faktiskt orkar se klart — och delar.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <a class="footer-logo" href="#" aria-label="Plund Media">
+        <img src="Plund_logo.svg" alt="Plund Media" class="footer-logo-svg" />
+      </a>
+      <div class="footer-info">
+        <a href="mailto:plundcollab@gmail.com">plundcollab@gmail.com</a>
+        &nbsp;·&nbsp;
+        <a href="tel:+35844240042">+358 44 2404042</a>
+      </div>
+      <div class="footer-copy">© 2026 Plund Media</div>
+    </div>
+  </div>
 </footer>
 
-<!-- LIGHTBOX -->
-<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Video">
-  <div class="lb-inner">
-    <button class="lb-close" onclick="closeLightbox()" aria-label="Stäng">×</button>
-    <video id="lb-video" controls playsinline></video>
-    <div class="lb-title" id="lb-title"></div>
-  </div>
-</div>
-
 <script>
-  /* Header scroll */
-  const hdr = document.getElementById('site-header');
-  window.addEventListener('scroll', () => {
-    hdr.classList.toggle('scrolled', window.scrollY > 60);
-  }, { passive: true });
-
-  /* Scroll reveal */
-  const revealObs = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); }
-    });
-  }, { threshold: 0.1 });
-  document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
-  setTimeout(() => {
-    document.querySelectorAll('#hero .reveal').forEach(el => el.classList.add('visible'));
-  }, 80);
-
-  /* Category filter */
-  document.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.addEventListener('click', function () {
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('aktiv'));
-      this.classList.add('aktiv');
-      const filter = this.dataset.filter;
-      document.querySelectorAll('.project-wrap').forEach(card => {
-        card.style.display = (filter === 'alla' || card.dataset.category === filter) ? '' : 'none';
-      });
-    });
+  var senastScroll = 0;
+  window.addEventListener('scroll', function() {
+    var nuScroll = window.pageYOffset;
+    var header = document.querySelector('header');
+    if (nuScroll > senastScroll && nuScroll > 80) {
+      header.classList.add('dold');
+    } else {
+      header.classList.remove('dold');
+    }
+    senastScroll = nuScroll;
   });
 
-  /* Lightbox */
-  function openLightbox(src, title) {
-    const lb = document.getElementById('lightbox');
-    const video = document.getElementById('lb-video');
-    document.getElementById('lb-title').textContent = title;
-    video.src = src;
-    lb.classList.add('open');
-    video.play().catch(() => {});
-    document.body.style.overflow = 'hidden';
-  }
-  function closeLightbox() {
-    const lb = document.getElementById('lightbox');
-    const video = document.getElementById('lb-video');
-    lb.classList.remove('open');
-    video.pause();
-    video.src = '';
-    document.body.style.overflow = '';
-  }
-  document.getElementById('lightbox').addEventListener('click', function (e) {
-    if (e.target === this) closeLightbox();
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        e.target.classList.add('synlig');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.fade-up').forEach(function(el) {
+    observer.observe(el);
   });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+  document.querySelectorAll('#hero .fade-up').forEach(function(el) {
+    setTimeout(function() { el.classList.add('synlig'); }, 80);
+  });
+
+  function scrollaCarousel(riktning) {
+    var fönster = document.querySelector('.carousel-fönster');
+    var kort = fönster.querySelector('.video-kort');
+    var kortBredd = kort.getBoundingClientRect().width + 16; /* 16 = gap */
+    fönster.scrollBy({ left: riktning * kortBredd, behavior: 'smooth' });
+  }
 </script>
 </body>
 </html>
