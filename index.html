@@ -61,6 +61,7 @@
       height: 46px;
       width: auto;
       display: block;
+      margin-left: 24px;
     }
 
     nav { display: flex; gap: 32px; }
@@ -339,14 +340,18 @@
 
     @media (max-width: 768px) {
       nav { display: none; }
-      .om-mig-grid { grid-template-columns: 1fr; gap: 48px; }
-      .kontakt-inner { grid-template-columns: 1fr; gap: 48px; }
+      .om-mig-grid { grid-template-columns: 1fr; gap: 40px; }
+      .kontakt-inner { grid-template-columns: 1fr; gap: 40px; }
       .footer-inner { flex-direction: column; text-align: center; }
       /* Mobil: korten tar upp ~85% av skärmens bredd, en i taget */
       .video-kort { flex: 0 0 85vw; max-width: 340px; }
-      .kontakt-foto-wrapper { display: none; }
       /* Pilar döljs på mobil — swipen räcker */
       .carousel-pilar { display: none; }
+      /* Faktakort i en kolumn på mobil */
+      .fakta-kort-grid { grid-template-columns: 1fr; }
+      .fakta-kort.stor { grid-column: span 1; }
+      /* Ankbilden mindre på mobil så den inte tar hela skärmen */
+      .om-foto-wrapper .kontakt-foto { max-width: 300px; margin: 0 auto; }
     }
   </style>
 </head>
@@ -455,7 +460,7 @@
 Idag gör jag content för Svenska Kulturfonden och Yle Watt. Jag driver också Plund Media för att företagsreklam är genuint tråkig och kan göras mycket roligare.</p>
       </div>
       <div class="fade-up" style="transition-delay:0.15s; display:flex; flex-direction:column; align-items:center; gap:16px;">
-        <div class="kontakt-foto-wrapper" style="width:100%;">
+        <div class="kontakt-foto-wrapper om-foto-wrapper" style="width:100%;">
           <img src="anka.JPG" alt="Pär Lund" class="kontakt-foto" style="max-width:100%;" />
         </div>
         <p style="color: #555; font-size: 0.9rem; text-align:center; font-style:italic;">O jåå, ja kan no typ va seriös.</p>
