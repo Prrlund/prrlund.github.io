@@ -20,7 +20,7 @@
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
     body {
       background-color: var(--bakgrund);
       color: var(--text-huvud);
@@ -115,12 +115,13 @@
       margin-bottom: 32px;
     }
     .hero-rubrik {
-      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-size: clamp(2rem, 8vw, 4.5rem);
       font-weight: 800;
       line-height: 1.1;
       letter-spacing: -0.04em;
-      max-width: 800px;
+      max-width: 100%;
       margin-bottom: 28px;
+      word-break: break-word;
     }
     .hero-rubrik em { font-style: normal; color: var(--accent); }
     .hero-text {
