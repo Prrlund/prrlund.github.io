@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://plundmedia.com/sitemap.xml

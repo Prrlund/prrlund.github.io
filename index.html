@@ -3,7 +3,76 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Plund Media</title>
+  <title>Plund Media — Pär Lund | Videocontent för företag i Finland</title>
+  <meta name="description" content="Plund Media drivs av Pär Lund (prrlund) — content creator från Purmo, baserad i Helsingfors. Bakom kulisserna-videos och autentiskt videocontent för företag. Mindre reklam, mer Pärsonlighet." />
+  <meta name="keywords" content="Pär Lund, Par Lund, Per Lund, Lund Pär, Plund, prrlund, Plund Media, Plundmedia, Media Plund, videoproduktion Helsingfors, content creator Finland, företagsvideo, bakom kulisserna" />
+  <meta name="author" content="Pär Lund" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://plundmedia.com/" />
+
+  <!-- Open Graph (Facebook, LinkedIn, AI-crawlers) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://plundmedia.com/" />
+  <meta property="og:title" content="Plund Media — Pär Lund | Videocontent för företag" />
+  <meta property="og:description" content="Pär Lund (prrlund) gör bakom kulisserna-videos och autentiskt videocontent för företag i Finland. Mindre reklam, mer Pärsonlighet." />
+  <meta property="og:image" content="https://plundmedia.com/anka.JPG" />
+  <meta property="og:locale" content="sv_FI" />
+  <meta property="og:site_name" content="Plund Media" />
+
+  <!-- Twitter / X -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Plund Media — Pär Lund | Videocontent för företag" />
+  <meta name="twitter:description" content="Pär Lund (prrlund) gör bakom kulisserna-videos och autentiskt videocontent för företag i Finland." />
+  <meta name="twitter:image" content="https://plundmedia.com/anka.JPG" />
+
+  <!-- Strukturerad data för Google & AI-assistenter -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": "https://plundmedia.com/#par-lund",
+        "name": "Pär Lund",
+        "alternateName": ["Par Lund", "Per Lund", "Lund Pär", "Plund", "prrlund", "Pär \"Plund\" Lund"],
+        "url": "https://plundmedia.com/",
+        "image": "https://plundmedia.com/anka.JPG",
+        "jobTitle": "Content Creator & Videoproducent",
+        "worksFor": { "@id": "https://plundmedia.com/#plund-media" },
+        "homeLocation": { "@type": "Place", "name": "Helsingfors, Finland" },
+        "birthPlace": { "@type": "Place", "name": "Purmo, Finland" },
+        "alumniOf": "Helsingfors universitet",
+        "knowsLanguage": ["sv", "fi", "en"],
+        "sameAs": [
+          "https://www.instagram.com/prrlund",
+          "https://www.tiktok.com/@prrlund"
+        ]
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://plundmedia.com/#plund-media",
+        "name": "Plund Media",
+        "alternateName": ["Plundmedia", "Media Plund", "PlundMedia", "Plund"],
+        "url": "https://plundmedia.com/",
+        "logo": "https://plundmedia.com/Plund_logo.svg",
+        "description": "Plund Media gör bakom kulisserna-videos och autentiskt videocontent för företag i Finland — inget manus, ingen reklam-känsla, bara underhållning folk faktiskt orkar se klart.",
+        "founder": { "@id": "https://plundmedia.com/#par-lund" },
+        "email": "plundcollab@gmail.com",
+        "telephone": "+358442404042",
+        "areaServed": "Finland",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Helsingfors",
+          "addressCountry": "FI"
+        },
+        "sameAs": [
+          "https://www.instagram.com/prrlund",
+          "https://www.tiktok.com/@prrlund"
+        ]
+      }
+    ]
+  }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,200;0,9..40,400;0,9..40,500;0,9..40,700;0,9..40,800;1,9..40,200;1,9..40,400&display=swap" rel="stylesheet" />
@@ -58,24 +127,6 @@
     .loader-text span:nth-child(4) { animation-delay: .21s; }
     .loader-text span:nth-child(5) { animation-delay: .28s; color: var(--guld); }
     @keyframes l-upp { to { transform: translateY(0); } }
-
-    /* ── CURSOR (endast desktop) ───────── */
-    .cursor { display: none; }
-    @media (hover: hover) and (pointer: fine) {
-      .cursor {
-        display: block;
-        position: fixed;
-        width: 10px; height: 10px;
-        background: var(--text);
-        border-radius: 50%;
-        pointer-events: none;
-        z-index: 9999;
-        transform: translate(-50%, -50%);
-        transition: width .25s, height .25s;
-        mix-blend-mode: difference;
-      }
-      .cursor.stor { width: 56px; height: 56px; }
-    }
 
     /* ── HEADER ────────────────────────── */
     header {
@@ -533,9 +584,6 @@
 </head>
 <body>
 
-<!-- CURSOR -->
-<div class="cursor" id="cursor"></div>
-
 <!-- LOADER -->
 <div id="loader">
   <div class="loader-text">
@@ -754,19 +802,6 @@ Idag gör jag content för Svenska Kulturfonden och Yle Watt. Jag driver också 
     });
   }, { threshold: 0.12 });
   document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
-
-  // Custom cursor (endast desktop)
-  var cur = document.getElementById('cursor');
-  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-    document.addEventListener('mousemove', function(e) {
-      cur.style.left = e.clientX + 'px';
-      cur.style.top = e.clientY + 'px';
-    });
-    document.querySelectorAll('a, button, .vg-overlay').forEach(function(el) {
-      el.addEventListener('mouseenter', function() { cur.classList.add('stor'); });
-      el.addEventListener('mouseleave', function() { cur.classList.remove('stor'); });
-    });
-  }
 
   // Portfolio: spela video vid klick, pausa andra
   function spelaVideo(overlay) {
