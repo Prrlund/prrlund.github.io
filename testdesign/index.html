@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Plund Designlabb — testdesigner</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,700;9..40,900&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0c0c0b;
+      color: #f2f1ee;
+      font-family: 'DM Sans', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      padding: 48px clamp(20px, 5vw, 64px) 80px;
+    }
+    .topp { margin-bottom: 48px; }
+    .topp-etikett {
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+      color: #ffbf32;
+      margin-bottom: 12px;
+    }
+    h1 {
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      font-weight: 900;
+      letter-spacing: -.03em;
+      margin-bottom: 12px;
+    }
+    .topp p { color: #8a8884; max-width: 520px; }
+
+    .galleri {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px;
+    }
+    .design-kort {
+      background: #161614;
+      border: 1px solid rgba(255,255,255,.09);
+      border-radius: 18px;
+      overflow: hidden;
+      transition: transform .2s, border-color .2s;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+    }
+    .design-kort:hover { transform: translateY(-4px); border-color: rgba(255,191,50,.4); }
+
+    .design-thumb {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/10;
+      overflow: hidden;
+      background: #1d1d1b;
+    }
+    /* Live-miniatyr: hela hemsidan skalad till 30% */
+    .design-thumb iframe {
+      width: 333.33%;
+      height: 333.33%;
+      transform: scale(0.3);
+      transform-origin: top left;
+      border: 0;
+      pointer-events: none;
+    }
+    .design-thumb::after {
+      content: '';
+      position: absolute; inset: 0;
+    }
+
+    .design-info { padding: 20px 22px 24px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+    .design-namn { font-size: 1.2rem; font-weight: 900; letter-spacing: -.02em; }
+    .design-desc { font-size: .88rem; color: #8a8884; flex: 1; }
+    .design-öppna {
+      margin-top: 14px;
+      font-size: .8rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: #ffbf32;
+    }
+
+    .live-tag {
+      position: absolute;
+      top: 12px; left: 12px;
+      z-index: 2;
+      background: #ffbf32;
+      color: #0c0c0b;
+      font-size: .65rem;
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 100px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="topp">
+    <p class="topp-etikett">Plund Media</p>
+    <h1>Designlabb 🧪</h1>
+    <p>Testdesigner för plundmedia.com — klicka på en design för att se den i fullskärm. Den här sidan är dold för sökmotorer.</p>
+  </div>
+
+  <div class="galleri">
+
+    <a class="design-kort" href="https://plundmedia.com/" target="_blank">
+      <div class="design-thumb">
+        <span class="live-tag">Live nu</span>
+        <iframe src="https://plundmedia.com/" loading="lazy" tabindex="-1" title="Nuvarande design"></iframe>
+      </div>
+      <div class="design-info">
+        <div class="design-namn">Cinematisk mörk</div>
+        <div class="design-desc">Den som ligger live: fullskärms-videohero, guld-ticker, mörk portfolio-grid, ljus om-sektion.</div>
+        <div class="design-öppna">Öppna →</div>
+      </div>
+    </a>
+
+    <a class="design-kort" href="bento.html" target="_blank">
+      <div class="design-thumb">
+        <iframe src="bento.html" loading="lazy" tabindex="-1" title="Bento"></iframe>
+      </div>
+      <div class="design-info">
+        <div class="design-namn">Bento / lekfull studio</div>
+        <div class="design-desc">Ljust papper, tjocka svarta kanter, hårda skuggor, sticker-känsla och bento-grid. Svart pill-header.</div>
+        <div class="design-öppna">Öppna →</div>
+      </div>
+    </a>
+
+  </div>
+
+</body>
+</html>
