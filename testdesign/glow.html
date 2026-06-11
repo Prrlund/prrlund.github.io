@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Plund Media — Glöd (preview)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0b0a08;
+      --text: #f5f2ea;
+      --dim: #9b958a;
+      --guld: #ffbf32;
+      --glas: rgba(255,255,255,.045);
+      --glas-kant: rgba(255,255,255,.1);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Sora', sans-serif;
+      font-size: 16px;
+      line-height: 1.75;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    /* Gradientblobbar */
+    .blob {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(110px);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .blob1 { width: 560px; height: 560px; top: -180px; right: -120px; background: rgba(255,191,50,.16); }
+    .blob2 { width: 480px; height: 480px; bottom: -160px; left: -140px; background: rgba(214,108,16,.12); }
+
+    section { scroll-margin-top: 100px; position: relative; z-index: 1; }
+    .wrap { max-width: 1060px; margin: 0 auto; padding: 0 22px; }
+
+    /* HEADER — flytande glaspill */
+    header {
+      position: sticky; top: 14px; z-index: 1000;
+      max-width: 1060px;
+      margin: 14px auto 0;
+      padding: 0 22px;
+    }
+    .header-glas {
+      background: rgba(11,10,8,.55);
+      border: 1px solid var(--glas-kant);
+      backdrop-filter: blur(18px);
+      border-radius: 100px;
+      padding: 10px 20px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .logo-svg { height: 38px; width: auto; display: block; }
+    nav { display: flex; gap: 26px; }
+    nav a {
+      color: var(--dim);
+      text-decoration: none;
+      font-size: .82rem;
+      font-weight: 600;
+      transition: color .2s;
+    }
+    nav a:hover { color: var(--guld); }
+
+    /* HERO */
+    #hero { padding: clamp(80px, 14vh, 150px) 0 60px; text-align: center; }
+    .hero-etikett {
+      display: inline-block;
+      background: var(--glas);
+      border: 1px solid var(--glas-kant);
+      backdrop-filter: blur(10px);
+      border-radius: 100px;
+      font-size: .7rem;
+      font-weight: 600;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--guld);
+      padding: 8px 20px;
+      margin-bottom: 30px;
+    }
+    .hero-rubrik {
+      font-size: clamp(2.6rem, 7.5vw, 5.8rem);
+      font-weight: 800;
+      line-height: 1.04;
+      letter-spacing: -.04em;
+      max-width: 16ch;
+      margin: 0 auto 28px;
+    }
+    .hero-rubrik .grad {
+      background: linear-gradient(100deg, #ffbf32 10%, #ff9d2e 60%, #ffd87a 95%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .hero-text { color: var(--dim); max-width: 540px; margin: 0 auto 40px; }
+    .knapp {
+      display: inline-block;
+      background: linear-gradient(120deg, #ffbf32, #ff9d2e);
+      color: #161310;
+      border-radius: 100px;
+      padding: 17px 40px;
+      text-decoration: none;
+      font-weight: 800;
+      font-size: .92rem;
+      box-shadow: 0 14px 44px rgba(255,176,32,.35);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .knapp:hover { transform: translateY(-3px); box-shadow: 0 22px 60px rgba(255,176,32,.5); }
+
+    /* SEKTIONER */
+    .sektion { padding: 60px 0; }
+    .sektion-huvud { text-align: center; margin-bottom: 44px; }
+    .etikett {
+      font-size: .7rem;
+      font-weight: 600;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--guld);
+      margin-bottom: 12px;
+    }
+    .sektion-titel {
+      font-size: clamp(1.9rem, 4.6vw, 3.2rem);
+      font-weight: 800;
+      letter-spacing: -.03em;
+      line-height: 1.06;
+      margin-bottom: 12px;
+    }
+    .sektion-desc { color: var(--dim); max-width: 480px; margin: 0 auto; font-size: .95rem; }
+
+    /* VIDEOS */
+    .verk-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+    .verk {
+      position: relative;
+      border-radius: 26px;
+      overflow: hidden;
+      aspect-ratio: 9/14;
+      border: 1px solid var(--glas-kant);
+      background: var(--glas);
+      transition: transform .3s, box-shadow .3s;
+    }
+    .verk:hover { transform: translateY(-6px); box-shadow: 0 30px 70px rgba(255,176,32,.14); }
+    .verk video {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+    .verk-overlay {
+      position: absolute; inset: 0;
+      z-index: 2;
+      cursor: pointer;
+      background: linear-gradient(to top, rgba(11,10,8,.85) 0%, transparent 45%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 22px;
+      transition: opacity .3s;
+    }
+    .verk.spelar .verk-overlay { opacity: 0; pointer-events: none; }
+    .verk-namn { font-weight: 800; font-size: 1.2rem; letter-spacing: -.02em; }
+    .verk-typ { color: var(--dim); font-size: .78rem; }
+    .verk-play {
+      position: absolute;
+      top: 18px; right: 18px;
+      width: 46px; height: 46px;
+      background: rgba(11,10,8,.5);
+      border: 1px solid var(--glas-kant);
+      backdrop-filter: blur(8px);
+      border-radius: 100px;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .25s, transform .25s;
+    }
+    .verk-overlay:hover .verk-play { background: var(--guld); transform: scale(1.08); }
+    .verk-play svg { width: 15px; height: 15px; fill: #fff; margin-left: 2px; }
+    .verk-overlay:hover .verk-play svg { fill: #161310; }
+
+    /* OM */
+    .om-glas {
+      background: var(--glas);
+      border: 1px solid var(--glas-kant);
+      backdrop-filter: blur(16px);
+      border-radius: 32px;
+      padding: clamp(28px, 5vw, 56px);
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: clamp(28px, 5vw, 60px);
+      align-items: center;
+    }
+    .om-glas .sektion-titel { margin-bottom: 18px; }
+    .om-text { color: var(--dim); margin-bottom: 28px; }
+    .fakta-rader { display: flex; flex-direction: column; gap: 0; }
+    .fakta-rad {
+      display: flex; align-items: baseline; gap: 16px;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(255,255,255,.07);
+    }
+    .fakta-rad:last-child { border-bottom: none; }
+    .fakta-siffra {
+      font-weight: 800;
+      letter-spacing: -.02em;
+      background: linear-gradient(100deg, #ffbf32, #ff9d2e);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      min-width: 170px;
+      flex-shrink: 0;
+      font-size: 1.05rem;
+    }
+    .fakta-etikett { color: var(--dim); font-size: .88rem; }
+    .om-foto-ram {
+      position: relative;
+      border-radius: 26px;
+      overflow: hidden;
+      border: 1px solid var(--glas-kant);
+    }
+    .om-foto-ram img { width: 100%; display: block; aspect-ratio: 3/4; object-fit: cover; }
+    .om-citat {
+      position: absolute;
+      bottom: 14px; left: 14px; right: 14px;
+      background: rgba(11,10,8,.6);
+      border: 1px solid var(--glas-kant);
+      backdrop-filter: blur(12px);
+      border-radius: 14px;
+      font-size: .82rem;
+      font-style: italic;
+      color: var(--text);
+      text-align: center;
+      padding: 10px 14px;
+    }
+
+    /* KONTAKT */
+    .kontakt-glas {
+      background: var(--glas);
+      border: 1px solid var(--glas-kant);
+      backdrop-filter: blur(16px);
+      border-radius: 32px;
+      padding: clamp(36px, 6vw, 70px);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .kontakt-glas::before {
+      content: '';
+      position: absolute;
+      top: -120px; left: 50%;
+      transform: translateX(-50%);
+      width: 480px; height: 240px;
+      background: rgba(255,191,50,.14);
+      filter: blur(80px);
+      pointer-events: none;
+    }
+    .kontakt-titel {
+      font-size: clamp(2rem, 5.4vw, 3.8rem);
+      font-weight: 800;
+      letter-spacing: -.04em;
+      line-height: 1.08;
+      max-width: 19ch;
+      margin: 12px auto 18px;
+      position: relative;
+    }
+    .kontakt-titel .grad {
+      background: linear-gradient(100deg, #ffbf32, #ff9d2e);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .kontakt-undertext { color: var(--dim); margin-bottom: 34px; position: relative; }
+    .kontakt-rader { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; position: relative; }
+    .kontakt-rad {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: rgba(255,255,255,.05);
+      border: 1px solid var(--glas-kant);
+      border-radius: 100px;
+      padding: 14px 28px;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 600;
+      font-size: .9rem;
+      transition: border-color .2s, transform .2s;
+    }
+    .kontakt-rad:hover { border-color: var(--guld); transform: translateY(-2px); }
+
+    footer {
+      position: relative; z-index: 1;
+      padding: 36px 22px 46px;
+      text-align: center;
+      color: var(--dim);
+      font-size: .82rem;
+    }
+    footer a { color: var(--dim); text-decoration: none; }
+    footer a:hover { color: var(--guld); }
+
+    .reveal { opacity: 0; transform: translateY(26px); transition: opacity .8s, transform .8s; }
+    .reveal.synlig { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 780px) {
+      nav { display: none; }
+      .verk-grid { grid-template-columns: 1fr; }
+      .verk { max-width: 420px; margin: 0 auto; width: 100%; }
+      .om-glas { grid-template-columns: 1fr; }
+      .fakta-siffra { min-width: 120px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="blob blob1"></div>
+<div class="blob blob2"></div>
+
+<header>
+  <div class="header-glas">
+    <a href="#" aria-label="Plund Media"><img src="/Plund_logo.svg" alt="Plund Media" class="logo-svg" /></a>
+    <nav>
+      <a href="#portfolio">Portfolio</a>
+      <a href="#om-mig">Om mig</a>
+      <a href="#kontakt">Kontakt</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section id="hero">
+    <div class="hero-etikett reveal">Pär utforskar företag</div>
+    <h1 class="hero-rubrik reveal" style="transition-delay:.08s">Mindre reklam.<br>Mer <span class="grad">Pär</span>sonlighet.</h1>
+    <p class="hero-text reveal" style="transition-delay:.16s">
+      Traditionell företagsreklam är tråkig. Därför gör jag något annat — jag kommer in, ställer frågor,
+      spelar lite dum och gör content folk faktiskt skrattar åt och minns.
+    </p>
+    <a href="#kontakt" class="knapp reveal" style="transition-delay:.24s">Ta kontakt →</a>
+  </section>
+
+  <section id="portfolio" class="sektion">
+    <div class="sektion-huvud reveal">
+      <p class="etikett">Mina videor</p>
+      <h2 class="sektion-titel">Portfolio</h2>
+      <p class="sektion-desc">Bakom kulisserna-videos där jag utforskar företag som en nyfiken outsider.</p>
+    </div>
+    <div class="verk-grid">
+
+      <div class="verk reveal">
+        <video preload="none" poster="/Kaffia.png" playsinline><source src="/kaffia.mp4" type="video/mp4"></video>
+        <div class="verk-overlay" onclick="spelaVideo(this)">
+          <span class="verk-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></span>
+          <p class="verk-namn">Kaffia</p>
+          <p class="verk-typ">Bakom kulisserna</p>
+        </div>
+      </div>
+
+      <div class="verk reveal" style="transition-delay:.08s">
+        <video preload="none" poster="/Sekasin.png" playsinline><source src="/Pär besöker Sekasin.mp4" type="video/mp4"></video>
+        <div class="verk-overlay" onclick="spelaVideo(this)">
+          <span class="verk-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></span>
+          <p class="verk-namn">Sekasin</p>
+          <p class="verk-typ">Bakom kulisserna</p>
+        </div>
+      </div>
+
+      <div class="verk reveal" style="transition-delay:.16s">
+        <video preload="none" poster="/Reload.png" playsinline><source src="/reload.mp4" type="video/mp4"></video>
+        <div class="verk-overlay" onclick="spelaVideo(this)">
+          <span class="verk-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></span>
+          <p class="verk-namn">Reload Vending</p>
+          <p class="verk-typ">Bakom kulisserna</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="om-mig" class="sektion">
+    <div class="om-glas reveal">
+      <div>
+        <p class="etikett">Vem är jag?</p>
+        <h2 class="sektion-titel">Bakom kameran</h2>
+        <p class="om-text">Pär här hej. Jag är från Purmo, studerar socialpsykologi i Helsingfors och har skapat videor sedan jag var 12.
+Idag gör jag content för Svenska Kulturfonden och Yle Watt. Jag driver också Plund Media för att företagsreklam är genuint tråkig och kan göras mycket roligare.</p>
+        <div class="fakta-rader">
+          <div class="fakta-rad">
+            <span class="fakta-siffra">100%</span>
+            <span class="fakta-etikett">Autentiskt content, inget manus och ingen reklam-känsla</span>
+          </div>
+          <div class="fakta-rad">
+            <span class="fakta-siffra">Bakom kulisserna</span>
+            <span class="fakta-etikett">Så här funkar företaget på riktigt.</span>
+          </div>
+          <div class="fakta-rad">
+            <span class="fakta-siffra">Underhållning</span>
+            <span class="fakta-etikett">Videor folk faktiskt orkar se klart — och delar.</span>
+          </div>
+        </div>
+      </div>
+      <div class="om-foto-ram">
+        <img src="/anka.JPG" alt="Pär Lund" />
+        <div class="om-citat">O jåå, ja kan no typ va seriös.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="kontakt" class="sektion">
+    <div class="kontakt-glas reveal">
+      <p class="etikett">Kom igång</p>
+      <h2 class="kontakt-titel">Vill ni att jag kommer och gör en video om <span class="grad">ert företag?</span></h2>
+      <p class="kontakt-undertext">Hör av er så pratar vi om hur det kan se ut för just ert företag.</p>
+      <div class="kontakt-rader">
+        <a href="mailto:plundcollab@gmail.com" class="kontakt-rad">✉ plundcollab@gmail.com</a>
+        <a href="tel:+35844240042" class="kontakt-rad">☏ +358 44 2404042</a>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <p><a href="https://www.instagram.com/prrlund" target="_blank">Instagram</a> &nbsp;·&nbsp; <a href="https://www.tiktok.com/@prrlund" target="_blank">TikTok</a></p>
+  <p>© 2026 Plund Media</p>
+</footer>
+
+<script>
+  var obs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) { e.target.classList.add('synlig'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
+
+  function spelaVideo(overlay) {
+    var verk = overlay.closest('.verk');
+    var video = verk.querySelector('video');
+    document.querySelectorAll('.verk video').forEach(function(v) {
+      if (v !== video) { v.pause(); v.closest('.verk').classList.remove('spelar'); v.controls = false; }
+    });
+    verk.classList.add('spelar');
+    video.controls = true;
+    video.play();
+  }
+</script>
+</body>
+</html>

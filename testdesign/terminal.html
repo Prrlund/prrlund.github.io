@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Plund Media — Terminal (preview)</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --svart: #0a0805;
+      --panel: #110e08;
+      --guld: #ffbf32;
+      --guld-dov: #b8860b;
+      --dim: #8a7a55;
+      --linje: rgba(255,191,50,.25);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
+    body {
+      background: var(--svart);
+      color: var(--guld);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 15px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    /* CRT-scanlines + vignette */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background: repeating-linear-gradient(to bottom, rgba(255,191,50,.025) 0px, rgba(255,191,50,.025) 1px, transparent 1px, transparent 3px);
+      pointer-events: none;
+      z-index: 999;
+    }
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,.5) 100%);
+      pointer-events: none;
+      z-index: 998;
+    }
+    section { scroll-margin-top: 80px; }
+    .wrap { max-width: 980px; margin: 0 auto; padding: 0 20px; }
+
+    /* HEADER */
+    header {
+      position: sticky; top: 0; z-index: 1000;
+      background: rgba(10,8,5,.92);
+      border-bottom: 1px solid var(--linje);
+      backdrop-filter: blur(6px);
+    }
+    .header-inner {
+      max-width: 980px; margin: 0 auto;
+      padding: 10px 20px;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px;
+    }
+    .logo-svg { height: 34px; width: auto; display: block; }
+    nav { display: flex; gap: 22px; }
+    nav a {
+      color: var(--dim);
+      text-decoration: none;
+      font-size: .8rem;
+    }
+    nav a::before { content: './'; opacity: .6; }
+    nav a:hover { color: var(--guld); text-shadow: 0 0 8px rgba(255,191,50,.6); }
+
+    /* HERO */
+    #hero { padding: 70px 0 50px; }
+    .prompt { color: var(--dim); font-size: .85rem; margin-bottom: 6px; }
+    .prompt::before { content: 'plund@media:~$ '; color: var(--guld-dov); }
+    .hero-rubrik {
+      font-size: clamp(1.8rem, 5.4vw, 3.6rem);
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -.02em;
+      margin: 18px 0 26px;
+      text-shadow: 0 0 18px rgba(255,191,50,.35);
+      min-height: 2.4em;
+    }
+    .hero-rubrik .invert { background: var(--guld); color: var(--svart); padding: 0 6px; text-shadow: none; }
+    .markör {
+      display: inline-block;
+      width: .55em; height: 1.1em;
+      background: var(--guld);
+      vertical-align: text-bottom;
+      animation: blink 1s steps(1) infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+    .hero-text { color: var(--dim); max-width: 600px; margin-bottom: 34px; }
+    .knapp {
+      display: inline-block;
+      border: 1px solid var(--guld);
+      color: var(--guld);
+      padding: 13px 30px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: .85rem;
+      transition: background .2s, color .2s, box-shadow .2s;
+    }
+    .knapp:hover { background: var(--guld); color: var(--svart); box-shadow: 0 0 24px rgba(255,191,50,.5); }
+    .knapp::before { content: '> '; }
+
+    /* PANELER */
+    .panel {
+      border: 1px solid var(--linje);
+      background: var(--panel);
+      margin-bottom: 40px;
+    }
+    .panel-titelrad {
+      border-bottom: 1px solid var(--linje);
+      padding: 8px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: .75rem;
+      color: var(--dim);
+    }
+    .panel-titelrad .prickar { letter-spacing: 3px; color: var(--guld-dov); }
+    .panel-kropp { padding: clamp(20px, 3.5vw, 36px); }
+
+    .avd-titel {
+      font-size: clamp(1.5rem, 3.6vw, 2.3rem);
+      font-weight: 700;
+      margin-bottom: 6px;
+      text-shadow: 0 0 14px rgba(255,191,50,.3);
+    }
+    .avd-titel::before { content: '## '; color: var(--guld-dov); }
+    .avd-desc { color: var(--dim); margin-bottom: 26px; font-size: .9rem; }
+
+    /* VIDEOS */
+    .verk-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .verk {
+      border: 1px solid var(--linje);
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 9/14;
+      background: #000;
+    }
+    .verk video {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      opacity: .85;
+    }
+    .verk-overlay {
+      position: absolute; inset: 0;
+      z-index: 2;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      background: linear-gradient(to top, rgba(10,8,5,.92) 0%, transparent 45%);
+      transition: opacity .3s;
+    }
+    .verk.spelar .verk-overlay { opacity: 0; pointer-events: none; }
+    .verk-fil {
+      padding: 14px;
+      font-size: .85rem;
+      font-weight: 700;
+    }
+    .verk-fil::before { content: '▶ '; color: var(--guld); }
+    .verk-meta { padding: 0 14px 14px; font-size: .7rem; color: var(--dim); }
+    .verk-overlay:hover .verk-fil { text-shadow: 0 0 10px rgba(255,191,50,.8); }
+
+    /* OM */
+    .om-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 28px; align-items: start; }
+    .om-text { color: #c9b27a; font-size: .95rem; }
+    .om-text::first-line { color: var(--guld); }
+    .nyckel-lista { margin-top: 24px; font-size: .85rem; }
+    .nyckel-rad { display: flex; gap: 10px; padding: 7px 0; border-bottom: 1px dashed rgba(255,191,50,.15); }
+    .nyckel { color: var(--guld-dov); min-width: 150px; flex-shrink: 0; }
+    .värde { color: var(--guld); }
+    .om-foto { border: 1px solid var(--linje); padding: 8px; background: #000; }
+    .om-foto img {
+      width: 100%; display: block;
+      aspect-ratio: 3/4; object-fit: cover;
+      filter: sepia(60%) saturate(1.4) brightness(.95);
+    }
+    .om-foto figcaption { font-size: .75rem; color: var(--dim); padding-top: 8px; font-style: italic; text-align: center; }
+
+    /* KONTAKT */
+    .kontakt-titel {
+      font-size: clamp(1.5rem, 4vw, 2.6rem);
+      font-weight: 700;
+      line-height: 1.25;
+      margin-bottom: 10px;
+      max-width: 24ch;
+      text-shadow: 0 0 14px rgba(255,191,50,.3);
+    }
+    .kontakt-titel .invert { background: var(--guld); color: var(--svart); padding: 0 6px; text-shadow: none; }
+    .kontakt-undertext { color: var(--dim); margin-bottom: 28px; font-size: .9rem; }
+    .kontakt-rader { display: flex; gap: 14px; flex-wrap: wrap; }
+    .kontakt-rad {
+      border: 1px solid var(--guld);
+      color: var(--guld);
+      padding: 13px 24px;
+      text-decoration: none;
+      font-size: .85rem;
+      font-weight: 700;
+      transition: background .2s, color .2s, box-shadow .2s;
+    }
+    .kontakt-rad:hover { background: var(--guld); color: var(--svart); box-shadow: 0 0 24px rgba(255,191,50,.5); }
+
+    footer {
+      border-top: 1px solid var(--linje);
+      padding: 22px 20px 36px;
+      text-align: center;
+      font-size: .75rem;
+      color: var(--dim);
+    }
+    footer a { color: var(--dim); text-decoration: none; }
+    footer a:hover { color: var(--guld); }
+
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .6s, transform .6s; }
+    .reveal.synlig { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 760px) {
+      nav { display: none; }
+      .verk-grid { grid-template-columns: 1fr; }
+      .verk { max-width: 420px; }
+      .om-grid { grid-template-columns: 1fr; }
+      .nyckel { min-width: 110px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a href="#" aria-label="Plund Media"><img src="/Plund_logo.svg" alt="Plund Media" class="logo-svg" /></a>
+    <nav>
+      <a href="#portfolio">portfolio</a>
+      <a href="#om-mig">om-mig</a>
+      <a href="#kontakt">kontakt</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section id="hero">
+    <p class="prompt">kör pärsonlighet.exe</p>
+    <h1 class="hero-rubrik"><span id="maskintext"></span><span class="markör"></span></h1>
+    <p class="hero-text reveal">
+      Traditionell företagsreklam är tråkig. Därför gör jag något annat — jag kommer in, ställer frågor,
+      spelar lite dum och gör content folk faktiskt skrattar åt och minns.
+    </p>
+    <a href="#kontakt" class="knapp reveal" style="transition-delay:.1s">Ta kontakt</a>
+  </section>
+
+  <section id="portfolio">
+    <div class="panel reveal">
+      <div class="panel-titelrad">
+        <span>~/plund/portfolio</span>
+        <span class="prickar">● ● ●</span>
+      </div>
+      <div class="panel-kropp">
+        <h2 class="avd-titel">Portfolio</h2>
+        <p class="avd-desc">// Mina videor — bakom kulisserna-videos där jag utforskar företag som en nyfiken outsider.</p>
+        <div class="verk-grid">
+
+          <div class="verk">
+            <video preload="none" poster="/Kaffia.png" playsinline><source src="/kaffia.mp4" type="video/mp4"></video>
+            <div class="verk-overlay" onclick="spelaVideo(this)">
+              <p class="verk-fil">kaffia.mp4</p>
+              <p class="verk-meta">[01] Kaffia — tryck för att spela</p>
+            </div>
+          </div>
+
+          <div class="verk">
+            <video preload="none" poster="/Sekasin.png" playsinline><source src="/Pär besöker Sekasin.mp4" type="video/mp4"></video>
+            <div class="verk-overlay" onclick="spelaVideo(this)">
+              <p class="verk-fil">sekasin.mp4</p>
+              <p class="verk-meta">[02] Sekasin — tryck för att spela</p>
+            </div>
+          </div>
+
+          <div class="verk">
+            <video preload="none" poster="/Reload.png" playsinline><source src="/reload.mp4" type="video/mp4"></video>
+            <div class="verk-overlay" onclick="spelaVideo(this)">
+              <p class="verk-fil">reload.mp4</p>
+              <p class="verk-meta">[03] Reload Vending — tryck för att spela</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="om-mig">
+    <div class="panel reveal">
+      <div class="panel-titelrad">
+        <span>~/plund/om-mig</span>
+        <span class="prickar">● ● ●</span>
+      </div>
+      <div class="panel-kropp">
+        <h2 class="avd-titel">Bakom kameran</h2>
+        <p class="avd-desc">// Vem är jag?</p>
+        <div class="om-grid">
+          <div>
+            <p class="om-text">Pär här hej. Jag är från Purmo, studerar socialpsykologi i Helsingfors och har skapat videor sedan jag var 12.
+Idag gör jag content för Svenska Kulturfonden och Yle Watt. Jag driver också Plund Media för att företagsreklam är genuint tråkig och kan göras mycket roligare.</p>
+            <div class="nyckel-lista">
+              <div class="nyckel-rad"><span class="nyckel">autenticitet:</span><span class="värde">100% — inget manus, ingen reklam-känsla</span></div>
+              <div class="nyckel-rad"><span class="nyckel">stil:</span><span class="värde">Bakom kulisserna — så här funkar företaget på riktigt</span></div>
+              <div class="nyckel-rad"><span class="nyckel">resultat:</span><span class="värde">Underhållning — videor folk faktiskt orkar se klart, och delar</span></div>
+            </div>
+          </div>
+          <figure class="om-foto">
+            <img src="/anka.JPG" alt="Pär Lund" />
+            <figcaption>O jåå, ja kan no typ va seriös.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="kontakt">
+    <div class="panel reveal">
+      <div class="panel-titelrad">
+        <span>~/plund/kontakt</span>
+        <span class="prickar">● ● ●</span>
+      </div>
+      <div class="panel-kropp">
+        <p class="prompt">init samarbete --nu</p>
+        <h2 class="kontakt-titel">Vill ni att jag kommer och gör en video om <span class="invert">ert företag?</span></h2>
+        <p class="kontakt-undertext">Hör av er så pratar vi om hur det kan se ut för just ert företag.</p>
+        <div class="kontakt-rader">
+          <a href="mailto:plundcollab@gmail.com" class="kontakt-rad">plundcollab@gmail.com</a>
+          <a href="tel:+35844240042" class="kontakt-rad">+358 44 2404042</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <p><a href="https://www.instagram.com/prrlund" target="_blank">instagram/@prrlund</a> &nbsp;·&nbsp; <a href="https://www.tiktok.com/@prrlund" target="_blank">tiktok/@prrlund</a></p>
+  <p>© 2026 Plund Media — session avslutad_</p>
+</footer>
+
+<script>
+  // Skrivmaskinseffekt på rubriken
+  (function() {
+    var mål = document.getElementById('maskintext');
+    var html = 'Mindre reklam.<br>Mer <span class="invert">Pär</span>sonlighet.';
+    // Skriv tecken för tecken men hoppa över taggar direkt
+    var i = 0, ut = '';
+    function skriv() {
+      if (i >= html.length) return;
+      if (html[i] === '<') {
+        var slut = html.indexOf('>', i);
+        ut += html.slice(i, slut + 1);
+        i = slut + 1;
+      } else {
+        ut += html[i];
+        i++;
+      }
+      mål.innerHTML = ut;
+      setTimeout(skriv, 42);
+    }
+    setTimeout(skriv, 350);
+  })();
+
+  var obs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) { e.target.classList.add('synlig'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
+
+  function spelaVideo(overlay) {
+    var verk = overlay.closest('.verk');
+    var video = verk.querySelector('video');
+    document.querySelectorAll('.verk video').forEach(function(v) {
+      if (v !== video) { v.pause(); v.closest('.verk').classList.remove('spelar'); v.controls = false; }
+    });
+    verk.classList.add('spelar');
+    video.controls = true;
+    video.play();
+  }
+</script>
+</body>
+</html>

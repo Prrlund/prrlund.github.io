@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Plund Media — Scrapbook (preview)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=DM+Sans:opsz,wght@9..40,400;9..40,700;9..40,900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --kraft: #e3d5b8;
+      --kraft-mörk: #d4c19c;
+      --bläck: #2e2718;
+      --guld: #e8a811;
+      --guld-ljus: #ffbf32;
+      --vit: #fdfbf6;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
+    body {
+      background: var(--kraft);
+      background-image:
+        radial-gradient(rgba(46,39,24,.06) 1.5px, transparent 1.5px),
+        linear-gradient(rgba(255,255,255,.25), transparent 300px);
+      background-size: 18px 18px, 100% 100%;
+      color: var(--bläck);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 17px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    section { scroll-margin-top: 90px; }
+    .wrap { max-width: 1020px; margin: 0 auto; padding: 0 22px; }
+
+    .hand { font-family: 'Caveat', cursive; }
+
+    /* Tejp-bit */
+    .tejp {
+      position: absolute;
+      width: 92px; height: 26px;
+      background: rgba(255,240,180,.65);
+      border-left: 1px dashed rgba(46,39,24,.15);
+      border-right: 1px dashed rgba(46,39,24,.15);
+      box-shadow: 0 2px 6px rgba(46,39,24,.12);
+      top: -13px; left: 50%;
+      transform: translateX(-50%) rotate(-3deg);
+      z-index: 3;
+    }
+
+    /* HEADER */
+    header {
+      position: sticky; top: 0; z-index: 1000;
+      background: var(--bläck);
+      box-shadow: 0 4px 18px rgba(46,39,24,.25);
+    }
+    .header-inner {
+      max-width: 1020px; margin: 0 auto;
+      padding: 10px 22px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .logo-svg { height: 38px; width: auto; display: block; }
+    nav { display: flex; gap: 24px; }
+    nav a {
+      font-family: 'Caveat', cursive;
+      color: #cfc4ac;
+      text-decoration: none;
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+    nav a:hover { color: var(--guld-ljus); }
+
+    /* HERO */
+    #hero { padding: 72px 0 56px; text-align: center; position: relative; }
+    .hero-etikett {
+      display: inline-block;
+      font-family: 'Caveat', cursive;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--bläck);
+      background: var(--guld-ljus);
+      padding: 4px 22px;
+      transform: rotate(-2deg);
+      box-shadow: 3px 3px 0 rgba(46,39,24,.25);
+      margin-bottom: 30px;
+    }
+    .hero-rubrik {
+      font-size: clamp(2.7rem, 8vw, 6rem);
+      font-weight: 900;
+      line-height: .98;
+      letter-spacing: -.04em;
+      max-width: 14ch;
+      margin: 0 auto 24px;
+    }
+    .hero-rubrik .mark {
+      position: relative;
+      white-space: nowrap;
+    }
+    .hero-rubrik .mark::after {
+      content: '';
+      position: absolute;
+      left: -2%; right: -2%;
+      bottom: .04em;
+      height: .32em;
+      background: var(--guld-ljus);
+      z-index: -1;
+      transform: rotate(-1deg);
+    }
+    .hero-text { color: #5e533a; max-width: 540px; margin: 0 auto 36px; }
+    .knapp {
+      display: inline-block;
+      background: var(--bläck);
+      color: var(--vit);
+      padding: 16px 36px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 900;
+      font-size: .95rem;
+      box-shadow: 4px 4px 0 rgba(46,39,24,.3);
+      transform: rotate(-.5deg);
+      transition: transform .15s, box-shadow .15s;
+    }
+    .knapp:hover { transform: rotate(-.5deg) translate(-2px,-2px); box-shadow: 6px 6px 0 rgba(46,39,24,.3); }
+
+    /* Avdelningsrubrik */
+    .avd-huvud { text-align: center; margin-bottom: 50px; }
+    .avd-etikett {
+      font-family: 'Caveat', cursive;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--guld);
+    }
+    .avd-titel {
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      font-weight: 900;
+      letter-spacing: -.03em;
+      line-height: 1;
+      margin: 4px 0 10px;
+    }
+    .avd-desc { color: #5e533a; max-width: 460px; margin: 0 auto; font-size: .95rem; }
+
+    /* POLAROIDS */
+    #portfolio { padding: 50px 0 70px; }
+    .polaroid-rad {
+      display: flex;
+      justify-content: center;
+      gap: clamp(18px, 4vw, 44px);
+      flex-wrap: wrap;
+    }
+    .polaroid {
+      position: relative;
+      background: var(--vit);
+      padding: 12px 12px 0;
+      box-shadow: 0 12px 30px rgba(46,39,24,.25);
+      width: min(290px, 84vw);
+      transition: transform .25s;
+    }
+    .polaroid:nth-child(1) { transform: rotate(-2.4deg); }
+    .polaroid:nth-child(2) { transform: rotate(1.6deg) translateY(14px); }
+    .polaroid:nth-child(3) { transform: rotate(-1.2deg); }
+    .polaroid:hover { transform: rotate(0deg) scale(1.04); z-index: 5; }
+    .polaroid-media {
+      position: relative;
+      aspect-ratio: 9/12;
+      overflow: hidden;
+      background: #111;
+    }
+    .polaroid-media video {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+    .polaroid-overlay {
+      position: absolute; inset: 0;
+      z-index: 2;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: opacity .3s;
+    }
+    .polaroid.spelar .polaroid-overlay { opacity: 0; pointer-events: none; }
+    .polaroid-play {
+      width: 56px; height: 56px;
+      background: var(--guld-ljus);
+      border-radius: 100px;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 6px 18px rgba(46,39,24,.4);
+      transition: transform .2s;
+    }
+    .polaroid-overlay:hover .polaroid-play { transform: scale(1.15) rotate(10deg); }
+    .polaroid-play svg { width: 18px; height: 18px; fill: var(--bläck); margin-left: 3px; }
+    .polaroid-text {
+      font-family: 'Caveat', cursive;
+      font-size: 1.5rem;
+      font-weight: 700;
+      text-align: center;
+      padding: 10px 4px 14px;
+    }
+
+    /* OM MIG */
+    #om-mig { padding: 50px 0 70px; }
+    .om-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(32px, 6vw, 70px);
+      align-items: center;
+    }
+    .anteckning {
+      position: relative;
+      background: var(--vit);
+      padding: clamp(26px, 4vw, 44px);
+      box-shadow: 0 12px 30px rgba(46,39,24,.18);
+      transform: rotate(-.8deg);
+    }
+    .anteckning::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: repeating-linear-gradient(to bottom, var(--guld-ljus) 0 14px, transparent 14px 22px);
+    }
+    .anteckning .avd-titel { text-align: left; }
+    .anteckning p.brödtext { color: #5e533a; margin-top: 14px; }
+    .fakta-lista { margin-top: 24px; list-style: none; }
+    .fakta-lista li {
+      padding: 10px 0;
+      border-bottom: 1px dashed rgba(46,39,24,.2);
+      font-size: .95rem;
+      color: #5e533a;
+    }
+    .fakta-lista li:last-child { border-bottom: none; }
+    .fakta-lista strong { color: var(--bläck); font-weight: 900; }
+    .fakta-lista li::before { content: '✓ '; color: var(--guld); font-weight: 900; }
+
+    .stor-polaroid {
+      position: relative;
+      background: var(--vit);
+      padding: 14px 14px 0;
+      box-shadow: 0 16px 40px rgba(46,39,24,.28);
+      transform: rotate(2deg);
+      max-width: 380px;
+      margin: 0 auto;
+      transition: transform .25s;
+    }
+    .stor-polaroid:hover { transform: rotate(0deg) scale(1.02); }
+    .stor-polaroid img { width: 100%; display: block; aspect-ratio: 3/4; object-fit: cover; }
+    .stor-polaroid .polaroid-text { font-size: 1.6rem; }
+
+    /* KONTAKT */
+    #kontakt { padding: 50px 0 80px; }
+    .kontakt-kort {
+      position: relative;
+      background: var(--vit);
+      box-shadow: 0 16px 40px rgba(46,39,24,.22);
+      padding: clamp(32px, 6vw, 64px);
+      text-align: center;
+      transform: rotate(-.5deg);
+    }
+    .kontakt-titel {
+      font-size: clamp(2rem, 5.4vw, 3.8rem);
+      font-weight: 900;
+      letter-spacing: -.035em;
+      line-height: 1.05;
+      max-width: 20ch;
+      margin: 8px auto 18px;
+    }
+    .kontakt-titel .mark { position: relative; white-space: nowrap; }
+    .kontakt-titel .mark::after {
+      content: '';
+      position: absolute;
+      left: -2%; right: -2%;
+      bottom: .04em;
+      height: .32em;
+      background: var(--guld-ljus);
+      z-index: -1;
+      transform: rotate(-1deg);
+    }
+    .kontakt-undertext { color: #5e533a; margin-bottom: 32px; }
+    .kontakt-rader { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .kontakt-rad {
+      font-family: 'Caveat', cursive;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--bläck);
+      text-decoration: none;
+      background: var(--kraft);
+      padding: 10px 26px;
+      transform: rotate(-1deg);
+      box-shadow: 3px 3px 0 rgba(46,39,24,.2);
+      transition: transform .15s;
+    }
+    .kontakt-rad:nth-child(2) { transform: rotate(1.2deg); }
+    .kontakt-rad:hover { transform: rotate(0deg) translate(-2px,-2px); }
+
+    footer {
+      background: var(--bläck);
+      color: #cfc4ac;
+      text-align: center;
+      padding: 30px 22px 40px;
+      font-size: .85rem;
+    }
+    footer a { color: #cfc4ac; text-decoration: none; }
+    footer a:hover { color: var(--guld-ljus); }
+    .footer-hand { font-family: 'Caveat', cursive; font-size: 1.3rem; color: var(--guld-ljus); margin-bottom: 6px; }
+
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s, transform .7s; }
+    .reveal.synlig { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 780px) {
+      nav { display: none; }
+      .om-grid { grid-template-columns: 1fr; }
+      .polaroid:nth-child(2) { transform: rotate(1.6deg); }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a href="#" aria-label="Plund Media"><img src="/Plund_logo.svg" alt="Plund Media" class="logo-svg" /></a>
+    <nav>
+      <a href="#portfolio">Portfolio</a>
+      <a href="#om-mig">Om mig</a>
+      <a href="#kontakt">Kontakt</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section id="hero">
+    <div class="hero-etikett reveal">Pär utforskar företag ✦</div>
+    <h1 class="hero-rubrik reveal" style="transition-delay:.08s">Mindre reklam.<br>Mer <span class="mark">Pär</span>sonlighet.</h1>
+    <p class="hero-text reveal" style="transition-delay:.16s">
+      Traditionell företagsreklam är tråkig. Därför gör jag något annat — jag kommer in, ställer frågor,
+      spelar lite dum och gör content folk faktiskt skrattar åt och minns.
+    </p>
+    <a href="#kontakt" class="knapp reveal" style="transition-delay:.24s">Ta kontakt →</a>
+  </section>
+
+  <section id="portfolio">
+    <div class="avd-huvud reveal">
+      <p class="avd-etikett">mina videor ↓</p>
+      <h2 class="avd-titel">Portfolio</h2>
+      <p class="avd-desc">Bakom kulisserna-videos där jag utforskar företag som en nyfiken outsider.</p>
+    </div>
+    <div class="polaroid-rad">
+
+      <div class="polaroid reveal">
+        <span class="tejp"></span>
+        <div class="polaroid-media">
+          <video preload="none" poster="/Kaffia.png" playsinline><source src="/kaffia.mp4" type="video/mp4"></video>
+          <div class="polaroid-overlay" onclick="spelaVideo(this)">
+            <span class="polaroid-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></span>
+          </div>
+        </div>
+        <p class="polaroid-text">Kaffia ☕</p>
+      </div>
+
+      <div class="polaroid reveal" style="transition-delay:.08s">
+        <span class="tejp" style="transform:translateX(-50%) rotate(2deg)"></span>
+        <div class="polaroid-media">
+          <video preload="none" poster="/Sekasin.png" playsinline><source src="/Pär besöker Sekasin.mp4" type="video/mp4"></video>
+          <div class="polaroid-overlay" onclick="spelaVideo(this)">
+            <span class="polaroid-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></span>
+          </div>
+        </div>
+        <p class="polaroid-text">Sekasin 🎙️</p>
+      </div>
+
+      <div class="polaroid reveal" style="transition-delay:.16s">
+        <span class="tejp" style="transform:translateX(-50%) rotate(-5deg)"></span>
+        <div class="polaroid-media">
+          <video preload="none" poster="/Reload.png" playsinline><source src="/reload.mp4" type="video/mp4"></video>
+          <div class="polaroid-overlay" onclick="spelaVideo(this)">
+            <span class="polaroid-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></span>
+          </div>
+        </div>
+        <p class="polaroid-text">Reload Vending 🥤</p>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="om-mig">
+    <div class="om-grid">
+      <div class="anteckning reveal">
+        <p class="avd-etikett">vem är jag?</p>
+        <h2 class="avd-titel">Bakom kameran</h2>
+        <p class="brödtext">Pär här hej. Jag är från Purmo, studerar socialpsykologi i Helsingfors och har skapat videor sedan jag var 12.
+Idag gör jag content för Svenska Kulturfonden och Yle Watt. Jag driver också Plund Media för att företagsreklam är genuint tråkig och kan göras mycket roligare.</p>
+        <ul class="fakta-lista">
+          <li><strong>100%</strong> — Autentiskt content, inget manus och ingen reklam-känsla</li>
+          <li><strong>Bakom kulisserna</strong> — Så här funkar företaget på riktigt.</li>
+          <li><strong>Underhållning</strong> — Videor folk faktiskt orkar se klart, och delar.</li>
+        </ul>
+      </div>
+      <div class="stor-polaroid reveal" style="transition-delay:.1s">
+        <span class="tejp"></span>
+        <img src="/anka.JPG" alt="Pär Lund" />
+        <p class="polaroid-text">O jåå, ja kan no typ va seriös. 🦆</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="kontakt">
+    <div class="kontakt-kort reveal">
+      <span class="tejp"></span>
+      <p class="avd-etikett">kom igång!</p>
+      <h2 class="kontakt-titel">Vill ni att jag kommer och gör en video om <span class="mark">ert företag?</span></h2>
+      <p class="kontakt-undertext">Hör av er så pratar vi om hur det kan se ut för just ert företag.</p>
+      <div class="kontakt-rader">
+        <a href="mailto:plundcollab@gmail.com" class="kontakt-rad">✉ plundcollab@gmail.com</a>
+        <a href="tel:+35844240042" class="kontakt-rad">☏ +358 44 2404042</a>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <p class="footer-hand">tack för att du tittade förbi!</p>
+  <p><a href="https://www.instagram.com/prrlund" target="_blank">Instagram</a> &nbsp;·&nbsp; <a href="https://www.tiktok.com/@prrlund" target="_blank">TikTok</a></p>
+  <p>© 2026 Plund Media</p>
+</footer>
+
+<script>
+  var obs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) { e.target.classList.add('synlig'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
+
+  function spelaVideo(overlay) {
+    var kort = overlay.closest('.polaroid');
+    var video = kort.querySelector('video');
+    document.querySelectorAll('.polaroid video').forEach(function(v) {
+      if (v !== video) { v.pause(); v.closest('.polaroid').classList.remove('spelar'); v.controls = false; }
+    });
+    kort.classList.add('spelar');
+    video.controls = true;
+    video.play();
+  }
+</script>
+</body>
+</html>
