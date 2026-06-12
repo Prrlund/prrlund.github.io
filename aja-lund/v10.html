@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Aja Lund — Photographer & Artist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{--bg:#f4f5f4;--ink:#1d1f1d;--muted:#9aa09b;--line:#e1e4e1;}
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--ink);font-family:'Manrope',sans-serif;font-weight:300;-webkit-font-smoothing:antialiased;}
+  a{color:inherit;text-decoration:none;}
+  ::selection{background:var(--ink);color:var(--bg);}
+
+  header{position:fixed;inset:0 0 auto;z-index:90;display:flex;justify-content:space-between;align-items:center;height:66px;padding:0 40px;background:rgba(244,245,244,.9);backdrop-filter:blur(14px);}
+  .logo{font-weight:500;font-size:.92rem;letter-spacing:.3em;text-transform:uppercase;}
+  nav{display:flex;gap:30px;}
+  nav a{font-size:.64rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);transition:color .25s;}
+  nav a:hover{color:var(--ink);}
+
+  #hero{padding:170px 40px 90px;max-width:1480px;margin:0 auto;}
+  .now{display:inline-flex;align-items:center;gap:9px;font-size:.62rem;letter-spacing:.26em;text-transform:uppercase;color:var(--muted);margin-bottom:34px;}
+  .now i{width:7px;height:7px;border-radius:50%;background:var(--ink);display:inline-block;}
+  h1{font-weight:200;font-size:clamp(2.6rem,6.6vw,5.6rem);line-height:1.06;letter-spacing:-.02em;max-width:1060px;}
+  h1 b{font-weight:400;}
+  .hero-foot{margin-top:44px;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:18px;}
+  .hero-foot p{font-size:.9rem;line-height:1.85;color:#5c615c;max-width:430px;}
+  .hero-foot a{font-size:.64rem;letter-spacing:.22em;text-transform:uppercase;border-bottom:1px solid var(--ink);padding-bottom:4px;transition:opacity .25s;font-weight:400;}
+  .hero-foot a:hover{opacity:.5;}
+
+  .exhibit{max-width:1480px;margin:0 auto;padding:50px 40px;}
+  .exhibit .frame{overflow:hidden;}
+  .exhibit img{width:100%;display:block;transition:transform 3.5s ease;}
+  .exhibit:hover img{transform:scale(1.02);}
+  .exhibit .meta{display:flex;justify-content:space-between;align-items:baseline;padding-top:18px;border-bottom:1px solid var(--line);padding-bottom:18px;}
+  .exhibit .meta .t{font-weight:400;font-size:1.05rem;letter-spacing:.02em;}
+  .exhibit .meta .t span{color:var(--muted);font-weight:300;margin-left:14px;}
+  .exhibit .meta .go{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);transition:color .25s;}
+  .exhibit:hover .meta .go{color:var(--ink);}
+  .exhibit.duo{display:grid;grid-template-columns:1fr 1fr;gap:40px;}
+  .exhibit.duo > a{display:block;}
+
+  .statement{padding:130px 40px;text-align:center;}
+  .statement p{font-weight:200;font-size:clamp(1.7rem,3.8vw,3rem);line-height:1.5;max-width:980px;margin:0 auto;letter-spacing:-.01em;}
+  .statement p b{font-weight:400;}
+  .statement .s{margin-top:30px;font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);}
+
+  #index{max-width:1480px;margin:0 auto;padding:40px 40px 110px;}
+  #index h2{font-size:.64rem;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);margin-bottom:30px;font-weight:400;}
+  .idx{display:grid;grid-template-columns:repeat(2,1fr);gap:0 60px;}
+  .idx a{display:flex;justify-content:space-between;align-items:baseline;padding:17px 2px;border-top:1px solid var(--line);font-weight:300;font-size:1.02rem;transition:padding-left .25s;}
+  .idx a:hover{padding-left:14px;}
+  .idx a span:last-child{font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);}
+
+  #about{background:#fff;padding:120px 40px;}
+  .ab-inner{max-width:1480px;margin:0 auto;display:grid;grid-template-columns:5fr 7fr;gap:90px;align-items:center;}
+  .ab-inner .im{overflow:hidden;}
+  .ab-inner img{width:100%;display:block;}
+  .ab-inner .k{font-size:.62rem;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);margin-bottom:24px;}
+  .ab-inner h2{font-weight:200;font-size:clamp(2rem,4vw,3.4rem);line-height:1.12;letter-spacing:-.015em;margin-bottom:28px;}
+  .ab-inner h2 b{font-weight:400;}
+  .ab-inner p{font-size:.92rem;line-height:2;color:#5c615c;}
+  .ab-inner p + p{margin-top:15px;}
+  .cv-cols{margin-top:44px;display:grid;grid-template-columns:1fr 1fr;gap:36px;}
+  .cv-cols h3{font-size:.6rem;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);margin-bottom:16px;font-weight:400;}
+  .cv-cols .r{padding:9px 0;border-top:1px solid var(--line);font-size:.82rem;display:flex;gap:14px;}
+  .cv-cols .y{color:var(--muted);font-size:.72rem;width:42px;flex-shrink:0;padding-top:2px;}
+
+  #contact{padding:140px 40px;text-align:center;}
+  #contact .k{font-size:.62rem;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);margin-bottom:28px;}
+  #contact h2{font-weight:200;font-size:clamp(2.6rem,7vw,6rem);line-height:1.04;letter-spacing:-.02em;}
+  #contact h2 b{font-weight:400;}
+  .mail{display:inline-block;margin-top:44px;font-weight:300;font-size:clamp(1.15rem,2.6vw,1.7rem);border-bottom:1px solid var(--ink);padding-bottom:5px;transition:opacity .25s;}
+  .mail:hover{opacity:.5;}
+  .c-links{margin-top:48px;display:flex;justify-content:center;gap:36px;flex-wrap:wrap;font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);}
+  .c-links a:hover{color:var(--ink);}
+
+  footer{border-top:1px solid var(--line);padding:26px 40px;display:flex;justify-content:space-between;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);}
+
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity 1s ease,transform 1s ease;}
+  .reveal.in{opacity:1;transform:none;}
+
+  @media(max-width:980px){
+    header{padding:0 20px;}
+    nav{display:none;}
+    #hero{padding:120px 20px 60px;}
+    .exhibit{padding:34px 20px;}
+    .exhibit.duo{grid-template-columns:1fr;gap:34px;}
+    .idx{grid-template-columns:1fr;}
+    #index{padding:30px 20px 70px;}
+    .ab-inner{grid-template-columns:1fr;gap:44px;}
+    #about{padding:70px 20px;}
+    .statement{padding:90px 20px;}
+    #contact{padding:90px 20px;}
+    footer{flex-direction:column;gap:6px;padding:20px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="#">Aja Lund</a>
+  <nav>
+    <a href="#index">Series</a>
+    <a href="#about">About</a>
+    <a href="https://ajalund.fi/exhibitions" target="_blank" rel="noopener">Exhibitions</a>
+    <a href="https://ajalund.fi/books" target="_blank" rel="noopener">Books</a>
+    <a href="https://ajalund.fi/shop" target="_blank" rel="noopener">Shop</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<section id="hero">
+  <span class="now reveal in"><i></i>Photographer & Artist — Jakobstad, Finland</span>
+  <h1 class="reveal in">Photographs of what people <b>keep</b> — and what keeps people.</h1>
+  <div class="hero-foot reveal in">
+    <p>Fine art and documentary photography by Aja Lund: collected objects, fellow collectors, humans, and the quiet landscapes between the living and the dead.</p>
+    <a href="#index">Index of series</a>
+  </div>
+</section>
+
+<div class="exhibit reveal">
+  <a href="https://ajalund.fi/levande-och-doeda-1" target="_blank" rel="noopener">
+    <div class="frame"><img src="https://cdn.myportfolio.com/8d5343b58cee252cfbfb55fe90f83778/7c3a171c-4af7-477a-b788-bc8cf37722f6_rw_1920.jpg?h=c24e7a18bc722876f384b49db0c28099" alt="Levande och döda" /></div>
+    <div class="meta"><span class="t">Levande och döda<span>Landscapes, ongoing</span></span><span class="go">View series →</span></div>
+  </a>
+</div>
+
+<div class="exhibit duo reveal">
+  <a href="https://ajalund.fi/studio" target="_blank" rel="noopener">
+    <div class="frame"><img loading="lazy" src="https://cdn.myportfolio.com/8d5343b58cee252cfbfb55fe90f83778/43d3a541-b338-4dba-ba6d-167fda681fab_rw_1920.jpg?h=0857bb334bc28915c3e6fd53c2678d37" alt="Objects — brushes" /></div>
+    <div class="meta"><span class="t">Objects<span>Studio</span></span><span class="go">View →</span></div>
+  </a>
+  <a href="https://ajalund.fi/portraits" target="_blank" rel="noopener">
+    <div class="frame"><img loading="lazy" src="https://cdn.myportfolio.com/8d5343b58cee252cfbfb55fe90f83778/83978c3a-1924-4148-96f8-f9b5a8af79dd_rw_1920.jpg?h=5f77b34f603a56213effbce1ac9a5cc7" alt="Humans" /></div>
+    <div class="meta"><span class="t">Humans<span>Portraits</span></span><span class="go">View →</span></div>
+  </a>
+</div>
+
+<div class="exhibit reveal">
+  <a href="https://ajalund.fi/collectors" target="_blank" rel="noopener">
+    <div class="frame"><img loading="lazy" src="https://cdn.myportfolio.com/8d5343b58cee252cfbfb55fe90f83778/25e16beb-178d-40b3-b45e-330b149f75a9_rw_1920.jpg?h=5cca92a8da7f005ed8f94c12fe8b482f" alt="Collectors" /></div>
+    <div class="meta"><span class="t">Collectors<span>Documentary, 2017—</span></span><span class="go">View series →</span></div>
+  </a>
+</div>
+
+<div class="exhibit duo reveal">
+  <a href="https://ajalund.fi/hiding-in-haze" target="_blank" rel="noopener">
+    <div class="frame"><img loading="lazy" src="https://cdn.myportfolio.com/8d5343b58cee252cfbfb55fe90f83778/e2a31732-b4c4-4cfa-8012-27298af85c3a_rw_1920.jpg?h=fc4881ec852546a7821cde47c2747a64" alt="Hiding in Haze" /></div>
+    <div class="meta"><span class="t">Emotions<span>Hiding in Haze</span></span><span class="go">View →</span></div>
+  </a>
+  <a href="https://ajalund.fi/studio" target="_blank" rel="noopener">
+    <div class="frame"><img loading="lazy" src="https://cdn.myportfolio.com/8d5343b58cee252cfbfb55fe90f83778/e6c46540-3d62-4939-9c38-651d68701927_rw_1920.jpg?h=a23fe8bc6fb7ed8b63ddf888a1924668" alt="Objects — boxes" /></div>
+    <div class="meta"><span class="t">Objects<span>Studio</span></span><span class="go">View →</span></div>
+  </a>
+</div>
+
+<section class="statement reveal">
+  <p>“I am drawn to the contrasts, throwing myself between the true and the imagined, the ruled and the free, <b>the dead and the living.</b>”</p>
+  <p class="s">Artist statement</p>
+</section>
+
+<section id="index">
+  <h2 class="reveal">Complete index</h2>
+  <div class="idx reveal">
+    <a href="https://ajalund.fi/studio" target="_blank" rel="noopener"><span>Objects</span><span>Studio</span></a>
+    <a href="https://ajalund.fi/collectors" target="_blank" rel="noopener"><span>Collectors</span><span>Documentary</span></a>
+    <a href="https://ajalund.fi/portraits" target="_blank" rel="noopener"><span>Humans</span><span>Portraits</span></a>
+    <a href="https://ajalund.fi/hiding-in-haze" target="_blank" rel="noopener"><span>Emotions — Hiding in Haze</span><span>Staged</span></a>
+    <a href="https://ajalund.fi/du-fattas-mig" target="_blank" rel="noopener"><span>Sorrows — Du fattas mig</span><span>Staged</span></a>
+    <a href="https://ajalund.fi/levande-och-doeda-1" target="_blank" rel="noopener"><span>Landscapes — Levande och döda</span><span>Ongoing</span></a>
+    <a href="https://ajalund.fi/lekparken" target="_blank" rel="noopener"><span>Playgrounds — Lekparken</span><span>Series</span></a>
+    <a href="https://ajalund.fi/old-time-photo" target="_blank" rel="noopener"><span>Old Times</span><span>Archive</span></a>
+  </div>
+</section>
+
+<section id="about">
+  <div class="ab-inner">
+    <div class="im reveal">
+      <img src="https://cdn.myportfolio.com/8d5343b58cee252cfbfb55fe90f83778/132e2a72-e878-40d0-9b3d-55e5adf437b7_rw_1920.jpg?h=346baade147cecde1f9aa07c0ad95983" alt="Objects — collected light bulbs" />
+    </div>
+    <div>
+      <p class="k reveal">About</p>
+      <h2 class="reveal">A collector who happens to <b>photograph</b> — or the other way around.</h2>
+      <p class="reveal">Born in a small solitary village in the woods on the west coast of Finland. When Aja was twelve her father died, and collecting became a way of keeping: objects as containers of memories and emotions. The camera followed naturally — another way to gather life, picture by picture.</p>
+      <p class="reveal">She holds an MA in Photography (Novia UAS), spent a year at Atelier Smedsby in Paris under Margot Wallard and JH Engström, and interned with Anders Petersen in Stockholm. She teaches photography, runs Kulturkollektivet Insidan, and won the Solveig von Schoultz poetry prize in 2024.</p>
+      <div class="cv-cols reveal">
+        <div>
+          <h3>Selected solo</h3>
+          <div class="r"><span class="y">2025</span><span>Object me — After Eight, Jakobstad</span></div>
+          <div class="r"><span class="y">2024</span><span>I am a collector, I want more! — Pova, Lapua</span></div>
+          <div class="r"><span class="y">2024</span><span>Suomi Barbie — Vasa & Pori</span></div>
+          <div class="r"><span class="y">2021</span><span>Jag är en samlare… — Sandviken, SWE</span></div>
+        </div>
+        <div>
+          <h3>Books & honours</h3>
+          <div class="r"><span class="y">2026</span><span>Grant, The Finnish Cultural Foundation</span></div>
+          <div class="r"><span class="y">2023</span><span>Aja, Evidence of Death's Opposite</span></div>
+          <div class="r"><span class="y">2019</span><span>Jag är en samlare, jag vill ha mer!</span></div>
+          <div class="r"><span class="y">—</span><span>Collections: Sandvikens Konsthall</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <p class="k reveal">Commissions · Prints · Collaborations</p>
+  <h2 class="reveal">Something worth<br /><b>keeping?</b></h2>
+  <a class="mail reveal" href="mailto:ajalundphoto@gmail.com">ajalundphoto@gmail.com</a>
+  <div class="c-links reveal">
+    <a href="tel:+358505971603">+358 50 597 1603</a>
+    <a href="https://www.instagram.com/ajalundphoto/" target="_blank" rel="noopener">@ajalundphoto</a>
+    <a href="https://www.instagram.com/egenartiga/" target="_blank" rel="noopener">Egenart</a>
+    <a href="https://ajalund.fi/shop" target="_blank" rel="noopener">Shop</a>
+  </div>
+</section>
+
+<footer>
+  <span>© 2026 Aja Lund</span>
+  <span>Member, The Association of Photographic Artists in Finland</span>
+</footer>
+
+<script>
+  const obs = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); obs.unobserve(e.target);} }), {threshold:.08});
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
