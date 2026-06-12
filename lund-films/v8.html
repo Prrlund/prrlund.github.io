@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lund Films — v8</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600&display=swap');
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{--bg:#111;--fg:#efece4;--muted:#7d7a72;--amber:#d9a93c;--cell:#1b1b19;}
+    body{background:var(--bg);color:var(--fg);font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;}
+    a{color:inherit;text-decoration:none;}
+    nav{display:flex;justify-content:space-between;align-items:center;padding:22px 30px;font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;}
+    nav .lg{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:.12em;color:var(--amber);}
+    nav a:hover{color:var(--amber);}
+    .hero{text-align:center;padding:7vh 24px 5vh;}
+    .hero .eye{font-size:.66rem;letter-spacing:.4em;text-transform:uppercase;color:var(--amber);margin-bottom:14px;}
+    .hero h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(4rem,15vw,14rem);line-height:.85;letter-spacing:.02em;}
+    .hero p{margin-top:10px;color:var(--muted);font-size:.8rem;letter-spacing:.22em;text-transform:uppercase;}
+    /* FILMSTRIP */
+    .strip-wrap{margin:6vh 0;}
+    .strip{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;background:#000;padding:0;border-top:1px solid #2a2a26;border-bottom:1px solid #2a2a26;}
+    .strip::-webkit-scrollbar{height:10px;}
+    .strip::-webkit-scrollbar-track{background:#000;}
+    .strip::-webkit-scrollbar-thumb{background:var(--amber);border-radius:5px;}
+    .cellf{flex:0 0 min(72vw,560px);scroll-snap-align:center;padding:0 8px;}
+    .perf{display:flex;justify-content:space-between;padding:10px 6px;}
+    .perf i{display:block;width:22px;height:13px;background:var(--bg);border-radius:3px;}
+    .shot{position:relative;aspect-ratio:16/9;overflow:hidden;cursor:pointer;}
+    .shot .ph{position:absolute;inset:0;transition:transform .5s;}
+    .cellf:nth-child(1) .ph{background:radial-gradient(ellipse at 45% 55%,#a3742a,#1c140a 75%);}
+    .cellf:nth-child(2) .ph{background:radial-gradient(ellipse at 55% 45%,#2a5a8a,#0a1018 75%);}
+    .cellf:nth-child(3) .ph{background:radial-gradient(ellipse at 50% 50%,#8a2a3a,#180a0d 75%);}
+    .cellf:nth-child(4) .ph{background:radial-gradient(ellipse at 45% 55%,#3a7a3a,#0a140a 75%);}
+    .cellf:nth-child(5) .ph{background:radial-gradient(ellipse at 55% 50%,#6a3a8a,#100a16 75%);}
+    .cellf:nth-child(6) .ph{background:radial-gradient(ellipse at 50% 50%,#8a6a2a,#16120a 75%);}
+    .shot:hover .ph{transform:scale(1.06);}
+    .shot .cap{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-between;align-items:baseline;padding:14px 16px;background:linear-gradient(to top,rgba(0,0,0,.85),transparent);}
+    .shot .t{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:.05em;}
+    .shot .c{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--amber);}
+    .hint{text-align:center;font-size:.64rem;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);margin-top:16px;}
+    /* INFO */
+    .info{max-width:760px;margin:0 auto;padding:8vh 26px;text-align:center;}
+    .info p{font-size:1.05rem;line-height:1.9;color:#b9b5aa;}
+    .info b{color:var(--fg);font-weight:600;}
+    footer{border-top:1px solid #2a2a26;padding:46px 30px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px;}
+    footer .big{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,6vw,4.5rem);line-height:.9;}
+    footer .big span{color:var(--amber);}
+    footer .lk{display:flex;flex-direction:column;gap:6px;text-align:right;font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);}
+    footer .lk a:hover{color:var(--amber);}
+    @media(max-width:600px){footer{flex-direction:column;align-items:flex-start;}footer .lk{text-align:left;}}
+  </style>
+</head>
+<body>
+  <nav>
+    <span class="lg">LF</span>
+    <span><a href="#reel">Reel</a> &nbsp;·&nbsp; <a href="mailto:hello@lund.films">Mail</a> &nbsp;·&nbsp; <a href="https://instagram.com/lund.films">IG ↗</a></span>
+  </nav>
+
+  <section class="hero">
+    <div class="eye">Algot Lund · Helsinki</div>
+    <h1>LUND FILMS</h1>
+    <p>Films · Commercials · Photo · 3D</p>
+  </section>
+
+  <div class="strip-wrap" id="reel">
+    <div class="strip">
+      <div class="cellf">
+        <div class="perf"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="shot"><div class="ph"></div><div class="cap"><span class="t">Stinging Rocko</span><span class="c">Video</span></div></div>
+        <div class="perf"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      </div>
+      <div class="cellf">
+        <div class="perf"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="shot"><div class="ph"></div><div class="cap"><span class="t">SP Cables</span><span class="c">3D Render</span></div></div>
+        <div class="perf"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      </div>
+      <div class="cellf">
+        <div class="perf"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="shot"><div class="ph"></div><div class="cap"><span class="t">Joel Sundkvist</span><span class="c">Promo Photos</span></div></div>
+        <div class="perf"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      </div>
+      <div class="cellf">
+        <div class="perf"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="shot"><div class="ph"></div><div class="cap"><span class="t">Heal From You</span><span class="c">Album Cover</span></div></div>
+        <div class="perf"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      </div>
+      <div class="cellf">
+        <div class="perf"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="shot"><div class="ph"></div><div class="cap"><span class="t">8th Road Home</span><span class="c">Album Cover</span></div></div>
+        <div class="perf"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      </div>
+      <div class="cellf">
+        <div class="perf"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="shot"><div class="ph"></div><div class="cap"><span class="t">Cat</span><span class="c">Cat</span></div></div>
+        <div class="perf"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      </div>
+    </div>
+    <p class="hint">← Drag the reel →</p>
+  </div>
+
+  <section class="info">
+    <p>Lund Films is the studio of <b>Algot Lund</b> — a cinematographer and editor in Helsinki shooting <b>films, commercials and photography</b> with a cinematic eye. Every project is treated like a frame worth keeping.</p>
+  </section>
+
+  <footer>
+    <div class="big">LUND <span>FILMS</span></div>
+    <div class="lk">
+      <a href="mailto:hello@lund.films">hello@lund.films</a>
+      <a href="https://instagram.com/lund.films">@lund.films ↗</a>
+      <span>© 2026 Helsinki</span>
+    </div>
+  </footer>
+</body>
+</html>
