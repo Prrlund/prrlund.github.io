@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Plund Media — Thumbnail-labb</title>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800;900&family=DM+Sans:opsz,wght@9..40,400;9..40,700;9..40,900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0c0c0b;
+      --panel: #161614;
+      --kant: rgba(255,255,255,.1);
+      --text: #f2f1ee;
+      --dim: #8a8884;
+      --guld: #ffbf32;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      padding: 40px clamp(16px, 4vw, 56px) 80px;
+    }
+    a.tillbaka { color: var(--dim); text-decoration: none; font-size: .8rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+    a.tillbaka:hover { color: var(--guld); }
+    h1 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 900; letter-spacing: -.03em; margin: 14px 0 8px; }
+    .ingress { color: var(--dim); max-width: 620px; margin-bottom: 32px; }
+
+    /* KONTROLLPANEL */
+    .kontroller {
+      background: var(--panel);
+      border: 1px solid var(--kant);
+      border-radius: 16px;
+      padding: 22px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 26px;
+      margin-bottom: 40px;
+      position: sticky;
+      top: 16px;
+      z-index: 50;
+      backdrop-filter: blur(10px);
+      background: rgba(22,22,20,.92);
+    }
+    .kontroll-grupp { display: flex; flex-direction: column; gap: 8px; }
+    .kontroll-grupp > label {
+      font-size: .68rem; font-weight: 800; letter-spacing: .14em;
+      text-transform: uppercase; color: var(--dim);
+    }
+    .knapp-rad { display: flex; gap: 6px; flex-wrap: wrap; }
+    .mini-knapp {
+      background: #222220;
+      border: 1px solid var(--kant);
+      color: var(--text);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: .8rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .mini-knapp:hover { border-color: var(--guld); }
+    .mini-knapp.aktiv { background: var(--guld); color: #111; border-color: var(--guld); }
+    input[type=text] {
+      background: #222220;
+      border: 1px solid var(--kant);
+      color: var(--text);
+      border-radius: 8px;
+      padding: 9px 12px;
+      font-size: .85rem;
+      font-family: inherit;
+      min-width: 180px;
+    }
+    input[type=text]:focus { outline: none; border-color: var(--guld); }
+    .fil-knapp {
+      display: inline-block;
+      background: var(--guld);
+      color: #111;
+      border-radius: 8px;
+      padding: 9px 16px;
+      font-size: .8rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform .15s;
+    }
+    .fil-knapp:hover { transform: translateY(-1px); }
+    input[type=file] { display: none; }
+
+    /* GALLERI */
+    .thumb-galleri {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 28px;
+    }
+    .thumb-kort { display: flex; flex-direction: column; gap: 12px; }
+    .thumb-titel { font-size: .95rem; font-weight: 800; letter-spacing: -.01em; }
+    .thumb-titel span { color: var(--dim); font-weight: 400; font-size: .82rem; display: block; margin-top: 2px; }
+
+    /* SJÄLVA THUMBNAILEN (9:16) */
+    .thumb {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 9/16;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #1a1a18;
+      border: 1px solid var(--kant);
+      isolation: isolate;
+    }
+    .thumb-bg {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      z-index: 0;
+    }
+    .thumb-mörk {
+      position: absolute; inset: 0;
+      z-index: 1;
+      background: linear-gradient(to bottom, rgba(10,10,8,.25) 0%, rgba(10,10,8,.05) 40%, rgba(10,10,8,.55) 100%);
+    }
+
+    /* ── FÖRSTORINGSGLAS (återanvändbar) ── */
+    .lupp { position: relative; width: var(--lupp, 58%); aspect-ratio: 1; }
+    .lins {
+      position: absolute; inset: 0;
+      border-radius: 50%;
+      border: 7px solid #111;
+      background: var(--lins-bg, rgba(255,255,255,.94));
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 7%;
+      padding: 13%;
+      overflow: hidden;
+      box-shadow: inset 0 0 0 2px rgba(255,255,255,.5), 0 8px 24px rgba(0,0,0,.3);
+      z-index: 2;
+    }
+    .skaft {
+      position: absolute;
+      left: 79%; top: 79%;
+      width: 11%;
+      height: 46%;
+      background: #111;
+      border-radius: 100px;
+      transform: translate(-50%, 0) rotate(-45deg);
+      transform-origin: top center;
+      box-shadow: 0 6px 16px rgba(0,0,0,.35);
+      z-index: 1;
+    }
+    .lupp-titel {
+      font-family: 'Archivo', sans-serif;
+      font-weight: 900;
+      color: #111;
+      text-transform: uppercase;
+      text-align: center;
+      line-height: .9;
+    }
+    .lupp-titel .stor { display: block; font-size: clamp(.8rem, 4.2cqw, 2rem); letter-spacing: -.02em; }
+    .lupp-titel .liten { display: block; font-size: clamp(.4rem, 2.1cqw, 1rem); letter-spacing: .12em; font-weight: 800; margin-top: 2px; }
+
+    /* ── LOGO-CHIP (normaliserar alla logoformer) ── */
+    .logo-chip {
+      background: var(--chip-bg, #fff);
+      border-radius: var(--chip-radie, 9px);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .logo-chip img {
+      max-width: 100%; max-height: 100%;
+      width: auto; height: auto;
+      object-fit: contain;
+      display: block;
+    }
+
+    /* "PÄR UTFORSKAR"-banner (för text-runt-varianter) */
+    .pär-banner {
+      font-family: 'Archivo', sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      color: #fff;
+      text-align: center;
+      line-height: .95;
+      text-shadow: 0 2px 12px rgba(0,0,0,.5);
+    }
+    .pär-banner .b-stor { display: block; font-size: clamp(1rem, 6cqw, 2.4rem); letter-spacing: -.02em; }
+    .pär-banner .b-liten { display: block; font-size: clamp(.5rem, 2.6cqw, 1rem); letter-spacing: .16em; color: var(--guld); margin-top: 3px; }
+
+    /* container queries så texten skalar med thumb-bredden */
+    .thumb { container-type: inline-size; }
+
+    /* Nedladdningsknapp */
+    .ladda-ner {
+      background: transparent;
+      border: 1px solid var(--kant);
+      color: var(--text);
+      border-radius: 8px;
+      padding: 9px;
+      font-size: .78rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .ladda-ner:hover { border-color: var(--guld); color: var(--guld); }
+
+    @media (max-width: 640px) {
+      .kontroller { position: static; }
+    }
+  </style>
+</head>
+<body>
+
+  <a class="tillbaka" href="./">← Designlabb</a>
+  <h1>Thumbnail-labb 🔍</h1>
+  <p class="ingress">
+    Sex olika overlay-stilar för dina inlägg. Ladda upp ett företags logo (rund, fyrkantig — spelar ingen roll, den läggs alltid i en "chip" som normaliserar formen),
+    byt bakgrund och jämför. Ladda ner den du gillar som färdig bild.
+  </p>
+
+  <!-- KONTROLLER -->
+  <div class="kontroller">
+    <div class="kontroll-grupp">
+      <label>Företagsnamn</label>
+      <input type="text" id="namn" value="Företaget" oninput="uppdateraNamn()" />
+    </div>
+
+    <div class="kontroll-grupp">
+      <label>Test-logo (form)</label>
+      <div class="knapp-rad">
+        <button class="mini-knapp aktiv" data-logo="rund" onclick="väljLogo('rund', this)">Rund</button>
+        <button class="mini-knapp" data-logo="fyrkant" onclick="väljLogo('fyrkant', this)">Fyrkantig</button>
+        <button class="mini-knapp" data-logo="bred" onclick="väljLogo('bred', this)">Bred</button>
+        <label class="fil-knapp">Ladda upp<input type="file" accept="image/*" onchange="laddaLogo(event)" /></label>
+      </div>
+    </div>
+
+    <div class="kontroll-grupp">
+      <label>Chip-bakgrund</label>
+      <div class="knapp-rad">
+        <button class="mini-knapp aktiv" data-chip="#fff" onclick="väljChip('#fff', this)">Vit</button>
+        <button class="mini-knapp" data-chip="#111" onclick="väljChip('#111', this)">Svart</button>
+        <button class="mini-knapp" data-chip="transparent" onclick="väljChip('transparent', this)">Ingen</button>
+      </div>
+    </div>
+
+    <div class="kontroll-grupp">
+      <label>Bakgrund</label>
+      <div class="knapp-rad">
+        <button class="mini-knapp aktiv" data-bg="/Kaffia.png" onclick="väljBg('/Kaffia.png', this)">Kaffia</button>
+        <button class="mini-knapp" data-bg="/Sekasin.png" onclick="väljBg('/Sekasin.png', this)">Sekasin</button>
+        <button class="mini-knapp" data-bg="/Reload.png" onclick="väljBg('/Reload.png', this)">Reload</button>
+        <label class="fil-knapp">Ladda upp<input type="file" accept="image/*" onchange="laddaBg(event)" /></label>
+      </div>
+    </div>
+  </div>
+
+  <!-- GALLERI -->
+  <div class="thumb-galleri" id="galleri">
+
+    <!-- 1. Lupp centrerad — allt i glaset -->
+    <div class="thumb-kort">
+      <div class="thumb-titel">1. Lupp — allt i glaset <span>Text + logo inuti förstoringsglaset</span></div>
+      <div class="thumb" id="t1">
+        <img class="thumb-bg" src="/Kaffia.png" alt="" crossorigin="anonymous" />
+        <div class="thumb-mörk"></div>
+        <div style="position:absolute; inset:0; z-index:3; display:flex; align-items:center; justify-content:center;">
+          <div class="lupp" style="--lupp:64%;">
+            <div class="lins" style="gap:9%;">
+              <div class="lupp-titel"><span class="stor">PÄR</span><span class="liten">UTFORSKAR</span></div>
+              <div class="logo-chip" data-logo-chip style="width:74%; height:34%;"><img data-logo src="" alt="" crossorigin="anonymous" /></div>
+            </div>
+            <span class="skaft"></span>
+          </div>
+        </div>
+      </div>
+      <button class="ladda-ner" onclick="laddaNer('t1','plund-thumb-1')">⬇ Ladda ner</button>
+    </div>
+
+    <!-- 2. Logo i glaset, text runt -->
+    <div class="thumb-kort">
+      <div class="thumb-titel">2. Logo i glaset, text runt <span>Bara logon inuti, "Pär utforskar" runtom</span></div>
+      <div class="thumb" id="t2">
+        <img class="thumb-bg" src="/Kaffia.png" alt="" crossorigin="anonymous" />
+        <div class="thumb-mörk"></div>
+        <div style="position:absolute; inset:0; z-index:3; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6%; padding:8%;">
+          <div class="pär-banner"><span class="b-stor">PÄR UTFORSKAR</span></div>
+          <div class="lupp" style="--lupp:62%;">
+            <div class="lins" style="padding:16%;">
+              <div class="logo-chip" data-logo-chip style="width:100%; height:100%; --chip-radie:50%;"><img data-logo src="" alt="" crossorigin="anonymous" /></div>
+            </div>
+            <span class="skaft"></span>
+          </div>
+          <div class="pär-banner"><span class="b-liten" data-namn style="font-size:clamp(.6rem,3.4cqw,1.3rem); letter-spacing:.04em;">FÖRETAGET</span></div>
+        </div>
+      </div>
+      <button class="ladda-ner" onclick="laddaNer('t2','plund-thumb-2')">⬇ Ladda ner</button>
+    </div>
+
+    <!-- 3. Nedre list -->
+    <div class="thumb-kort">
+      <div class="thumb-titel">3. Nedre list <span>TV-stil med lupp, text och logo i en rad</span></div>
+      <div class="thumb" id="t3">
+        <img class="thumb-bg" src="/Kaffia.png" alt="" crossorigin="anonymous" />
+        <div class="thumb-mörk"></div>
+        <div style="position:absolute; left:0; right:0; bottom:0; z-index:3; background:#111; padding:5% 6%; display:flex; align-items:center; gap:5%;">
+          <div class="lupp" style="--lupp:24%; flex-shrink:0;">
+            <div class="lins" style="background:var(--guld); padding:0;"></div>
+            <span class="skaft"></span>
+          </div>
+          <div style="flex:1; min-width:0;">
+            <div class="pär-banner" style="text-align:left;">
+              <span class="b-stor" style="color:#fff; font-size:clamp(.7rem,4.6cqw,1.8rem);">PÄR UTFORSKAR</span>
+              <span class="b-liten" data-namn style="text-align:left; font-size:clamp(.5rem,2.8cqw,1.1rem);">FÖRETAGET</span>
+            </div>
+          </div>
+          <div class="logo-chip" data-logo-chip style="width:18%; aspect-ratio:1; flex-shrink:0;"><img data-logo src="" alt="" crossorigin="anonymous" /></div>
+        </div>
+      </div>
+      <button class="ladda-ner" onclick="laddaNer('t3','plund-thumb-3')">⬇ Ladda ner</button>
+    </div>
+
+    <!-- 4. Guld topp-band -->
+    <div class="thumb-kort">
+      <div class="thumb-titel">4. Guld topp-band <span>Guldbanner uppe, stor logo-chip nere</span></div>
+      <div class="thumb" id="t4">
+        <img class="thumb-bg" src="/Kaffia.png" alt="" crossorigin="anonymous" />
+        <div class="thumb-mörk"></div>
+        <div style="position:absolute; top:0; left:0; right:0; z-index:3; background:var(--guld); padding:4% 6%; display:flex; align-items:center; gap:4%;">
+          <div class="lupp" style="--lupp:13%; flex-shrink:0;">
+            <div class="lins" style="background:#111; border-color:#111; padding:0;"></div>
+            <span class="skaft"></span>
+          </div>
+          <span class="pär-banner" style="color:#111; text-shadow:none; text-align:left;"><span class="b-stor" style="color:#111; font-size:clamp(.7rem,4.4cqw,1.7rem);">PÄR UTFORSKAR</span></span>
+        </div>
+        <div style="position:absolute; left:0; right:0; bottom:0; z-index:3; display:flex; flex-direction:column; align-items:center; gap:4%; padding:0 10% 12%;">
+          <div class="logo-chip" data-logo-chip style="width:60%; aspect-ratio:16/10;"><img data-logo src="" alt="" crossorigin="anonymous" /></div>
+          <span class="pär-banner"><span class="b-liten" data-namn style="font-size:clamp(.6rem,3.2cqw,1.2rem); letter-spacing:.08em;">FÖRETAGET</span></span>
+        </div>
+      </div>
+      <button class="ladda-ner" onclick="laddaNer('t4','plund-thumb-4')">⬇ Ladda ner</button>
+    </div>
+
+    <!-- 5. Hörn-lupp -->
+    <div class="thumb-kort">
+      <div class="thumb-titel">5. Hörn-lupp <span>Stort glas i hörnet, text längs botten</span></div>
+      <div class="thumb" id="t5">
+        <img class="thumb-bg" src="/Kaffia.png" alt="" crossorigin="anonymous" />
+        <div class="thumb-mörk"></div>
+        <div class="lupp" style="--lupp:54%; position:absolute; top:5%; left:5%; z-index:3;">
+          <div class="lins" style="padding:15%;">
+            <div class="logo-chip" data-logo-chip style="width:100%; height:100%; --chip-radie:50%;"><img data-logo src="" alt="" crossorigin="anonymous" /></div>
+          </div>
+          <span class="skaft"></span>
+        </div>
+        <div style="position:absolute; left:0; right:0; bottom:0; z-index:3; padding:8% 6%;">
+          <span class="pär-banner" style="text-align:left;">
+            <span class="b-stor" style="font-size:clamp(.9rem,6.4cqw,2.6rem);">PÄR<br>UTFORSKAR</span>
+            <span class="b-liten" data-namn style="text-align:left; font-size:clamp(.6rem,3cqw,1.2rem); margin-top:6px;">FÖRETAGET</span>
+          </span>
+        </div>
+      </div>
+      <button class="ladda-ner" onclick="laddaNer('t5','plund-thumb-5')">⬇ Ladda ner</button>
+    </div>
+
+    <!-- 6. Ren stämpel -->
+    <div class="thumb-kort">
+      <div class="thumb-titel">6. Ren stämpel <span>Liten lupp-badge i hörnet, stor logo centrerad</span></div>
+      <div class="thumb" id="t6">
+        <img class="thumb-bg" src="/Kaffia.png" alt="" crossorigin="anonymous" />
+        <div class="thumb-mörk"></div>
+        <div style="position:absolute; top:5%; left:5%; z-index:3; display:flex; align-items:center; gap:8px; background:rgba(17,17,17,.78); backdrop-filter:blur(6px); border-radius:100px; padding:6px 14px 6px 8px;">
+          <div class="lupp" style="--lupp:26px; width:26px; flex-shrink:0;">
+            <div class="lins" style="background:var(--guld); border-width:3px; padding:0;"></div>
+            <span class="skaft" style="width:13%; height:48%;"></span>
+          </div>
+          <span class="pär-banner"><span class="b-liten" style="color:#fff; font-size:.62rem; letter-spacing:.14em;">PÄR UTFORSKAR</span></span>
+        </div>
+        <div style="position:absolute; inset:0; z-index:2; display:flex; align-items:center; justify-content:center; padding:14%;">
+          <div class="logo-chip" data-logo-chip style="width:78%; aspect-ratio:16/11; box-shadow:0 16px 40px rgba(0,0,0,.4);"><img data-logo src="" alt="" crossorigin="anonymous" /></div>
+        </div>
+        <div style="position:absolute; left:0; right:0; bottom:0; z-index:3; text-align:center; padding:0 8% 9%;">
+          <span class="pär-banner"><span class="b-liten" data-namn style="font-size:clamp(.6rem,3.2cqw,1.2rem); letter-spacing:.1em;">FÖRETAGET</span></span>
+        </div>
+      </div>
+      <button class="ladda-ner" onclick="laddaNer('t6','plund-thumb-6')">⬇ Ladda ner</button>
+    </div>
+
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script>
+    // Sample-logos som demonstrerar olika former
+    var sampleLogos = {
+      rund: "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='#1a1a18'/><circle cx='50' cy='50' r='38' fill='none' stroke='#ffbf32' stroke-width='3.5'/><text x='50' y='44' font-family='Arial' font-size='15' font-weight='bold' fill='#fff' text-anchor='middle'>CO</text><text x='50' y='62' font-family='Arial' font-size='8' letter-spacing='2' fill='#ffbf32' text-anchor='middle'>STUDIO</text></svg>",
+      fyrkant: "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='#1a1a18'/><rect x='28' y='28' width='44' height='44' fill='none' stroke='#ffbf32' stroke-width='4'/><text x='50' y='57' font-family='Arial' font-size='22' font-weight='bold' fill='#fff' text-anchor='middle'>B</text></svg>",
+      bred: "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 70'><text x='100' y='48' font-family='Arial' font-size='34' font-weight='bold' fill='#1a1a18' text-anchor='middle'>BRAND<tspan fill='#e8a811'>.</tspan></text></svg>"
+    };
+
+    function svgTillDataURI(svg) { return 'data:image/svg+xml,' + encodeURIComponent(svg); }
+
+    function väljLogo(form, knapp) {
+      sättAktiv(knapp, 'data-logo');
+      sättLogo(svgTillDataURI(sampleLogos[form]));
+    }
+    function laddaLogo(e) {
+      var fil = e.target.files[0]; if (!fil) return;
+      var läsare = new FileReader();
+      läsare.onload = function(ev){ sättLogo(ev.target.result); };
+      läsare.readAsDataURL(fil);
+      // avmarkera form-knappar
+      document.querySelectorAll('[data-logo]').forEach(function(b){ b.classList.remove('aktiv'); });
+    }
+    function sättLogo(src) {
+      document.querySelectorAll('img[data-logo]').forEach(function(img){ img.src = src; });
+    }
+
+    function väljChip(färg, knapp) {
+      sättAktiv(knapp, 'data-chip');
+      document.querySelectorAll('[data-logo-chip]').forEach(function(c){ c.style.setProperty('--chip-bg', färg); });
+    }
+
+    function väljBg(src, knapp) {
+      sättAktiv(knapp, 'data-bg');
+      document.querySelectorAll('.thumb-bg').forEach(function(img){ img.src = src; });
+    }
+    function laddaBg(e) {
+      var fil = e.target.files[0]; if (!fil) return;
+      var läsare = new FileReader();
+      läsare.onload = function(ev){
+        document.querySelectorAll('.thumb-bg').forEach(function(img){ img.src = ev.target.result; });
+      };
+      läsare.readAsDataURL(fil);
+      document.querySelectorAll('[data-bg]').forEach(function(b){ b.classList.remove('aktiv'); });
+    }
+
+    function uppdateraNamn() {
+      var namn = document.getElementById('namn').value || 'Företaget';
+      document.querySelectorAll('[data-namn]').forEach(function(el){ el.textContent = namn.toUpperCase(); });
+    }
+
+    function sättAktiv(knapp, attr) {
+      var grupp = knapp.parentElement.querySelectorAll('[' + attr + ']');
+      grupp.forEach(function(b){ b.classList.remove('aktiv'); });
+      knapp.classList.add('aktiv');
+    }
+
+    function laddaNer(id, filnamn) {
+      var el = document.getElementById(id);
+      html2canvas(el, { scale: 1080 / el.offsetWidth, useCORS: true, backgroundColor: null, logging: false }).then(function(canvas){
+        var länk = document.createElement('a');
+        länk.download = filnamn + '.png';
+        länk.href = canvas.toDataURL('image/png');
+        länk.click();
+      });
+    }
+
+    // Init
+    sättLogo(svgTillDataURI(sampleLogos.rund));
+    uppdateraNamn();
+  </script>
+</body>
+</html>
