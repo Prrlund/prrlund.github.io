@@ -125,6 +125,35 @@
     .lockup.center .lk-utforskar { align-self: center; }
     .lockup.center .lockup-box { align-self: center; }
 
+    /* ── STOR WORDMARK (CAREER LADDER-stil) ── */
+    .wordmark {
+      font-family: 'Archivo Black', sans-serif;
+      line-height: .8;
+      text-align: center;
+      color: #fff;
+      z-index: 3;
+      /* tjock svart kontur som skalar med font-size */
+      text-shadow:
+        .07em 0 #0c0c0b, -.07em 0 #0c0c0b, 0 .07em #0c0c0b, 0 -.07em #0c0c0b,
+        .05em .05em #0c0c0b, -.05em .05em #0c0c0b, .05em -.05em #0c0c0b, -.05em -.05em #0c0c0b,
+        0 .12em .3em rgba(0,0,0,.55);
+    }
+    .wm-rad { display: flex; align-items: center; justify-content: center; gap: .04em; }
+    .wm-ikon-p { height: 1.18em; width: auto; margin-right: -.02em; filter: drop-shadow(0 .03em .05em #0c0c0b); }
+    .glas-o { height: 1.05em; width: auto; vertical-align: middle; margin: 0 -.02em; filter: drop-shadow(0 .03em .06em #0c0c0b); }
+    .liten-logo {
+      margin-top: .5em;
+      border: .07em solid rgba(255,255,255,.8);
+      border-radius: .18em;
+      padding: .35em .6em;
+      background: rgba(10,10,8,.5);
+      display: inline-flex; align-items: center; justify-content: center;
+      align-self: center;
+    }
+    /* Dölj alla företagslogo-element när knappen är av */
+    body.dölj-logo .lockup-box,
+    body.dölj-logo .liten-logo { display: none; }
+
     /* Stort förstoringsglas (variant 6) */
     .stor-lupp { position: relative; z-index: 2; }
     .stor-lins {
@@ -191,6 +220,13 @@
         <button class="mini-knapp" data-bg="/Sekasin.png" onclick="väljBg('/Sekasin.png', this)">Sekasin</button>
         <button class="mini-knapp" data-bg="/Reload.png" onclick="väljBg('/Reload.png', this)">Reload</button>
         <label class="fil-knapp">Ladda upp<input type="file" accept="image/*" onchange="laddaBg(event)" /></label>
+      </div>
+    </div>
+    <div class="kontroll-grupp">
+      <label>Företagslogo</label>
+      <div class="knapp-rad">
+        <button class="mini-knapp aktiv" data-logovis="visa" onclick="väljLogovis(true, this)">Visa</button>
+        <button class="mini-knapp" data-logovis="dölj" onclick="väljLogovis(false, this)">Dölj</button>
       </div>
     </div>
   </div>
@@ -299,6 +335,40 @@
       <button class="ladda-ner" onclick="laddaNer('t6','plund-6-iglaset')">⬇ Ladda ner</button>
     </div>
 
+    <!-- 7. WORDMARK — GLAS SOM P -->
+    <div class="thumb-kort">
+      <div class="thumb-titel">7. Wordmark — glas som P <span>Stor fet text, glaset är P:et i PÄR</span></div>
+      <div class="thumb" id="t7">
+        <img class="thumb-bg" src="/Kaffia.png" alt="" crossorigin="anonymous" />
+        <div class="thumb-mörk"></div>
+        <div style="position:absolute; left:0; right:0; bottom:9cqw; z-index:3; display:flex; flex-direction:column; align-items:center;">
+          <div class="wordmark" style="font-size:13cqw;">
+            <div class="wm-rad"><img class="wm-ikon-p" data-ikon src="/plund-ikon.svg" alt="Plund" /><span>ÄR</span></div>
+            <div class="wm-rad" style="font-size:.5em; letter-spacing:.02em;"><span>UTFORSKAR</span></div>
+          </div>
+          <div class="liten-logo"><span class="logo-chip"><img data-logo src="" alt="" crossorigin="anonymous" /></span></div>
+        </div>
+      </div>
+      <button class="ladda-ner" onclick="laddaNer('t7','plund-7-wordmark-p')">⬇ Ladda ner</button>
+    </div>
+
+    <!-- 8. WORDMARK — GLAS SOM O -->
+    <div class="thumb-kort">
+      <div class="thumb-titel">8. Wordmark — glas som O <span>Glaset blir O:et i UTF-O-RSKAR</span></div>
+      <div class="thumb" id="t8">
+        <img class="thumb-bg" src="/Kaffia.png" alt="" crossorigin="anonymous" />
+        <div class="thumb-mörk"></div>
+        <div style="position:absolute; left:0; right:0; bottom:9cqw; z-index:3; display:flex; flex-direction:column; align-items:center;">
+          <div class="wordmark" style="font-size:15cqw;">
+            <div class="wm-rad"><span>PÄR</span></div>
+            <div class="wm-rad" style="font-size:.46em; letter-spacing:.01em;"><span>UTF</span><svg class="glas-o" viewBox="0 0 122 122" xmlns="http://www.w3.org/2000/svg"><circle cx="52" cy="52" r="40" fill="none" stroke="#ffbf32" stroke-width="15"/><line x1="80" y1="80" x2="112" y2="112" stroke="#ffbf32" stroke-width="17" stroke-linecap="round"/><path d="M33 33 Q46 23 64 29" stroke="#fff" stroke-width="6" fill="none" stroke-linecap="round" opacity=".7"/></svg><span>RSKAR</span></div>
+          </div>
+          <div class="liten-logo"><span class="logo-chip"><img data-logo src="" alt="" crossorigin="anonymous" /></span></div>
+        </div>
+      </div>
+      <button class="ladda-ner" onclick="laddaNer('t8','plund-8-wordmark-o')">⬇ Ladda ner</button>
+    </div>
+
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -315,6 +385,8 @@
     function sättLogo(src){ document.querySelectorAll('img[data-logo]').forEach(function(img){ img.src=src; }); }
 
     function väljChip(färg, knapp){ sättAktiv(knapp,'data-chip'); document.querySelectorAll('.logo-chip').forEach(function(c){ c.style.setProperty('--chip-bg', färg); c.style.padding = färg==='transparent' ? '0' : '.25em .35em'; }); }
+
+    function väljLogovis(visa, knapp){ sättAktiv(knapp,'data-logovis'); document.body.classList.toggle('dölj-logo', !visa); }
 
     function väljBg(src, knapp){ sättAktiv(knapp,'data-bg'); document.querySelectorAll('.thumb-bg').forEach(function(img){ img.src=src; }); }
     function laddaBg(e){ var f=e.target.files[0]; if(!f) return; var r=new FileReader(); r.onload=function(ev){ document.querySelectorAll('.thumb-bg').forEach(function(img){ img.src=ev.target.result; }); }; r.readAsDataURL(f); document.querySelectorAll('[data-bg]').forEach(function(b){b.classList.remove('aktiv');}); }
