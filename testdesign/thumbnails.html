@@ -94,34 +94,53 @@
     .hörn.bv { bottom: 4cqw; left: 4cqw; border-bottom: .8cqw solid var(--guld); border-left: .8cqw solid var(--guld); }
     .hörn.bh { bottom: 4cqw; right: 4cqw; border-bottom: .8cqw solid var(--guld); border-right: .8cqw solid var(--guld); }
 
-    /* ── VARUMÄRKES-LOCKUP (återanvändbar, em-skalad) ── */
-    .lockup { display: flex; flex-direction: column; z-index: 3; }
-    .lockup-topp { display: flex; align-items: center; gap: .3em; }
-    .lockup-ikon { height: 2.7em; width: auto; display: block; filter: drop-shadow(0 2px 6px rgba(0,0,0,.4)); }
-    .lk-text { display: flex; flex-direction: column; line-height: .82; }
-    .lk-par {
+    /* ── VARUMÄRKES-LOCKUP — ikonen ÄR P:et i "PÄR" ── */
+    .lockup { display: flex; flex-direction: column; z-index: 3; align-items: flex-start; }
+    .lk-rad { display: flex; align-items: flex-start; }
+    .lockup-ikon { height: 2.9em; width: auto; display: block; margin-top: -.18em; filter: drop-shadow(0 2px 7px rgba(0,0,0,.5)); }
+    .lk-aer {
       font-family: 'Archivo Black', sans-serif;
-      font-size: 2.5em; color: #fff; letter-spacing: -.01em;
-      text-shadow: 0 2px 10px rgba(0,0,0,.55);
+      font-size: 2.5em; line-height: .78; color: #fff; letter-spacing: -.01em;
+      margin-left: -.07em; margin-top: .04em;
+      text-shadow: 0 2px 12px rgba(0,0,0,.6);
     }
     .lk-utforskar {
       font-family: 'Archivo', sans-serif; font-weight: 800;
-      font-size: .92em; letter-spacing: .2em; color: var(--guld);
-      text-shadow: 0 2px 8px rgba(0,0,0,.55); margin-top: .15em;
+      font-size: 1.18em; letter-spacing: .12em; color: #fff;
+      text-shadow: 0 2px 9px rgba(0,0,0,.6); margin-top: -.32em;
     }
     .lockup-box {
       align-self: flex-start;
-      margin-top: .65em;
-      border: .09em solid rgba(255,255,255,.7);
-      border-radius: .25em;
-      padding: .4em .7em;
+      margin-top: .55em;
+      border: .085em solid rgba(255,255,255,.75);
+      border-radius: .2em;
+      padding: .42em .75em;
       background: rgba(10,10,8,.45);
       display: inline-flex; align-items: center; justify-content: center;
     }
     .logo-chip { display: flex; align-items: center; justify-content: center; background: var(--chip-bg, transparent); border-radius: .15em; }
     .logo-chip img { height: 1.5em; width: auto; max-width: 9em; object-fit: contain; display: block; }
     .lockup.center { align-items: center; text-align: center; }
+    .lockup.center .lk-rad { justify-content: center; }
+    .lockup.center .lk-utforskar { align-self: center; }
     .lockup.center .lockup-box { align-self: center; }
+
+    /* Stort förstoringsglas (variant 6) */
+    .stor-lupp { position: relative; z-index: 2; }
+    .stor-lins {
+      width: 64cqw; height: 64cqw; border-radius: 50%;
+      border: 2.6cqw solid #111;
+      background: rgba(8,8,7,.32);
+      box-shadow: 0 0 0 .4cqw rgba(255,255,255,.12), inset 0 0 6cqw rgba(255,255,255,.18);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .stor-skaft {
+      position: absolute; left: 8%; top: 82%;
+      width: 9%; height: 38%;
+      background: #111; border-radius: 100px;
+      transform: translate(-50%,0) rotate(45deg); transform-origin: top center;
+      box-shadow: 0 6px 16px rgba(0,0,0,.4);
+    }
 
     /* Nedladdning */
     .ladda-ner {
@@ -185,8 +204,9 @@
         <img class="thumb-bg" src="/Kaffia.png" alt="" crossorigin="anonymous" />
         <div class="thumb-mörk"></div>
         <span class="hörn tv"></span><span class="hörn th"></span><span class="hörn bv"></span><span class="hörn bh"></span>
-        <div class="lockup" style="position:absolute; top:7cqw; left:7cqw; font-size:5.2cqw;">
-          <div class="lockup-topp"><img class="lockup-ikon" data-ikon src="/plund-ikon.svg" alt="Plund" /><div class="lk-text"><span class="lk-par">PÄR</span><span class="lk-utforskar">UTFORSKAR</span></div></div>
+        <div class="lockup" style="position:absolute; top:7cqw; left:7cqw; font-size:5.4cqw;">
+          <div class="lk-rad"><img class="lockup-ikon" data-ikon src="/plund-ikon.svg" alt="Plund" /><span class="lk-aer">ÄR</span></div>
+          <span class="lk-utforskar">UTFORSKAR</span>
           <div class="lockup-box"><span class="logo-chip"><img data-logo src="" alt="" crossorigin="anonymous" /></span></div>
         </div>
       </div>
@@ -200,8 +220,9 @@
         <img class="thumb-bg" src="/Kaffia.png" alt="" crossorigin="anonymous" />
         <div class="thumb-mörk"></div>
         <span class="hörn tv"></span><span class="hörn th"></span><span class="hörn bv"></span><span class="hörn bh"></span>
-        <div class="lockup" style="position:absolute; top:8cqw; left:8cqw; font-size:3.4cqw;">
-          <div class="lockup-topp"><img class="lockup-ikon" data-ikon src="/plund-ikon.svg" alt="Plund" /><div class="lk-text"><span class="lk-par">PÄR</span><span class="lk-utforskar">UTFORSKAR</span></div></div>
+        <div class="lockup" style="position:absolute; top:8cqw; left:8cqw; font-size:3.5cqw;">
+          <div class="lk-rad"><img class="lockup-ikon" data-ikon src="/plund-ikon.svg" alt="Plund" /><span class="lk-aer">ÄR</span></div>
+          <span class="lk-utforskar">UTFORSKAR</span>
           <div class="lockup-box"><span class="logo-chip"><img data-logo src="" alt="" crossorigin="anonymous" /></span></div>
         </div>
       </div>
@@ -215,9 +236,10 @@
         <img class="thumb-bg" src="/Kaffia.png" alt="" crossorigin="anonymous" />
         <div class="thumb-mörk"></div>
         <span class="hörn tv"></span><span class="hörn th"></span><span class="hörn bv"></span><span class="hörn bh"></span>
-        <div class="lockup center" style="position:absolute; bottom:9cqw; right:8cqw; font-size:3.4cqw; align-items:flex-end; text-align:right;">
-          <div class="lockup-topp"><img class="lockup-ikon" data-ikon src="/plund-ikon.svg" alt="Plund" /><div class="lk-text"><span class="lk-par">PÄR</span><span class="lk-utforskar">UTFORSKAR</span></div></div>
-          <div class="lockup-box" style="align-self:flex-end;"><span class="logo-chip"><img data-logo src="" alt="" crossorigin="anonymous" /></span></div>
+        <div class="lockup center" style="position:absolute; bottom:9cqw; right:8cqw; font-size:3.5cqw;">
+          <div class="lk-rad"><img class="lockup-ikon" data-ikon src="/plund-ikon.svg" alt="Plund" /><span class="lk-aer">ÄR</span></div>
+          <span class="lk-utforskar">UTFORSKAR</span>
+          <div class="lockup-box"><span class="logo-chip"><img data-logo src="" alt="" crossorigin="anonymous" /></span></div>
         </div>
       </div>
       <button class="ladda-ner" onclick="laddaNer('t3','plund-3-minimal-bh')">⬇ Ladda ner</button>
@@ -231,8 +253,9 @@
         <div class="thumb-mörk"></div>
         <span class="hörn th"></span><span class="hörn bh"></span>
         <div style="position:absolute; top:6cqw; bottom:6cqw; left:5cqw; width:.8cqw; background:var(--guld); z-index:4;"></div>
-        <div class="lockup" style="position:absolute; top:8cqw; left:10cqw; font-size:4.4cqw;">
-          <div class="lockup-topp"><img class="lockup-ikon" data-ikon src="/plund-ikon.svg" alt="Plund" /><div class="lk-text"><span class="lk-par">PÄR</span><span class="lk-utforskar">UTFORSKAR</span></div></div>
+        <div class="lockup" style="position:absolute; top:8cqw; left:10cqw; font-size:4.6cqw;">
+          <div class="lk-rad"><img class="lockup-ikon" data-ikon src="/plund-ikon.svg" alt="Plund" /><span class="lk-aer">ÄR</span></div>
+          <span class="lk-utforskar">UTFORSKAR</span>
           <div class="lockup-box"><span class="logo-chip"><img data-logo src="" alt="" crossorigin="anonymous" /></span></div>
         </div>
       </div>
@@ -246,29 +269,34 @@
         <img class="thumb-bg" src="/Kaffia.png" alt="" crossorigin="anonymous" />
         <div class="thumb-mörk"></div>
         <span class="hörn tv"></span><span class="hörn th"></span><span class="hörn bv"></span><span class="hörn bh"></span>
-        <div class="lockup center" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:5cqw;">
-          <div class="lockup-topp"><img class="lockup-ikon" data-ikon src="/plund-ikon.svg" alt="Plund" /><div class="lk-text"><span class="lk-par">PÄR</span><span class="lk-utforskar">UTFORSKAR</span></div></div>
+        <div class="lockup center" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:5.2cqw;">
+          <div class="lk-rad"><img class="lockup-ikon" data-ikon src="/plund-ikon.svg" alt="Plund" /><span class="lk-aer">ÄR</span></div>
+          <span class="lk-utforskar">UTFORSKAR</span>
           <div class="lockup-box"><span class="logo-chip"><img data-logo src="" alt="" crossorigin="anonymous" /></span></div>
         </div>
       </div>
       <button class="ladda-ner" onclick="laddaNer('t5','plund-5-centrerad')">⬇ Ladda ner</button>
     </div>
 
-    <!-- 6. CIRCLE BADGE -->
+    <!-- 6. I FÖRSTORINGSGLASET -->
     <div class="thumb-kort">
-      <div class="thumb-titel">6. Circle badge <span>Lockup i en guld-ring</span></div>
+      <div class="thumb-titel">6. I förstoringsglaset <span>Allt inuti ett stort glas (som din bild 2)</span></div>
       <div class="thumb" id="t6">
         <img class="thumb-bg" src="/Kaffia.png" alt="" crossorigin="anonymous" />
         <div class="thumb-mörk"></div>
         <span class="hörn tv"></span><span class="hörn th"></span><span class="hörn bv"></span><span class="hörn bh"></span>
-        <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:62cqw; height:62cqw; border-radius:50%; border:.7cqw solid var(--guld); background:rgba(8,8,7,.35); z-index:2; display:flex; align-items:center; justify-content:center;">
-          <div class="lockup center" style="font-size:4.4cqw;">
-            <div class="lockup-topp"><img class="lockup-ikon" data-ikon src="/plund-ikon.svg" alt="Plund" /><div class="lk-text"><span class="lk-par">PÄR</span><span class="lk-utforskar">UTFORSKAR</span></div></div>
-            <div class="lockup-box"><span class="logo-chip"><img data-logo src="" alt="" crossorigin="anonymous" /></span></div>
+        <div class="stor-lupp" style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:64cqw; height:64cqw;">
+          <div class="stor-lins">
+            <div class="lockup center" style="font-size:3.7cqw;">
+              <div class="lk-rad"><img class="lockup-ikon" data-ikon src="/plund-ikon.svg" alt="Plund" /><span class="lk-aer">ÄR</span></div>
+              <span class="lk-utforskar">UTFORSKAR</span>
+              <div class="lockup-box"><span class="logo-chip"><img data-logo src="" alt="" crossorigin="anonymous" /></span></div>
+            </div>
           </div>
+          <span class="stor-skaft"></span>
         </div>
       </div>
-      <button class="ladda-ner" onclick="laddaNer('t6','plund-6-circle')">⬇ Ladda ner</button>
+      <button class="ladda-ner" onclick="laddaNer('t6','plund-6-iglaset')">⬇ Ladda ner</button>
     </div>
 
   </div>
