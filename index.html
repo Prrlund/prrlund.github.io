@@ -314,13 +314,25 @@
       margin-bottom: 56px;
       flex-wrap: wrap;
     }
+    /* Horisontell karusell: ~3 syns, scrolla för fler */
     .video-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      display: flex;
       gap: 18px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding-bottom: 12px;
+      /* låt korten nå ut till kanten men börja i linje med rubriken */
+      margin: 0 calc(-1 * clamp(20px, 6vw, 110px));
+      padding-left: clamp(20px, 6vw, 110px);
+      padding-right: clamp(20px, 6vw, 110px);
     }
+    .video-grid::-webkit-scrollbar { display: none; }
     .vg-kort {
       position: relative;
+      flex: 0 0 clamp(230px, 30%, 330px);
+      scroll-snap-align: start;
       border-radius: 18px;
       overflow: hidden;
       background: var(--yta);
@@ -329,11 +341,22 @@
       transition: border-color .3s, transform .3s;
     }
     .vg-kort:hover { border-color: rgba(255,191,50,.35); transform: translateY(-4px); }
+    /* Thumbnail som riktig bild → object-fit respekteras alltid, ingen stretch */
+    .vg-thumb {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      z-index: 1;
+    }
+    .vg-kort.spelar .vg-thumb { display: none; }
     .vg-kort video {
       position: absolute; inset: 0;
       width: 100%; height: 100%;
       object-fit: cover;
+      z-index: 0;
+      background: #000;
     }
+    .vg-kort.spelar video { z-index: 3; }
     .vg-overlay {
       position: absolute; inset: 0;
       background: linear-gradient(to top, rgba(7,7,7,.92) 0%, rgba(7,7,7,.15) 45%, transparent 70%);
@@ -529,18 +552,12 @@
       .hero-rubrik { font-size: clamp(2.6rem, 12vw, 4rem); }
       .scroll-hint { display: none; }
 
-      /* Portfolio: swipe-karusell med snap, en video i taget centrerad */
+      /* Portfolio på mobil: en video i taget, centrerad */
       .video-grid {
-        display: flex;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
         gap: 14px;
         margin: 0 -20px;
-        padding: 0 20px 8px;
+        padding: 0 20px 10px;
       }
-      .video-grid::-webkit-scrollbar { display: none; }
       .vg-kort {
         flex: 0 0 82vw;
         max-width: 340px;
@@ -619,7 +636,8 @@
   <div class="video-grid reveal" style="transition-delay:.2s">
 
     <div class="vg-kort">
-      <video preload="none" poster="Widetoes.png" playsinline>
+      <img class="vg-thumb" src="Widetoes.png" alt="WideToes" />
+      <video preload="none" playsinline>
         <source src="Pär utforskar WideToes 25mb.mp4" type="video/mp4">
       </video>
       <div class="vg-overlay" onclick="spelaVideo(this)">
@@ -630,7 +648,8 @@
     </div>
 
     <div class="vg-kort">
-      <video preload="none" poster="Kaffia.png" playsinline>
+      <img class="vg-thumb" src="Kaffia.png" alt="Kaffia" />
+      <video preload="none" playsinline>
         <source src="kaffia.mp4" type="video/mp4">
       </video>
       <div class="vg-overlay" onclick="spelaVideo(this)">
@@ -641,7 +660,8 @@
     </div>
 
     <div class="vg-kort">
-      <video preload="none" poster="Pavis.png" playsinline>
+      <img class="vg-thumb" src="Pavis.png" alt="Pavis" />
+      <video preload="none" playsinline>
         <source src="Pär utforskar pavis 25mb.mp4" type="video/mp4">
       </video>
       <div class="vg-overlay" onclick="spelaVideo(this)">
@@ -652,7 +672,8 @@
     </div>
 
     <div class="vg-kort">
-      <video preload="none" poster="Gorans.png" playsinline>
+      <img class="vg-thumb" src="Gorans.png" alt="Görans" />
+      <video preload="none" playsinline>
         <source src="Pär x Görans 25mb.mp4" type="video/mp4">
       </video>
       <div class="vg-overlay" onclick="spelaVideo(this)">
@@ -663,13 +684,62 @@
     </div>
 
     <div class="vg-kort">
-      <video preload="none" poster="Omsorg.png" playsinline>
+      <img class="vg-thumb" src="Omsorg.png" alt="Omsorg" />
+      <video preload="none" playsinline>
         <source src="Pär utforskar Omsorg 25mb.mp4" type="video/mp4">
       </video>
       <div class="vg-overlay" onclick="spelaVideo(this)">
         <div class="vg-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
         <p class="vg-nr">05</p>
         <h3 class="vg-namn">Omsorg</h3>
+      </div>
+    </div>
+
+    <div class="vg-kort">
+      <img class="vg-thumb" src="Omsorg-dropin.png" alt="Omsorg – Drop in" />
+      <video preload="none" playsinline>
+        <source src="Drop in vid Omsorg 25mb - Pär.mp4" type="video/mp4">
+      </video>
+      <div class="vg-overlay" onclick="spelaVideo(this)">
+        <div class="vg-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+        <p class="vg-nr">06</p>
+        <h3 class="vg-namn">Omsorg — Drop in</h3>
+      </div>
+    </div>
+
+    <div class="vg-kort">
+      <img class="vg-thumb" src="Omsorg-rekrytering.png" alt="Omsorg – Rekrytering" />
+      <video preload="none" playsinline>
+        <source src="Rekryteringsvideo - Pär besöker 25mb Omsorg.mp4" type="video/mp4">
+      </video>
+      <div class="vg-overlay" onclick="spelaVideo(this)">
+        <div class="vg-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+        <p class="vg-nr">07</p>
+        <h3 class="vg-namn">Omsorg — Rekrytering</h3>
+      </div>
+    </div>
+
+    <div class="vg-kort">
+      <img class="vg-thumb" src="Reload.png" alt="Reload Vending" />
+      <video preload="none" playsinline>
+        <source src="reload.mp4" type="video/mp4">
+      </video>
+      <div class="vg-overlay" onclick="spelaVideo(this)">
+        <div class="vg-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+        <p class="vg-nr">08</p>
+        <h3 class="vg-namn">Reload Vending</h3>
+      </div>
+    </div>
+
+    <div class="vg-kort">
+      <img class="vg-thumb" src="Sekasin.png" alt="Sekasin" />
+      <video preload="none" playsinline>
+        <source src="Pär besöker Sekasin.mp4" type="video/mp4">
+      </video>
+      <div class="vg-overlay" onclick="spelaVideo(this)">
+        <div class="vg-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+        <p class="vg-nr">09</p>
+        <h3 class="vg-namn">Sekasin</h3>
       </div>
     </div>
 
