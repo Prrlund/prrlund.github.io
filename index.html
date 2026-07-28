@@ -314,49 +314,43 @@
       margin-bottom: 56px;
       flex-wrap: wrap;
     }
-    /* Horisontell karusell: ~3 syns, scrolla för fler */
-    .video-grid {
+    /* ── ROTERANDE KARUSELL ────────────── */
+    .karusell {
+      position: relative;
+      margin: 0 calc(-1 * clamp(20px, 6vw, 110px));
+      /* mjuk fade i kanterna så korten inte kapas hårt */
+      -webkit-mask-image: linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%);
+      mask-image: linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%);
+    }
+    .kar-spar {
       display: flex;
       gap: 18px;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-      padding-bottom: 12px;
-      /* låt korten nå ut till kanten men börja i linje med rubriken */
-      margin: 0 calc(-1 * clamp(20px, 6vw, 110px));
-      padding-left: clamp(20px, 6vw, 110px);
-      padding-right: clamp(20px, 6vw, 110px);
+      will-change: transform;
+      padding: 6px 0 14px;
+      cursor: grab;
+      touch-action: pan-y;
     }
-    .video-grid::-webkit-scrollbar { display: none; }
+    .kar-spar.dras { cursor: grabbing; }
     .vg-kort {
       position: relative;
-      flex: 0 0 clamp(230px, 30%, 330px);
-      scroll-snap-align: start;
+      flex: 0 0 clamp(216px, 22vw, 300px);
       border-radius: 18px;
       overflow: hidden;
       background: var(--yta);
       border: 1px solid var(--kant);
       aspect-ratio: 9/16;
       transition: border-color .3s, transform .3s;
+      user-select: none;
+      -webkit-user-drag: none;
     }
-    .vg-kort:hover { border-color: rgba(255,191,50,.35); transform: translateY(-4px); }
-    /* Thumbnail som riktig bild → object-fit respekteras alltid, ingen stretch */
+    .vg-kort:hover { border-color: rgba(255,191,50,.4); transform: translateY(-5px); }
     .vg-thumb {
       position: absolute; inset: 0;
       width: 100%; height: 100%;
       object-fit: cover;
       z-index: 1;
+      pointer-events: none;
     }
-    .vg-kort.spelar .vg-thumb { display: none; }
-    .vg-kort video {
-      position: absolute; inset: 0;
-      width: 100%; height: 100%;
-      object-fit: cover;
-      z-index: 0;
-      background: #000;
-    }
-    .vg-kort.spelar video { z-index: 3; }
     .vg-overlay {
       position: absolute; inset: 0;
       background: linear-gradient(to top, rgba(7,7,7,.92) 0%, rgba(7,7,7,.15) 45%, transparent 70%);
@@ -364,11 +358,10 @@
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
-      padding: 26px 22px;
+      padding: 22px 20px;
       cursor: pointer;
       transition: opacity .35s;
     }
-    .vg-kort.spelar .vg-overlay { opacity: 0; pointer-events: none; }
     .vg-nr {
       font-size: .66rem;
       font-weight: 700;
@@ -377,7 +370,7 @@
       margin-bottom: 6px;
     }
     .vg-namn {
-      font-size: 1.35rem;
+      font-size: 1.15rem;
       font-weight: 800;
       letter-spacing: -.02em;
       line-height: 1.1;
@@ -386,17 +379,109 @@
       position: absolute;
       top: 50%; left: 50%;
       transform: translate(-50%, -50%);
-      width: 64px; height: 64px;
+      width: 58px; height: 58px;
       border-radius: 100px;
-      background: rgba(7,7,7,.55);
+      background: rgba(7,7,7,.5);
       backdrop-filter: blur(6px);
-      border: 1px solid rgba(255,255,255,.25);
+      border: 1px solid rgba(255,255,255,.28);
       display: flex; align-items: center; justify-content: center;
       transition: transform .25s, background .25s, border-color .25s;
     }
-    .vg-overlay:hover .vg-play { transform: translate(-50%,-50%) scale(1.1); background: var(--guld); border-color: var(--guld); }
-    .vg-play svg { width: 20px; height: 20px; fill: #fff; margin-left: 3px; transition: fill .25s; }
+    .vg-overlay:hover .vg-play { transform: translate(-50%,-50%) scale(1.12); background: var(--guld); border-color: var(--guld); }
+    .vg-play svg { width: 18px; height: 18px; fill: #fff; margin-left: 3px; transition: fill .25s; }
     .vg-overlay:hover .vg-play svg { fill: #0a0a0a; }
+
+    /* Diskreta pilar (desktop) */
+    .kar-pil {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 5;
+      width: 42px; height: 42px;
+      border-radius: 100px;
+      background: rgba(7,7,7,.55);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,.16);
+      color: var(--text);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      opacity: .5;
+      transition: opacity .25s, background .25s, border-color .25s;
+    }
+    .karusell:hover .kar-pil { opacity: 1; }
+    .kar-pil:hover { background: var(--guld); border-color: var(--guld); color: #0a0a0a; }
+    .kar-pil svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+    .kar-pil.vanster { left: clamp(8px, 2vw, 26px); }
+    .kar-pil.hoger { right: clamp(8px, 2vw, 26px); }
+
+    /* ── VIDEO-MODAL (zoom-in) ─────────── */
+    .video-modal {
+      position: fixed; inset: 0;
+      z-index: 3000;
+      display: none;
+      align-items: center; justify-content: center;
+      padding: 24px;
+    }
+    .video-modal.oppen { display: flex; }
+    .vm-bakgrund {
+      position: absolute; inset: 0;
+      background: rgba(5,5,4,.9);
+      backdrop-filter: blur(10px);
+      opacity: 0;
+      transition: opacity .35s ease;
+    }
+    .video-modal.synlig .vm-bakgrund { opacity: 1; }
+    .vm-ram {
+      position: relative;
+      z-index: 2;
+      border-radius: 18px;
+      overflow: hidden;
+      background: #000;
+      box-shadow: 0 30px 80px rgba(0,0,0,.6);
+      transform-origin: top left;
+    }
+    .vm-ram video {
+      display: block;
+      width: 100%; height: 100%;
+      object-fit: contain;
+      background: #000;
+    }
+    .vm-stang {
+      position: absolute;
+      top: 18px; right: 18px;
+      z-index: 4;
+      width: 44px; height: 44px;
+      border-radius: 100px;
+      background: rgba(7,7,7,.6);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,.2);
+      color: var(--text);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity .3s ease, background .2s, border-color .2s;
+    }
+    .video-modal.synlig .vm-stang { opacity: 1; }
+    .vm-stang:hover { background: var(--guld); border-color: var(--guld); color: #0a0a0a; }
+    .vm-stang svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2.4; stroke-linecap: round; }
+    .vm-titel {
+      position: absolute;
+      left: 20px; bottom: 18px;
+      z-index: 4;
+      font-size: .95rem;
+      font-weight: 800;
+      letter-spacing: -.01em;
+      color: #fff;
+      text-shadow: 0 2px 10px rgba(0,0,0,.7);
+      opacity: 0;
+      transition: opacity .3s ease .1s;
+      pointer-events: none;
+    }
+    .video-modal.synlig .vm-titel { opacity: 1; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .vm-bakgrund, .vm-stang, .vm-titel { transition: none; }
+    }
 
     /* ── OM MIG (ljus sektion) ─────────── */
     #om-mig {
@@ -552,18 +637,12 @@
       .hero-rubrik { font-size: clamp(2.6rem, 12vw, 4rem); }
       .scroll-hint { display: none; }
 
-      /* Portfolio på mobil: en video i taget, centrerad */
-      .video-grid {
-        gap: 14px;
-        margin: 0 -20px;
-        padding: 0 20px 10px;
-      }
-      .vg-kort {
-        flex: 0 0 82vw;
-        max-width: 340px;
-        scroll-snap-align: center;
-        scroll-snap-stop: always;
-      }
+      /* Portfolio på mobil: större kort, inga pilar (svep istället) */
+      .karusell { margin: 0 -20px; }
+      .kar-spar { gap: 12px; }
+      .vg-kort { flex: 0 0 66vw; max-width: 300px; }
+      .kar-pil { display: none; }
+      .vm-stang { top: 12px; right: 12px; }
 
       .om-grid { grid-template-columns: 1fr; gap: 44px; }
       #om-mig { margin: 0 10px; border-radius: 24px; }
@@ -633,116 +712,95 @@
     </div>
   </div>
 
-  <div class="video-grid reveal" style="transition-delay:.2s">
+  <div class="karusell reveal" id="karusell" style="transition-delay:.2s">
+    <button class="kar-pil vanster" id="pilVanster" aria-label="Föregående">
+      <svg viewBox="0 0 24 24"><polyline points="15,18 9,12 15,6"/></svg>
+    </button>
+    <div class="kar-spar" id="karSpar">
+      <div class="vg-kort" data-video="Pär utforskar WideToes 25mb.mp4" data-namn="WideToes">
+        <img class="vg-thumb" src="Widetoes.png" alt="WideToes" draggable="false" />
+        <div class="vg-overlay">
+          <div class="vg-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+          <p class="vg-nr">01</p>
+          <h3 class="vg-namn">WideToes</h3>
+        </div>
+      </div>
 
-    <div class="vg-kort">
-      <img class="vg-thumb" src="Widetoes.png" alt="WideToes" />
-      <video preload="none" playsinline>
-        <source src="Pär utforskar WideToes 25mb.mp4" type="video/mp4">
-      </video>
-      <div class="vg-overlay" onclick="spelaVideo(this)">
-        <div class="vg-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
-        <p class="vg-nr">01</p>
-        <h3 class="vg-namn">WideToes</h3>
+      <div class="vg-kort" data-video="kaffia.mp4" data-namn="Kaffia">
+        <img class="vg-thumb" src="Kaffia.png" alt="Kaffia" draggable="false" />
+        <div class="vg-overlay">
+          <div class="vg-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+          <p class="vg-nr">02</p>
+          <h3 class="vg-namn">Kaffia</h3>
+        </div>
+      </div>
+
+      <div class="vg-kort" data-video="Pär utforskar pavis 25mb.mp4" data-namn="Pavis">
+        <img class="vg-thumb" src="Pavis.png" alt="Pavis" draggable="false" />
+        <div class="vg-overlay">
+          <div class="vg-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+          <p class="vg-nr">03</p>
+          <h3 class="vg-namn">Pavis</h3>
+        </div>
+      </div>
+
+      <div class="vg-kort" data-video="Pär x Görans 25mb.mp4" data-namn="Görans">
+        <img class="vg-thumb" src="Gorans.png" alt="Görans" draggable="false" />
+        <div class="vg-overlay">
+          <div class="vg-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+          <p class="vg-nr">04</p>
+          <h3 class="vg-namn">Görans</h3>
+        </div>
+      </div>
+
+      <div class="vg-kort" data-video="Pär utforskar Omsorg 25mb.mp4" data-namn="Omsorg">
+        <img class="vg-thumb" src="Omsorg.png" alt="Omsorg" draggable="false" />
+        <div class="vg-overlay">
+          <div class="vg-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+          <p class="vg-nr">05</p>
+          <h3 class="vg-namn">Omsorg</h3>
+        </div>
+      </div>
+
+      <div class="vg-kort" data-video="Drop in vid Omsorg 25mb - Pär.mp4" data-namn="Omsorg — Drop in">
+        <img class="vg-thumb" src="Omsorg-dropin.png" alt="Omsorg — Drop in" draggable="false" />
+        <div class="vg-overlay">
+          <div class="vg-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+          <p class="vg-nr">06</p>
+          <h3 class="vg-namn">Omsorg — Drop in</h3>
+        </div>
+      </div>
+
+      <div class="vg-kort" data-video="Rekryteringsvideo - Pär besöker 25mb Omsorg.mp4" data-namn="Omsorg — Rekrytering">
+        <img class="vg-thumb" src="Omsorg-rekrytering.png" alt="Omsorg — Rekrytering" draggable="false" />
+        <div class="vg-overlay">
+          <div class="vg-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+          <p class="vg-nr">07</p>
+          <h3 class="vg-namn">Omsorg — Rekrytering</h3>
+        </div>
+      </div>
+
+      <div class="vg-kort" data-video="reload.mp4" data-namn="Reload Vending">
+        <img class="vg-thumb" src="Reload.png" alt="Reload Vending" draggable="false" />
+        <div class="vg-overlay">
+          <div class="vg-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+          <p class="vg-nr">08</p>
+          <h3 class="vg-namn">Reload Vending</h3>
+        </div>
+      </div>
+
+      <div class="vg-kort" data-video="Pär besöker Sekasin.mp4" data-namn="Sekasin">
+        <img class="vg-thumb" src="Sekasin.png" alt="Sekasin" draggable="false" />
+        <div class="vg-overlay">
+          <div class="vg-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+          <p class="vg-nr">09</p>
+          <h3 class="vg-namn">Sekasin</h3>
+        </div>
       </div>
     </div>
-
-    <div class="vg-kort">
-      <img class="vg-thumb" src="Kaffia.png" alt="Kaffia" />
-      <video preload="none" playsinline>
-        <source src="kaffia.mp4" type="video/mp4">
-      </video>
-      <div class="vg-overlay" onclick="spelaVideo(this)">
-        <div class="vg-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
-        <p class="vg-nr">02</p>
-        <h3 class="vg-namn">Kaffia</h3>
-      </div>
-    </div>
-
-    <div class="vg-kort">
-      <img class="vg-thumb" src="Pavis.png" alt="Pavis" />
-      <video preload="none" playsinline>
-        <source src="Pär utforskar pavis 25mb.mp4" type="video/mp4">
-      </video>
-      <div class="vg-overlay" onclick="spelaVideo(this)">
-        <div class="vg-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
-        <p class="vg-nr">03</p>
-        <h3 class="vg-namn">Pavis</h3>
-      </div>
-    </div>
-
-    <div class="vg-kort">
-      <img class="vg-thumb" src="Gorans.png" alt="Görans" />
-      <video preload="none" playsinline>
-        <source src="Pär x Görans 25mb.mp4" type="video/mp4">
-      </video>
-      <div class="vg-overlay" onclick="spelaVideo(this)">
-        <div class="vg-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
-        <p class="vg-nr">04</p>
-        <h3 class="vg-namn">Görans</h3>
-      </div>
-    </div>
-
-    <div class="vg-kort">
-      <img class="vg-thumb" src="Omsorg.png" alt="Omsorg" />
-      <video preload="none" playsinline>
-        <source src="Pär utforskar Omsorg 25mb.mp4" type="video/mp4">
-      </video>
-      <div class="vg-overlay" onclick="spelaVideo(this)">
-        <div class="vg-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
-        <p class="vg-nr">05</p>
-        <h3 class="vg-namn">Omsorg</h3>
-      </div>
-    </div>
-
-    <div class="vg-kort">
-      <img class="vg-thumb" src="Omsorg-dropin.png" alt="Omsorg – Drop in" />
-      <video preload="none" playsinline>
-        <source src="Drop in vid Omsorg 25mb - Pär.mp4" type="video/mp4">
-      </video>
-      <div class="vg-overlay" onclick="spelaVideo(this)">
-        <div class="vg-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
-        <p class="vg-nr">06</p>
-        <h3 class="vg-namn">Omsorg — Drop in</h3>
-      </div>
-    </div>
-
-    <div class="vg-kort">
-      <img class="vg-thumb" src="Omsorg-rekrytering.png" alt="Omsorg – Rekrytering" />
-      <video preload="none" playsinline>
-        <source src="Rekryteringsvideo - Pär besöker 25mb Omsorg.mp4" type="video/mp4">
-      </video>
-      <div class="vg-overlay" onclick="spelaVideo(this)">
-        <div class="vg-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
-        <p class="vg-nr">07</p>
-        <h3 class="vg-namn">Omsorg — Rekrytering</h3>
-      </div>
-    </div>
-
-    <div class="vg-kort">
-      <img class="vg-thumb" src="Reload.png" alt="Reload Vending" />
-      <video preload="none" playsinline>
-        <source src="reload.mp4" type="video/mp4">
-      </video>
-      <div class="vg-overlay" onclick="spelaVideo(this)">
-        <div class="vg-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
-        <p class="vg-nr">08</p>
-        <h3 class="vg-namn">Reload Vending</h3>
-      </div>
-    </div>
-
-    <div class="vg-kort">
-      <img class="vg-thumb" src="Sekasin.png" alt="Sekasin" />
-      <video preload="none" playsinline>
-        <source src="Pär besöker Sekasin.mp4" type="video/mp4">
-      </video>
-      <div class="vg-overlay" onclick="spelaVideo(this)">
-        <div class="vg-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
-        <p class="vg-nr">09</p>
-        <h3 class="vg-namn">Sekasin</h3>
-      </div>
-    </div>
-
+    <button class="kar-pil hoger" id="pilHoger" aria-label="Nästa">
+      <svg viewBox="0 0 24 24"><polyline points="9,18 15,12 9,6"/></svg>
+    </button>
   </div>
 </section>
 
@@ -823,6 +881,18 @@ Idag gör jag content för Svenska Kulturfonden och Yle Watt. Jag driver också 
   <div class="footer-copy">© 2026 Plund Media</div>
 </footer>
 
+<!-- VIDEO-MODAL -->
+<div class="video-modal" id="videoModal">
+  <div class="vm-bakgrund" id="vmBakgrund"></div>
+  <div class="vm-ram" id="vmRam">
+    <video id="vmVideo" playsinline controls preload="auto"></video>
+    <p class="vm-titel" id="vmTitel"></p>
+  </div>
+  <button class="vm-stang" id="vmStang" aria-label="Stäng">
+    <svg viewBox="0 0 24 24"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+  </button>
+</div>
+
 <script>
   // Hero-innehåll fadar in direkt
   document.querySelectorAll('#hero .reveal').forEach(function(el) {
@@ -851,17 +921,270 @@ Idag gör jag content för Svenska Kulturfonden och Yle Watt. Jag driver också 
   }, { threshold: 0.12 });
   document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
 
-  // Portfolio: spela video vid klick, pausa andra
-  function spelaVideo(overlay) {
-    var kort = overlay.closest('.vg-kort');
-    var video = kort.querySelector('video');
-    document.querySelectorAll('.vg-kort video').forEach(function(v) {
-      if (v !== video) { v.pause(); v.closest('.vg-kort').classList.remove('spelar'); v.controls = false; }
+  // ── ROTERANDE KARUSELL ──────────────────────────────
+  (function() {
+    var karusell = document.getElementById('karusell');
+    var spar     = document.getElementById('karSpar');
+    if (!karusell || !spar) return;
+
+    var original   = Array.prototype.slice.call(spar.children);
+    var mjukRorelse = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    var offset = 0;          // hur långt spåret flyttats (px)
+    var basbredd = 0;        // bredd på ett varv (originaluppsättningen)
+    var hastighet = 26;      // px/sekund
+    var autoPa = mjukRorelse;
+    var pausadTill = 0;      // timestamp: auto återupptas efter denna
+    var tween = null;        // aktiv pil-animation
+
+    // Klona korten tills spåret räcker för sömlös loop
+    function byggLoop() {
+      Array.prototype.slice.call(spar.children).forEach(function(el, i) {
+        if (i >= original.length) spar.removeChild(el);
+      });
+      basbredd = spar.scrollWidth + parseFloat(getComputedStyle(spar).gap || 0);
+      var mal = karusell.offsetWidth * 2 + basbredd;
+      var i = 0;
+      while (spar.scrollWidth < mal && i < 60) {
+        original.forEach(function(k) {
+          var klon = k.cloneNode(true);
+          klon.setAttribute('aria-hidden', 'true');
+          spar.appendChild(klon);
+        });
+        i++;
+      }
+    }
+
+    function normalisera() {
+      if (basbredd <= 0) return;
+      while (offset >= basbredd) offset -= basbredd;
+      while (offset < 0) offset += basbredd;
+    }
+
+    function rita() {
+      spar.style.transform = 'translate3d(' + (-offset) + 'px,0,0)';
+    }
+
+    var forra = null;
+    function loop(nu) {
+      if (forra === null) forra = nu;
+      var dt = Math.min((nu - forra) / 1000, 0.05);
+      forra = nu;
+
+      if (autoPa && !drar && !tween && nu > pausadTill && !modalOppen) {
+        offset += hastighet * dt;
+        normalisera();
+        rita();
+      }
+      requestAnimationFrame(loop);
+    }
+
+    // ── Manuell dragning (touch + mus) ──
+    var drar = false, startX = 0, startOffset = 0, rorde = 0, pekarId = null;
+
+    spar.addEventListener('pointerdown', function(e) {
+      if (e.button !== undefined && e.button !== 0) return;
+      drar = true; rorde = 0; pekarId = e.pointerId;
+      startX = e.clientX; startOffset = offset;
+      tween = null;
+      spar.classList.add('dras');
+      spar.setPointerCapture(e.pointerId);
     });
-    kort.classList.add('spelar');
-    video.controls = true;
-    video.play();
-  }
+
+    spar.addEventListener('pointermove', function(e) {
+      if (!drar || e.pointerId !== pekarId) return;
+      var dx = e.clientX - startX;
+      rorde = Math.max(rorde, Math.abs(dx));
+      offset = startOffset - dx;
+      normalisera();
+      rita();
+    });
+
+    function slutaDra(e) {
+      if (!drar) return;
+      drar = false;
+      spar.classList.remove('dras');
+      pausadTill = performance.now() + 2500;
+      try { spar.releasePointerCapture(e.pointerId); } catch (err) {}
+    }
+    spar.addEventListener('pointerup', slutaDra);
+    spar.addEventListener('pointercancel', slutaDra);
+
+    // ── Pilar: mjuk förflyttning ett kort ──
+    function kortsteg() {
+      var k = spar.querySelector('.vg-kort');
+      var g = parseFloat(getComputedStyle(spar).gap || 18);
+      return k ? k.getBoundingClientRect().width + g : 260;
+    }
+
+    function glid(delta) {
+      var fran = offset, tid = 480, t0 = performance.now();
+      tween = true;
+      function steg(nu) {
+        var p = Math.min((nu - t0) / tid, 1);
+        var e = 1 - Math.pow(1 - p, 3); // ease-out
+        offset = fran + delta * e;
+        normalisera();
+        rita();
+        if (p < 1) { requestAnimationFrame(steg); }
+        else { tween = null; pausadTill = performance.now() + 2500; }
+      }
+      requestAnimationFrame(steg);
+    }
+
+    var pv = document.getElementById('pilVanster');
+    var ph = document.getElementById('pilHoger');
+    if (pv) pv.addEventListener('click', function() { glid(-kortsteg()); });
+    if (ph) ph.addEventListener('click', function() { glid(kortsteg()); });
+
+    // Pausa rotationen vid hover — men bara på enheter med riktig muspekare,
+    // annars kan touch trigga mouseenter utan mouseleave och stoppa den för gott.
+    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      karusell.addEventListener('mouseenter', function() { pausadTill = Infinity; });
+      karusell.addEventListener('mouseleave', function() { pausadTill = performance.now() + 400; });
+    }
+
+    // ── VIDEO-MODAL med zoom-in ──
+    var modal   = document.getElementById('videoModal');
+    var ram     = document.getElementById('vmRam');
+    var vid     = document.getElementById('vmVideo');
+    var titel   = document.getElementById('vmTitel');
+    var bakgrund= document.getElementById('vmBakgrund');
+    var stang   = document.getElementById('vmStang');
+    var modalOppen = false;
+    var senasteKort = null;
+
+    function malmatt() {
+      var maxH = Math.min(window.innerHeight * 0.86, 900);
+      var maxW = window.innerWidth - 48;
+      var h = maxH, w = h * 9 / 16;
+      if (w > maxW) { w = maxW; h = w * 16 / 9; }
+      return { w: w, h: h };
+    }
+
+    function oppna(kort) {
+      if (modalOppen) return;
+      senasteKort = kort;
+      var fran = kort.getBoundingClientRect();
+      var m = malmatt();
+      var till = {
+        x: (window.innerWidth - m.w) / 2,
+        y: (window.innerHeight - m.h) / 2
+      };
+
+      vid.src = kort.getAttribute('data-video');
+      titel.textContent = kort.getAttribute('data-namn') || '';
+      ram.style.width  = m.w + 'px';
+      ram.style.height = m.h + 'px';
+
+      modal.classList.add('oppen');
+      modalOppen = true;
+      document.body.style.overflow = 'hidden';
+
+      // FLIP: börja i kortets position/storlek, animera till mitten
+      var sx = fran.width / m.w, sy = fran.height / m.h;
+      ram.style.left = till.x + 'px';
+      ram.style.top  = till.y + 'px';
+      ram.style.position = 'fixed';
+
+      var start = 'translate(' + (fran.left - till.x) + 'px,' + (fran.top - till.y) + 'px) scale(' + sx + ',' + sy + ')';
+      var slut  = 'translate(0,0) scale(1,1)';
+
+      if (ram.animate && mjukRorelse) {
+        ram.animate([{ transform: start }, { transform: slut }], {
+          duration: 620, easing: 'cubic-bezier(.22,1,.36,1)', fill: 'both'
+        });
+      } else {
+        ram.style.transform = slut;
+      }
+
+      requestAnimationFrame(function() { modal.classList.add('synlig'); });
+      vid.currentTime = 0;
+      var p = vid.play();
+      if (p && p.catch) p.catch(function() {});
+    }
+
+    function stangModal() {
+      if (!modalOppen) return;
+      vid.pause();
+      modal.classList.remove('synlig');
+
+      var stadad = false;
+      var klar = function() {
+        if (stadad) return;            // kör bara en gång
+        stadad = true;
+        modal.classList.remove('oppen');
+        modalOppen = false;
+        vid.removeAttribute('src');
+        vid.load();
+        document.body.style.overflow = '';
+        pausadTill = performance.now() + 800;
+      };
+
+      if (senasteKort && ram.animate && mjukRorelse) {
+        var till = senasteKort.getBoundingClientRect();
+        var r = ram.getBoundingClientRect();
+        var sx = till.width / r.width, sy = till.height / r.height;
+        var a = ram.animate([
+          { transform: 'translate(0,0) scale(1,1)', opacity: 1 },
+          { transform: 'translate(' + (till.left - r.left) + 'px,' + (till.top - r.top) + 'px) scale(' + sx + ',' + sy + ')', opacity: 0 }
+        ], { duration: 420, easing: 'cubic-bezier(.4,0,.2,1)', fill: 'both' });
+        a.onfinish = klar;
+        if (a.finished && a.finished.then) a.finished.then(klar, klar);
+        // Säkerhetsnät: städa även om animationen aldrig rapporterar klart
+        // (t.ex. dold flik) — annars fastnar modalen med låst scroll.
+        setTimeout(klar, 600);
+      } else {
+        setTimeout(klar, 200);
+      }
+    }
+
+    // Klick på kort → öppna (men inte om man precis dragit)
+    spar.addEventListener('click', function(e) {
+      if (rorde > 6) { rorde = 0; return; }
+      var kort = e.target.closest('.vg-kort');
+      if (kort) oppna(kort);
+    });
+
+    stang.addEventListener('click', stangModal);
+    bakgrund.addEventListener('click', stangModal);
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') stangModal();
+    });
+
+    // ── Start ──
+    function initiera() {
+      byggLoop();
+      normalisera();
+      rita();
+    }
+
+    var alla = spar.querySelectorAll('img');
+    var kvar = alla.length;
+    if (kvar === 0) initiera();
+    alla.forEach(function(img) {
+      if (img.complete) { if (--kvar === 0) initiera(); }
+      else img.addEventListener('load', function() { if (--kvar === 0) initiera(); });
+    });
+    setTimeout(initiera, 700); // säkerhetsnät
+
+    var omtimer;
+    window.addEventListener('resize', function() {
+      clearTimeout(omtimer);
+      omtimer = setTimeout(function() {
+        byggLoop(); normalisera(); rita();
+        if (modalOppen) {
+          var m = malmatt();
+          ram.style.width = m.w + 'px';
+          ram.style.height = m.h + 'px';
+          ram.style.left = ((window.innerWidth - m.w) / 2) + 'px';
+          ram.style.top  = ((window.innerHeight - m.h) / 2) + 'px';
+        }
+      }, 200);
+    });
+
+    requestAnimationFrame(loop);
+  })();
 </script>
 </body>
 </html>
