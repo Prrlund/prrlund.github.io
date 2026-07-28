@@ -326,10 +326,12 @@
       display: flex;
       gap: 18px;
       will-change: transform;
-      padding: 6px 0 14px;
+      padding: 10px 0 18px;
       cursor: grab;
       touch-action: pan-y;
+      align-items: center;
     }
+    .kar-spar.glider { transition: transform .62s cubic-bezier(.4,0,.2,1); }
     .kar-spar.dras { cursor: grabbing; }
     .vg-kort {
       position: relative;
@@ -339,11 +341,22 @@
       background: var(--yta);
       border: 1px solid var(--kant);
       aspect-ratio: 9/16;
-      transition: border-color .3s, transform .3s;
+      /* Bara den aktiva videon är i fokus — övriga tonas ner och krymps */
+      transform: scale(.84);
+      opacity: .38;
+      transition: transform .5s cubic-bezier(.4,0,.2,1), opacity .5s ease, border-color .3s;
       user-select: none;
       -webkit-user-drag: none;
     }
-    .vg-kort:hover { border-color: rgba(255,191,50,.4); transform: translateY(-5px); }
+    .vg-kort.aktiv {
+      transform: scale(1);
+      opacity: 1;
+      border-color: rgba(255,191,50,.35);
+    }
+    .vg-kort.aktiv:hover { border-color: rgba(255,191,50,.6); }
+    /* Text syns bara på den i fokus */
+    .vg-kort .vg-overlay { opacity: 0; transition: opacity .45s ease; }
+    .vg-kort.aktiv .vg-overlay { opacity: 1; }
     .vg-thumb {
       position: absolute; inset: 0;
       width: 100%; height: 100%;
@@ -640,7 +653,7 @@
       /* Portfolio på mobil: större kort, inga pilar (svep istället) */
       .karusell { margin: 0 -20px; }
       .kar-spar { gap: 12px; }
-      .vg-kort { flex: 0 0 66vw; max-width: 300px; }
+      .vg-kort { flex: 0 0 70vw; max-width: 320px; }
       .kar-pil { display: none; }
       .vm-stang { top: 12px; right: 12px; }
 
@@ -718,7 +731,7 @@
     </button>
     <div class="kar-spar" id="karSpar">
       <div class="vg-kort" data-video="Pär utforskar WideToes 25mb.mp4" data-namn="WideToes">
-        <img class="vg-thumb" src="Widetoes.png" alt="WideToes" draggable="false" />
+        <img class="vg-thumb" src="Widetoes.png?v=2" alt="WideToes" draggable="false" />
         <div class="vg-overlay">
           <div class="vg-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
           <p class="vg-nr">01</p>
@@ -736,7 +749,7 @@
       </div>
 
       <div class="vg-kort" data-video="Pär utforskar pavis 25mb.mp4" data-namn="Pavis">
-        <img class="vg-thumb" src="Pavis.png" alt="Pavis" draggable="false" />
+        <img class="vg-thumb" src="Pavis.png?v=2" alt="Pavis" draggable="false" />
         <div class="vg-overlay">
           <div class="vg-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
           <p class="vg-nr">03</p>
@@ -745,7 +758,7 @@
       </div>
 
       <div class="vg-kort" data-video="Pär x Görans 25mb.mp4" data-namn="Görans">
-        <img class="vg-thumb" src="Gorans.png" alt="Görans" draggable="false" />
+        <img class="vg-thumb" src="Gorans.png?v=2" alt="Görans" draggable="false" />
         <div class="vg-overlay">
           <div class="vg-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
           <p class="vg-nr">04</p>
@@ -754,7 +767,7 @@
       </div>
 
       <div class="vg-kort" data-video="Pär utforskar Omsorg 25mb.mp4" data-namn="Omsorg">
-        <img class="vg-thumb" src="Omsorg.png" alt="Omsorg" draggable="false" />
+        <img class="vg-thumb" src="Omsorg.png?v=2" alt="Omsorg" draggable="false" />
         <div class="vg-overlay">
           <div class="vg-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
           <p class="vg-nr">05</p>
@@ -763,7 +776,7 @@
       </div>
 
       <div class="vg-kort" data-video="Drop in vid Omsorg 25mb - Pär.mp4" data-namn="Omsorg — Drop in">
-        <img class="vg-thumb" src="Omsorg-dropin.png" alt="Omsorg — Drop in" draggable="false" />
+        <img class="vg-thumb" src="Omsorg-dropin.png?v=2" alt="Omsorg — Drop in" draggable="false" />
         <div class="vg-overlay">
           <div class="vg-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
           <p class="vg-nr">06</p>
@@ -772,7 +785,7 @@
       </div>
 
       <div class="vg-kort" data-video="Rekryteringsvideo - Pär besöker 25mb Omsorg.mp4" data-namn="Omsorg — Rekrytering">
-        <img class="vg-thumb" src="Omsorg-rekrytering.png" alt="Omsorg — Rekrytering" draggable="false" />
+        <img class="vg-thumb" src="Omsorg-rekrytering.png?v=2" alt="Omsorg — Rekrytering" draggable="false" />
         <div class="vg-overlay">
           <div class="vg-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
           <p class="vg-nr">07</p>
@@ -921,74 +934,127 @@ Idag gör jag content för Svenska Kulturfonden och Yle Watt. Jag driver också 
   }, { threshold: 0.12 });
   document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
 
-  // ── ROTERANDE KARUSELL ──────────────────────────────
+  // ── FOKUS-KARUSELL: en video i taget ────────────────
   (function() {
     var karusell = document.getElementById('karusell');
     var spar     = document.getElementById('karSpar');
     if (!karusell || !spar) return;
 
-    var original   = Array.prototype.slice.call(spar.children);
+    var original    = Array.prototype.slice.call(spar.children);
+    var antal       = original.length;
     var mjukRorelse = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var harMus      = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
-    var offset = 0;          // hur långt spåret flyttats (px)
-    var basbredd = 0;        // bredd på ett varv (originaluppsättningen)
-    var hastighet = 26;      // px/sekund
-    var autoPa = mjukRorelse;
-    var pausadTill = 0;      // timestamp: auto återupptas efter denna
-    var tween = null;        // aktiv pil-animation
+    var index    = 0;      // vilket kort som är i fokus
+    var steg     = 0;      // kortbredd + gap
+    var offset   = 0;      // aktuell förskjutning i px
+    var kort     = [];     // alla kort (original + kloner)
+    var drar     = false, startX = 0, startOffset = 0, rorde = 0, pekarId = null;
+    var autoTimer = null;
+    var VILA     = 3000;   // ms per video innan den byter
 
-    // Klona korten tills spåret räcker för sömlös loop
-    function byggLoop() {
+    // Klona uppsättningen så loopen aldrig tar slut
+    function bygg() {
       Array.prototype.slice.call(spar.children).forEach(function(el, i) {
-        if (i >= original.length) spar.removeChild(el);
+        if (i >= antal) spar.removeChild(el);
       });
-      basbredd = spar.scrollWidth + parseFloat(getComputedStyle(spar).gap || 0);
-      var mal = karusell.offsetWidth * 2 + basbredd;
-      var i = 0;
-      while (spar.scrollWidth < mal && i < 60) {
+      var behovs = Math.ceil(karusell.offsetWidth / Math.max(mat().steg, 1)) + 2;
+      var varv = Math.max(2, Math.ceil(behovs / antal) + 1);
+      for (var v = 1; v < varv; v++) {
         original.forEach(function(k) {
           var klon = k.cloneNode(true);
           klon.setAttribute('aria-hidden', 'true');
           spar.appendChild(klon);
         });
-        i++;
       }
+      kort = Array.prototype.slice.call(spar.querySelectorAll('.vg-kort'));
     }
 
-    function normalisera() {
-      if (basbredd <= 0) return;
-      while (offset >= basbredd) offset -= basbredd;
-      while (offset < 0) offset += basbredd;
+    function mat() {
+      var k = spar.querySelector('.vg-kort');
+      var g = parseFloat(getComputedStyle(spar).gap) || 18;
+      // offsetWidth = layoutbredd, opåverkad av scale() — annars kan
+      // en mätning mitt i en animation ge fel steg och korten hamnar snett.
+      var b = k ? k.offsetWidth : 260;
+      return { bredd: b, steg: b + g };
+    }
+
+    // Placera så att kort nr i hamnar mitt i karusellen
+    function offsetFor(i) {
+      return i * steg + steg / 2 - karusell.offsetWidth / 2 - (parseFloat(getComputedStyle(spar).gap) || 18) / 2;
     }
 
     function rita() {
       spar.style.transform = 'translate3d(' + (-offset) + 'px,0,0)';
     }
 
-    var forra = null;
-    function loop(nu) {
-      if (forra === null) forra = nu;
-      var dt = Math.min((nu - forra) / 1000, 0.05);
-      forra = nu;
-
-      if (autoPa && !drar && !tween && nu > pausadTill && !modalOppen) {
-        offset += hastighet * dt;
-        normalisera();
-        rita();
-      }
-      requestAnimationFrame(loop);
+    function markera() {
+      kort.forEach(function(k, i) {
+        k.classList.toggle('aktiv', i === index);
+      });
     }
 
-    // ── Manuell dragning (touch + mus) ──
-    var drar = false, startX = 0, startOffset = 0, rorde = 0, pekarId = null;
+    function glidTill(nyIndex, direkt) {
+      index = nyIndex;
+      offset = offsetFor(index);
+      spar.classList.toggle('glider', !direkt && mjukRorelse);
+      rita();
+      markera();
+      if (direkt) {
+        // tvinga fram omritning så nästa glid animeras
+        void spar.offsetWidth;
+      }
+    }
 
+    // Hoppa osynligt tillbaka ett varv när vi passerat originaluppsättningen
+    function rebasa() {
+      if (index < antal) return;
+      index -= antal;
+      spar.classList.remove('glider');
+      offset = offsetFor(index);
+      rita();
+      markera();
+      void spar.offsetWidth;
+    }
+
+    function nasta() {
+      // Rebasa direkt om vi redan står utanför originalet — annars kan
+      // snabba klick hinna förbi den fördröjda rebasen och köra av spåret.
+      rebasa();
+      glidTill(index + 1);
+      setTimeout(rebasa, 640);
+    }
+    function forra()  {
+      if (index === 0) {           // hoppa osynligt framåt ett varv först
+        spar.classList.remove('glider');
+        index += antal;
+        offset = offsetFor(index);
+        rita(); markera();
+        void spar.offsetWidth;
+      }
+      glidTill(index - 1);
+    }
+
+    // ── Auto-växling ──
+    function startaAuto() {
+      stoppaAuto();
+      if (!mjukRorelse) return;
+      autoTimer = setInterval(function() {
+        if (!drar && !modalOppen && !document.hidden) nasta();
+      }, VILA);
+    }
+    function stoppaAuto() { if (autoTimer) { clearInterval(autoTimer); autoTimer = null; } }
+    function paus(ms) { stoppaAuto(); setTimeout(startaAuto, ms || 4000); }
+
+    // ── Manuell dragning: följer fingret, snappar till närmaste ──
     spar.addEventListener('pointerdown', function(e) {
       if (e.button !== undefined && e.button !== 0) return;
       drar = true; rorde = 0; pekarId = e.pointerId;
       startX = e.clientX; startOffset = offset;
-      tween = null;
+      stoppaAuto();
+      spar.classList.remove('glider');
       spar.classList.add('dras');
-      spar.setPointerCapture(e.pointerId);
+      try { spar.setPointerCapture(e.pointerId); } catch (err) {}
     });
 
     spar.addEventListener('pointermove', function(e) {
@@ -996,52 +1062,38 @@ Idag gör jag content för Svenska Kulturfonden och Yle Watt. Jag driver också 
       var dx = e.clientX - startX;
       rorde = Math.max(rorde, Math.abs(dx));
       offset = startOffset - dx;
-      normalisera();
       rita();
+      // markera den som är närmast mitten medan man drar
+      var n = Math.round((offset - offsetFor(0)) / steg);
+      if (n !== index && n >= 0 && n < kort.length) { index = n; markera(); }
     });
 
-    function slutaDra(e) {
+    function slapp(e) {
       if (!drar) return;
       drar = false;
       spar.classList.remove('dras');
-      pausadTill = performance.now() + 2500;
       try { spar.releasePointerCapture(e.pointerId); } catch (err) {}
-    }
-    spar.addEventListener('pointerup', slutaDra);
-    spar.addEventListener('pointercancel', slutaDra);
 
-    // ── Pilar: mjuk förflyttning ett kort ──
-    function kortsteg() {
-      var k = spar.querySelector('.vg-kort');
-      var g = parseFloat(getComputedStyle(spar).gap || 18);
-      return k ? k.getBoundingClientRect().width + g : 260;
+      // snappa till närmaste kort
+      var n = Math.round((offset - offsetFor(0)) / steg);
+      n = Math.max(0, Math.min(kort.length - 1, n));
+      glidTill(n);
+      setTimeout(rebasa, 640);
+      paus(4000);
     }
+    spar.addEventListener('pointerup', slapp);
+    spar.addEventListener('pointercancel', slapp);
 
-    function glid(delta) {
-      var fran = offset, tid = 480, t0 = performance.now();
-      tween = true;
-      function steg(nu) {
-        var p = Math.min((nu - t0) / tid, 1);
-        var e = 1 - Math.pow(1 - p, 3); // ease-out
-        offset = fran + delta * e;
-        normalisera();
-        rita();
-        if (p < 1) { requestAnimationFrame(steg); }
-        else { tween = null; pausadTill = performance.now() + 2500; }
-      }
-      requestAnimationFrame(steg);
-    }
-
+    // ── Pilar ──
     var pv = document.getElementById('pilVanster');
     var ph = document.getElementById('pilHoger');
-    if (pv) pv.addEventListener('click', function() { glid(-kortsteg()); });
-    if (ph) ph.addEventListener('click', function() { glid(kortsteg()); });
+    if (pv) pv.addEventListener('click', function() { forra(); paus(5000); });
+    if (ph) ph.addEventListener('click', function() { nasta(); paus(5000); });
 
-    // Pausa rotationen vid hover — men bara på enheter med riktig muspekare,
-    // annars kan touch trigga mouseenter utan mouseleave och stoppa den för gott.
-    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-      karusell.addEventListener('mouseenter', function() { pausadTill = Infinity; });
-      karusell.addEventListener('mouseleave', function() { pausadTill = performance.now() + 400; });
+    // Pausa vid hover (bara riktig muspekare — touch kan annars låsa den)
+    if (harMus) {
+      karusell.addEventListener('mouseenter', stoppaAuto);
+      karusell.addEventListener('mouseleave', function() { if (!modalOppen) startaAuto(); });
     }
 
     // ── VIDEO-MODAL med zoom-in ──
@@ -1118,7 +1170,7 @@ Idag gör jag content för Svenska Kulturfonden och Yle Watt. Jag driver också 
         vid.removeAttribute('src');
         vid.load();
         document.body.style.overflow = '';
-        pausadTill = performance.now() + 800;
+        startaAuto();
       };
 
       if (senasteKort && ram.animate && mjukRorelse) {
@@ -1139,11 +1191,20 @@ Idag gör jag content för Svenska Kulturfonden och Yle Watt. Jag driver också 
       }
     }
 
-    // Klick på kort → öppna (men inte om man precis dragit)
+    // Klick: aktivt kort → spela upp. Övriga → flytta fokus dit.
     spar.addEventListener('click', function(e) {
       if (rorde > 6) { rorde = 0; return; }
-      var kort = e.target.closest('.vg-kort');
-      if (kort) oppna(kort);
+      var klickat = e.target.closest('.vg-kort');
+      if (!klickat) return;
+      var i = kort.indexOf(klickat);
+      if (i === index) {
+        stoppaAuto();
+        oppna(klickat);
+      } else if (i > -1) {
+        glidTill(i);
+        setTimeout(rebasa, 640);
+        paus(5000);
+      }
     });
 
     stang.addEventListener('click', stangModal);
@@ -1153,10 +1214,14 @@ Idag gör jag content för Svenska Kulturfonden och Yle Watt. Jag driver också 
     });
 
     // ── Start ──
+    var startad = false;
     function initiera() {
-      byggLoop();
-      normalisera();
-      rita();
+      if (startad) return;
+      startad = true;
+      bygg();
+      steg = mat().steg;
+      glidTill(0, true);
+      startaAuto();
     }
 
     var alla = spar.querySelectorAll('img');
@@ -1168,11 +1233,19 @@ Idag gör jag content för Svenska Kulturfonden och Yle Watt. Jag driver också 
     });
     setTimeout(initiera, 700); // säkerhetsnät
 
+    // Pausa när fliken är dold (annars hopar sig växlingarna)
+    document.addEventListener('visibilitychange', function() {
+      if (document.hidden) stoppaAuto();
+      else if (!modalOppen) startaAuto();
+    });
+
     var omtimer;
     window.addEventListener('resize', function() {
       clearTimeout(omtimer);
       omtimer = setTimeout(function() {
-        byggLoop(); normalisera(); rita();
+        bygg();
+        steg = mat().steg;
+        glidTill(index % antal, true);
         if (modalOppen) {
           var m = malmatt();
           ram.style.width = m.w + 'px';
@@ -1182,8 +1255,6 @@ Idag gör jag content för Svenska Kulturfonden och Yle Watt. Jag driver också 
         }
       }, 200);
     });
-
-    requestAnimationFrame(loop);
   })();
 </script>
 </body>
