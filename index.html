@@ -101,34 +101,6 @@
     }
     section { scroll-margin-top: 80px; }
 
-    /* ── LOADER ────────────────────────── */
-    #loader {
-      position: fixed; inset: 0;
-      background: var(--bg);
-      z-index: 2000;
-      display: flex; align-items: center; justify-content: center;
-      transition: opacity .7s ease, visibility .7s ease;
-    }
-    #loader.borta { opacity: 0; visibility: hidden; }
-    .loader-text {
-      display: flex;
-      font-size: clamp(1.4rem, 4vw, 2.6rem);
-      font-weight: 200;
-      letter-spacing: .35em;
-      overflow: hidden;
-    }
-    .loader-text span {
-      display: inline-block;
-      transform: translateY(110%);
-      animation: l-upp .6s cubic-bezier(.16,1,.3,1) forwards;
-    }
-    .loader-text span:nth-child(1) { color: var(--guld); }
-    .loader-text span:nth-child(2) { animation-delay: .07s; }
-    .loader-text span:nth-child(3) { animation-delay: .14s; }
-    .loader-text span:nth-child(4) { animation-delay: .21s; }
-    .loader-text span:nth-child(5) { animation-delay: .28s; }
-    @keyframes l-upp { to { transform: translateY(0); } }
-
     /* ── HEADER ────────────────────────── */
     header {
       position: fixed;
@@ -585,13 +557,6 @@
 </head>
 <body>
 
-<!-- LOADER -->
-<div id="loader">
-  <div class="loader-text">
-    <span>P</span><span>L</span><span>U</span><span>N</span><span>D</span>
-  </div>
-</div>
-
 <header id="header">
   <a href="#" aria-label="Plund Media">
     <img src="Plund_logo.svg" alt="Plund Media" class="logo-svg" />
@@ -614,7 +579,7 @@
 <!-- HERO -->
 <section id="hero">
   <video id="hero-video" autoplay muted loop playsinline poster="Kaffia.png">
-    <source src="kaffia.mp4" type="video/mp4">
+    <source src="Website%20prewview%2025mb.mp4" type="video/mp4">
   </video>
   <div id="hero-gradient"></div>
   <div class="hero-inner">
@@ -767,20 +732,10 @@ Idag gör jag content för Svenska Kulturfonden och Yle Watt. Jag driver också 
 </footer>
 
 <script>
-  // Loader
-  window.addEventListener('load', function() {
-    setTimeout(function() {
-      document.getElementById('loader').classList.add('borta');
-      document.querySelectorAll('#hero .reveal').forEach(function(el) {
-        setTimeout(function() { el.classList.add('synlig'); }, 150);
-      });
-    }, 1100);
+  // Hero-innehåll fadar in direkt
+  document.querySelectorAll('#hero .reveal').forEach(function(el) {
+    setTimeout(function() { el.classList.add('synlig'); }, 100);
   });
-  // Fallback om load-eventet dröjer
-  setTimeout(function() {
-    document.getElementById('loader').classList.add('borta');
-    document.querySelectorAll('#hero .reveal').forEach(function(el) { el.classList.add('synlig'); });
-  }, 3000);
 
   // Header: bakgrund + göm vid scroll ner
   var senastScroll = 0;
