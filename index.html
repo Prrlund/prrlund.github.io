@@ -75,28 +75,34 @@
           {
             "@type": "Offer",
             "name": "Företagsvideo — en video",
-            "description": "Ett besök, en färdig film till era kanaler.",
+            "description": "En video. Från idé till färdig film. Ni behöver inte göra någonting.",
             "price": "450",
             "priceCurrency": "EUR"
           },
           {
             "@type": "Offer",
-            "name": "Företagsvideo — fyra videor",
-            "description": "Ett besök, en dags filmning, content för en månad.",
-            "price": "1500",
+            "name": "Företagsvideo — fyra videor i månaden",
+            "description": "Fyra videor i månaden. En dags filmning, en färdig video i veckan. Minst tre månader.",
+            "priceCurrency": "EUR",
+            "priceSpecification": {
+              "@type": "UnitPriceSpecification",
+              "price": "1600",
+              "priceCurrency": "EUR",
+              "unitCode": "MON",
+              "billingDuration": 1
+            }
+          },
+          {
+            "@type": "Offer",
+            "name": "Programledare — en kväll",
+            "description": "En kväll. Fest, gala, dimission.",
+            "price": "450",
             "priceCurrency": "EUR"
           },
           {
             "@type": "Offer",
-            "name": "Företagsvideo — tio videor",
-            "description": "Två besök, content för ett kvartal.",
-            "price": "3000",
-            "priceCurrency": "EUR"
-          },
-          {
-            "@type": "Offer",
-            "name": "Programledare & föreläsning",
-            "description": "Programledare för fest, gala, dimission eller seminarium. Även föreläsning om att bygga content.",
+            "name": "Programledare & föreläsare — hel dag",
+            "description": "Hela dagar, konferenser och föreläsningar. Beror på längd och plats. Offert.",
             "priceCurrency": "EUR",
             "priceSpecification": {
               "@type": "PriceSpecification",
@@ -537,6 +543,34 @@
       .vm-bakgrund, .vm-stang, .vm-titel { transition: none; }
     }
 
+    /* ── RESULTAT (bevis före pris) ────── */
+    #resultat {
+      background: var(--bg2);
+      border-top: 1px solid var(--kant);
+      border-bottom: 1px solid var(--kant);
+      padding: clamp(40px, 6vh, 64px) clamp(20px, 6vw, 110px);
+    }
+    .resultat-stor {
+      font-size: clamp(1.3rem, 2.6vw, 2rem);
+      font-weight: 800;
+      letter-spacing: -.03em;
+      line-height: 1.2;
+      max-width: 22ch;
+    }
+    .resultat-stor strong { color: var(--guld); font-weight: 800; }
+    .resultat-lista {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 40px;
+      margin-top: 26px;
+    }
+    .resultat-lista li { display: flex; flex-direction: column; }
+    .resultat-siffra {
+      font-size: 1.05rem; font-weight: 800; letter-spacing: -.02em;
+    }
+    .resultat-namn { font-size: .85rem; color: var(--dim); }
+
     /* ── VAD JAG GÖR ───────────────────── */
     #tjanster { background: var(--bg); }
     .tjanst-grid {
@@ -889,10 +923,21 @@
   </div>
 </div>
 
+<!-- RESULTAT -->
+<section id="resultat">
+  <p class="resultat-stor reveal"><strong>Över 120 000</strong> organiska visningar på sju videor.</p>
+  <ul class="resultat-lista reveal" style="transition-delay:.1s">
+    <li><span class="resultat-siffra">35 000</span><span class="resultat-namn">Widetoes</span></li>
+    <li><span class="resultat-siffra">31 000</span><span class="resultat-namn">Kaffia</span></li>
+    <li><span class="resultat-siffra">17 000</span><span class="resultat-namn">Pavis</span></li>
+    <li><span class="resultat-siffra">13 800</span><span class="resultat-namn">Görans — deras mest sedda video på Instagram</span></li>
+  </ul>
+</section>
+
 <!-- VAD JAG GÖR -->
 <section id="tjanster" class="sektion">
   <p class="sektion-rubrik reveal">Tjänster</p>
-  <h2 class="sektion-titel reveal" style="transition-delay:.08s">Två saker jag gör</h2>
+  <h2 class="sektion-titel reveal" style="transition-delay:.08s">Framför kameran eller framför publiken</h2>
 
   <div class="tjanst-grid">
 
@@ -900,21 +945,18 @@
       <p class="tjanst-etikett">Plund Media</p>
       <h3 class="tjanst-titel">Företagsvideo</h3>
       <p class="tjanst-text">
-        Jag kommer in på ert ställe, ställer frågor och spelar lite dum. Ni får en video som folk ser klart
-        och minns. Inget manus, ingen reklamkänsla.
+        Jag kommer in på ert ställe, ställer frågor och spelar lite dum. Eller testar er produkt, frågar folk
+        på stan, gör något ni inte tänkt på. Ni får en video som folk ser klart och minns. Inget manus,
+        ingen reklamkänsla.
       </p>
       <div class="pris-lista">
         <div class="pris-rad">
           <span class="pris-belopp">450 €</span>
-          <span class="pris-vad">En video. Ett besök, en färdig film till era kanaler.</span>
+          <span class="pris-vad">En video. Från idé till färdig film. Ni behöver inte göra någonting.</span>
         </div>
         <div class="pris-rad">
-          <span class="pris-belopp">1 500 €</span>
-          <span class="pris-vad">Fyra videor. Ett besök, en dags filmning, content för en månad.</span>
-        </div>
-        <div class="pris-rad">
-          <span class="pris-belopp">3 000 €</span>
-          <span class="pris-vad">Tio videor. Två besök, content för ett kvartal.</span>
+          <span class="pris-belopp">1 600 € / mån</span>
+          <span class="pris-vad">Fyra videor i månaden. En dags filmning, en färdig video i veckan. Minst tre månader.</span>
         </div>
       </div>
       <div class="tjanst-knapp-rad">
@@ -924,17 +966,24 @@
 
     <div class="tjanst-kort reveal" style="transition-delay:.2s">
       <p class="tjanst-etikett">Plund</p>
-      <h3 class="tjanst-titel">Programledare &amp; föreläsning</h3>
+      <h3 class="tjanst-titel">Programledare &amp; föreläsare</h3>
       <p class="tjanst-text">
-        Jag leder er kväll. Fest, gala, dimission, seminarium. Jag håller tempot, snackar med publiken
-        och ser till att ingen tittar på klockan. Går också att boka för att prata om hur man bygger content.
+        Jag leder er kväll eller er dag. Fest, gala, dimission, seminarium, konferens. Jag håller tempot,
+        snackar med publiken och ser till att ingen tittar på klockan. Går också att boka för att prata om
+        hur man bygger content.
       </p>
-      <div class="pris-fran">
-        <strong>Från 450 €.</strong>
-        <span>Beror på längd och plats.</span>
+      <div class="pris-lista">
+        <div class="pris-rad">
+          <span class="pris-belopp">450 €</span>
+          <span class="pris-vad">En kväll. Fest, gala, dimission.</span>
+        </div>
+        <div class="pris-rad">
+          <span class="pris-belopp">Offert</span>
+          <span class="pris-vad">Hela dagar, konferenser och föreläsningar. Beror på längd och plats.</span>
+        </div>
       </div>
       <div class="tjanst-knapp-rad">
-        <a href="mailto:plundcollab@gmail.com?subject=Programledare" class="knapp-primär">Boka mig för en kväll →</a>
+        <a href="mailto:plundcollab@gmail.com?subject=Programledare" class="knapp-primär">Boka mig för en kväll eller en dag →</a>
       </div>
     </div>
 
@@ -1154,7 +1203,7 @@
     <div>
       <p class="sektion-rubrik reveal">Kom igång</p>
       <h2 class="kontakt-titel reveal" style="transition-delay:.08s">
-        Vill ni boka en video eller <em>en kväll?</em>
+        Vill ni boka en video, en kväll eller <em>en hel dag?</em>
       </h2>
       <p class="kontakt-undertext reveal" style="transition-delay:.14s">Hör av er så pratar vi om hur det kan se ut.</p>
       <div class="kontakt-lista reveal" style="transition-delay:.2s">
@@ -1180,16 +1229,16 @@
     </div>
     <div class="fakta-stack reveal" style="transition-delay:.25s">
       <div class="fakta-rad">
-        <div class="fakta-siffra">100%</div>
-        <div class="fakta-etikett">Autentiskt content, inget manus och ingen reklam-känsla</div>
+        <div class="fakta-siffra">Inget manus</div>
+        <div class="fakta-etikett">Ingen inövad fras, ingen reklamkänsla. Det som händer är det som händer.</div>
       </div>
       <div class="fakta-rad">
-        <div class="fakta-siffra">Bakom kulisserna</div>
-        <div class="fakta-etikett">Så här funkar företaget på riktigt.</div>
+        <div class="fakta-siffra">Ni gör ingenting</div>
+        <div class="fakta-etikett">Jag planerar, filmar och klipper. Eller kommer och tar mikrofonen. Ni behöver inte förbereda något.</div>
       </div>
       <div class="fakta-rad">
-        <div class="fakta-siffra">Underhållning</div>
-        <div class="fakta-etikett">Videor folk faktiskt orkar se klart — och delar.</div>
+        <div class="fakta-siffra">Folk stannar kvar</div>
+        <div class="fakta-etikett">Videor som ses klart och delas. Kvällar där ingen tittar på klockan.</div>
       </div>
     </div>
   </div>
