@@ -934,7 +934,7 @@ Idag gör jag content för Svenska Kulturfonden och Yle Watt. Jag driver också 
   }, { threshold: 0.12 });
   document.querySelectorAll('.reveal').forEach(function(el) { obs.observe(el); });
 
-  // ── FOKUS-KARUSELL: en video i taget ────────────────
+  // ── FOKUS-KARUSELL: en video i taget, oändlig loop ──
   (function() {
     var karusell = document.getElementById('karusell');
     var spar     = document.getElementById('karSpar');
@@ -945,21 +945,32 @@ Idag gör jag content för Svenska Kulturfonden och Yle Watt. Jag driver också 
     var mjukRorelse = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var harMus      = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
-    var index    = 0;      // vilket kort som är i fokus
-    var steg     = 0;      // kortbredd + gap
-    var offset   = 0;      // aktuell förskjutning i px
-    var kort     = [];     // alla kort (original + kloner)
-    var drar     = false, startX = 0, startOffset = 0, rorde = 0, pekarId = null;
+    var kort = [], steg = 0, bredd = 0, gap = 18, loopBredd = 0;
+    var offset = 0;
+    var drar = false, startX = 0, startOffset = 0, rorde = 0, pekarId = null;
+    var senasteX = 0, senasteT = 0, fart = 0;   // px/ms för flick-igenkänning
     var autoTimer = null;
-    var VILA     = 3000;   // ms per video innan den byter
+    var VILA = 3000;        // ms per video
+    var FLICK = 0.22;       // px/ms — över detta räknas som en snärt
+    var TROSKEL = 0.10;     // 10 % av ett kort räcker för att byta video
 
-    // Klona uppsättningen så loopen aldrig tar slut
+    function mat() {
+      var k = spar.querySelector('.vg-kort');
+      gap = parseFloat(getComputedStyle(spar).gap) || 18;
+      // offsetWidth = layoutbredd, opåverkad av scale()
+      bredd = k ? k.offsetWidth : 260;
+      steg = bredd + gap;
+      loopBredd = antal * steg;
+    }
+
+    // Bygg tillräckligt många varv för att loopen aldrig ska ta slut,
+    // ens vid snabba svep: minst ett helt varv utanför skärmen åt vardera håll.
     function bygg() {
       Array.prototype.slice.call(spar.children).forEach(function(el, i) {
         if (i >= antal) spar.removeChild(el);
       });
-      var behovs = Math.ceil(karusell.offsetWidth / Math.max(mat().steg, 1)) + 2;
-      var varv = Math.max(2, Math.ceil(behovs / antal) + 1);
+      mat();
+      var varv = Math.max(3, Math.ceil(karusell.offsetWidth / Math.max(loopBredd, 1)) + 2);
       for (var v = 1; v < varv; v++) {
         original.forEach(function(k) {
           var klon = k.cloneNode(true);
@@ -968,20 +979,40 @@ Idag gör jag content för Svenska Kulturfonden och Yle Watt. Jag driver också 
         });
       }
       kort = Array.prototype.slice.call(spar.querySelectorAll('.vg-kort'));
+      mat();
+      // Exakt kortavstånd och varvlängd från layouten. offsetWidth avrundas
+      // till heltal, så bredd+gap blir en aning fel och korten hamnar snett.
+      if (kort[antal] && kort[0]) {
+        loopBredd = kort[antal].offsetLeft - kort[0].offsetLeft;
+        steg = loopBredd / antal;
+      }
     }
 
-    function mat() {
-      var k = spar.querySelector('.vg-kort');
-      var g = parseFloat(getComputedStyle(spar).gap) || 18;
-      // offsetWidth = layoutbredd, opåverkad av scale() — annars kan
-      // en mätning mitt i en animation ge fel steg och korten hamnar snett.
-      var b = k ? k.offsetWidth : 260;
-      return { bredd: b, steg: b + g };
+    // Offset som centrerar kort nr `slot`.
+    // Vi läser kortets verkliga layoutposition — att räkna slot*steg
+    // ackumulerar avrundningsfel (kortbredden är sällan ett helt tal)
+    // och korten hamnar då gradvis snett.
+    function offsetForSlot(slot) {
+      var k = kort[slot];
+      if (k) return k.offsetLeft + k.offsetWidth / 2 - karusell.offsetWidth / 2;
+      return slot * steg + bredd / 2 - karusell.offsetWidth / 2;
+    }
+    function slotNu() {
+      return (offset - offsetForSlot(0)) / steg;
     }
 
-    // Placera så att kort nr i hamnar mitt i karusellen
-    function offsetFor(i) {
-      return i * steg + steg / 2 - karusell.offsetWidth / 2 - (parseFloat(getComputedStyle(spar).gap) || 18) / 2;
+    // Håll oss alltid i mitten av spåret. Eftersom korten upprepas exakt var
+    // `loopBredd` px är hoppet helt osynligt — och loopen kan aldrig ta slut.
+    function wrap() {
+      if (loopBredd <= 0) return;
+      var s = slotNu(), skift = 0;
+      while (s < antal)      { skift += loopBredd; s += antal; }
+      while (s >= 2 * antal) { skift -= loopBredd; s -= antal; }
+      if (skift) {
+        offset += skift;
+        // Följ med i draget, annars nollställs hoppet av nästa pointermove
+        startOffset += skift;
+      }
     }
 
     function rita() {
@@ -989,51 +1020,33 @@ Idag gör jag content för Svenska Kulturfonden och Yle Watt. Jag driver också 
     }
 
     function markera() {
-      kort.forEach(function(k, i) {
-        k.classList.toggle('aktiv', i === index);
-      });
+      var s = Math.round(slotNu());
+      kort.forEach(function(k, i) { k.classList.toggle('aktiv', i === s); });
     }
 
-    function glidTill(nyIndex, direkt) {
-      index = nyIndex;
-      offset = offsetFor(index);
+    function visa(direkt) {
       spar.classList.toggle('glider', !direkt && mjukRorelse);
       rita();
       markera();
-      if (direkt) {
-        // tvinga fram omritning så nästa glid animeras
-        void spar.offsetWidth;
-      }
+      if (direkt) void spar.offsetWidth;
     }
 
-    // Hoppa osynligt tillbaka ett varv när vi passerat originaluppsättningen
-    function rebasa() {
-      if (index < antal) return;
-      index -= antal;
-      spar.classList.remove('glider');
-      offset = offsetFor(index);
-      rita();
-      markera();
-      void spar.offsetWidth;
-    }
-
-    function nasta() {
-      // Rebasa direkt om vi redan står utanför originalet — annars kan
-      // snabba klick hinna förbi den fördröjda rebasen och köra av spåret.
-      rebasa();
-      glidTill(index + 1);
-      setTimeout(rebasa, 640);
-    }
-    function forra()  {
-      if (index === 0) {           // hoppa osynligt framåt ett varv först
+    // Gå till ett slot (absolut) med mjuk glidning
+    function tillSlot(slot) {
+      wrap();                       // säkerställ mitten innan vi rör oss
+      offset = offsetForSlot(slot);
+      visa(false);
+      // hoppa osynligt tillbaka till mitten när glidningen är klar
+      clearTimeout(tillSlot._t);
+      tillSlot._t = setTimeout(function() {
+        wrap();
         spar.classList.remove('glider');
-        index += antal;
-        offset = offsetFor(index);
         rita(); markera();
-        void spar.offsetWidth;
-      }
-      glidTill(index - 1);
+      }, 660);
     }
+
+    function nasta() { tillSlot(Math.round(slotNu()) + 1); }
+    function forra() { tillSlot(Math.round(slotNu()) - 1); }
 
     // ── Auto-växling ──
     function startaAuto() {
@@ -1046,12 +1059,15 @@ Idag gör jag content för Svenska Kulturfonden och Yle Watt. Jag driver också 
     function stoppaAuto() { if (autoTimer) { clearInterval(autoTimer); autoTimer = null; } }
     function paus(ms) { stoppaAuto(); setTimeout(startaAuto, ms || 4000); }
 
-    // ── Manuell dragning: följer fingret, snappar till närmaste ──
+    // ── Dragning: följer fingret, snappar på lätt svep eller snärt ──
     spar.addEventListener('pointerdown', function(e) {
       if (e.button !== undefined && e.button !== 0) return;
       drar = true; rorde = 0; pekarId = e.pointerId;
       startX = e.clientX; startOffset = offset;
+      senasteX = e.clientX; senasteT = performance.now(); fart = 0;
+      wrap();
       stoppaAuto();
+      clearTimeout(tillSlot._t);
       spar.classList.remove('glider');
       spar.classList.add('dras');
       try { spar.setPointerCapture(e.pointerId); } catch (err) {}
@@ -1061,11 +1077,20 @@ Idag gör jag content för Svenska Kulturfonden och Yle Watt. Jag driver också 
       if (!drar || e.pointerId !== pekarId) return;
       var dx = e.clientX - startX;
       rorde = Math.max(rorde, Math.abs(dx));
+
+      var nu = performance.now();
+      var dt = nu - senasteT;
+      // Mät först när det gått några ms — annars kan dt≈0 ge orimlig fart
+      // och ett litet fingerdarr skulle räknas som en snärt.
+      if (dt >= 4) {
+        fart = (e.clientX - senasteX) / dt;   // negativ = svep åt vänster
+        senasteX = e.clientX; senasteT = nu;
+      }
+
       offset = startOffset - dx;
+      wrap();                       // oändlig loop även mitt i draget
       rita();
-      // markera den som är närmast mitten medan man drar
-      var n = Math.round((offset - offsetFor(0)) / steg);
-      if (n !== index && n >= 0 && n < kort.length) { index = n; markera(); }
+      markera();
     });
 
     function slapp(e) {
@@ -1074,11 +1099,24 @@ Idag gör jag content för Svenska Kulturfonden och Yle Watt. Jag driver också 
       spar.classList.remove('dras');
       try { spar.releasePointerCapture(e.pointerId); } catch (err) {}
 
-      // snappa till närmaste kort
-      var n = Math.round((offset - offsetFor(0)) / steg);
-      n = Math.max(0, Math.min(kort.length - 1, n));
-      glidTill(n);
-      setTimeout(rebasa, 640);
+      var flyttat = (offset - startOffset) / steg;   // hur många kort man dragit
+      // Startpunkten uttryckt i nuvarande numrering (wrap kan ha hoppat ett varv)
+      var fran = Math.round(slotNu() - flyttat);
+      var mal;
+
+      if (Math.abs(fart) > FLICK && rorde >= 12) {
+        // Snärt: ett kort i svepets riktning — behöver inte dras långt.
+        // Kräver ändå ~12px så att en darrning vid tryck inte byter video.
+        mal = fran + (fart < 0 ? 1 : -1);
+      } else if (Math.abs(flyttat) >= TROSKEL) {
+        // Kort svep räcker (18 % av ett kort)
+        mal = fran + (flyttat > 0 ? Math.max(1, Math.round(flyttat))
+                                  : Math.min(-1, Math.round(flyttat)));
+      } else {
+        mal = fran;                  // för litet — glid tillbaka
+      }
+
+      tillSlot(mal);
       paus(4000);
     }
     spar.addEventListener('pointerup', slapp);
@@ -1197,12 +1235,11 @@ Idag gör jag content för Svenska Kulturfonden och Yle Watt. Jag driver också 
       var klickat = e.target.closest('.vg-kort');
       if (!klickat) return;
       var i = kort.indexOf(klickat);
-      if (i === index) {
+      if (i === Math.round(slotNu())) {
         stoppaAuto();
         oppna(klickat);
       } else if (i > -1) {
-        glidTill(i);
-        setTimeout(rebasa, 640);
+        tillSlot(i);
         paus(5000);
       }
     });
@@ -1217,10 +1254,16 @@ Idag gör jag content för Svenska Kulturfonden och Yle Watt. Jag driver också 
     var startad = false;
     function initiera() {
       if (startad) return;
-      startad = true;
       bygg();
-      steg = mat().steg;
-      glidTill(0, true);
+      // Om karusellen ännu saknar bredd (dold flik, sen layout) blir stegen
+      // fel och den fastnar. Vänta och försök igen istället.
+      if (bredd < 40 || karusell.offsetWidth < 40) {
+        setTimeout(initiera, 300);
+        return;
+      }
+      startad = true;
+      offset = offsetForSlot(antal);   // starta i mitten-varvet
+      visa(true);
       startaAuto();
     }
 
@@ -1243,9 +1286,11 @@ Idag gör jag content för Svenska Kulturfonden och Yle Watt. Jag driver också 
     window.addEventListener('resize', function() {
       clearTimeout(omtimer);
       omtimer = setTimeout(function() {
+        // behåll vilken video som är i fokus över storleksändringen
+        var kvarSlot = ((Math.round(slotNu()) % antal) + antal) % antal;
         bygg();
-        steg = mat().steg;
-        glidTill(index % antal, true);
+        offset = offsetForSlot(antal + kvarSlot);
+        visa(true);
         if (modalOppen) {
           var m = malmatt();
           ram.style.width = m.w + 'px';
