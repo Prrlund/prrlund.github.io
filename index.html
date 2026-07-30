@@ -399,7 +399,10 @@
       transition: transform .5s cubic-bezier(.4,0,.2,1), opacity .5s ease, border-color .3s;
       user-select: none;
       -webkit-user-drag: none;
+      cursor: pointer;              /* hela kortet går att trycka på */
     }
+    /* Grannkorten ska kännas klickbara, inte bara vara det */
+    .vg-kort:not(.aktiv):hover { opacity: .68; transform: scale(.87); }
     .vg-kort.aktiv {
       transform: scale(1);
       opacity: 1;
@@ -1707,7 +1710,9 @@
 
     // Klick: aktivt kort → spela upp. Övriga → flytta fokus dit.
     spar.addEventListener('click', function(e) {
-      if (rorde > 6) { rorde = 0; return; }
+      // 10px: ett finger driver ofta några pixlar vid ett tryck — för snäv
+      // tröskel gjorde att tryck på grannkort räknades som svep och åts upp.
+      if (rorde > 10) { rorde = 0; return; }
       var klickat = e.target.closest('.vg-kort');
       if (!klickat) return;
       var i = kort.indexOf(klickat);
