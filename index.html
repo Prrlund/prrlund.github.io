@@ -10,6 +10,11 @@
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://plundmedia.com/" />
 
+  <!-- Favicon: bara förstoringsglas-P:et, ingen text (försvinner i 16×16) -->
+  <link rel="icon" type="image/svg+xml" href="plund-ikon.svg" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <meta name="theme-color" content="#070707" />
+
   <!-- Open Graph (Facebook, LinkedIn, AI-crawlers) -->
   <!-- TODO: byt og:image till den nya headshoten när den finns -->
   <meta property="og:type" content="website" />
@@ -651,10 +656,11 @@
     }
     .scen-knapp-rad { margin-top: 32px; }
 
-    /* ── FÖLJ MIG ──────────────────────── */
-    #folj { background: var(--bg); }
+    /* ── PÄRSONLIGT ────────────────────── */
+    #parsonligt { background: var(--bg); }
     .folj-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr);
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 16px; margin-top: clamp(32px, 4vw, 44px);
     }
     .folj-kort {
@@ -696,6 +702,50 @@
     .yt-lazy:hover .yt-play { background: var(--guld); border-color: var(--guld); transform: translate(-50%,-50%) scale(1.06); }
     .yt-play svg { width: 20px; height: 20px; fill: #fff; margin-left: 3px; transition: fill .25s; }
     .yt-lazy:hover .yt-play svg { fill: #0a0a0a; }
+
+    /* ── GÖMDA SKÄMT ───────────────────── */
+    /* Förstoringsglas som pekare på vissa ord. Raden syns först vid hover —
+       den som bara vill boka ska aldrig snubbla på den. */
+    .egg {
+      position: relative;
+      cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><circle cx="13" cy="13" r="8.5" fill="none" stroke="%23ffbf32" stroke-width="2.5"/><line x1="19" y1="19" x2="27" y2="27" stroke="%23ffbf32" stroke-width="3" stroke-linecap="round"/></svg>') 13 13, help;
+      border-bottom: 1px dotted rgba(255,191,50,.3);
+    }
+    .egg::after {
+      content: attr(data-egg);
+      position: absolute;
+      bottom: calc(100% + 10px); left: 50%;
+      transform: translateX(-50%) translateY(5px);
+      background: #17170f;
+      color: var(--text);
+      border: 1px solid rgba(255,191,50,.3);
+      border-radius: 12px;
+      padding: 9px 13px;
+      font-size: .8rem; font-weight: 400; font-style: normal;
+      line-height: 1.45; letter-spacing: 0;
+      text-transform: none;
+      white-space: normal; width: max-content; max-width: 230px;
+      text-align: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity .25s ease, transform .25s ease;
+      z-index: 30;
+      box-shadow: 0 12px 30px rgba(0,0,0,.5);
+    }
+    .egg:hover::after { opacity: 1; transform: translateX(-50%) translateY(0); }
+    /* Ljus sektion: mörk text i bubblan funkar ändå, men dämpa understrykningen */
+    #om-mig .egg { border-bottom-color: rgba(184,134,11,.4); }
+    /* Utan hover (touch) finns ingen väg till skämtet — visa inte ens antydan */
+    @media (hover: none) {
+      .egg { border-bottom: none; cursor: inherit; }
+      .egg::after { display: none; }
+    }
+
+    .kontakt-not {
+      margin-top: 18px;
+      font-size: .82rem;
+      color: var(--dim);
+      opacity: .75;
+    }
 
     /* ── OM MIG (ljus sektion) ─────────── */
     #om-mig {
@@ -835,6 +885,20 @@
     .footer-info a { color: var(--dim); text-decoration: none; transition: color .2s; }
     .footer-info a:hover { color: var(--guld); }
     .footer-copy { font-size: .78rem; color: var(--dim); opacity: .6; }
+    .footer-mitt { display: flex; flex-direction: column; gap: 10px; align-items: center; }
+    .footer-lankar { display: flex; flex-wrap: wrap; gap: 6px 18px; justify-content: center; }
+    .footer-lankar a {
+      font-size: .78rem; color: var(--dim); text-decoration: none;
+      letter-spacing: .04em; transition: color .2s;
+    }
+    .footer-lankar a:hover { color: var(--guld); }
+    .footer-hoger { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+    /* Hittas, serveras inte */
+    .footer-egg {
+      font-size: .72rem; color: var(--dim); opacity: .22;
+      letter-spacing: .04em; transition: opacity .3s;
+    }
+    .footer-egg:hover { opacity: .7; }
 
     /* ── REVEAL ────────────────────────── */
     .reveal {
@@ -843,6 +907,17 @@
       transition: opacity .8s ease, transform .8s ease;
     }
     .reveal.synlig { opacity: 1; transform: translateY(0); }
+
+    /* Mellanstorlekar: sex menyposter blir breda — dra ihop dem
+       så logo, meny och ikoner inte klistrar mot varandra. */
+    @media (max-width: 1140px) and (min-width: 769px) {
+      header { padding-left: 20px; padding-right: 20px; }
+      nav { gap: 15px; }
+      nav a { font-size: .68rem; letter-spacing: .04em; }
+      .logo-svg { height: 36px; }
+      .social-icons { gap: 8px; }
+      .social-icons a { width: 32px; height: 32px; }
+    }
 
     /* ── MOBIL ─────────────────────────── */
     @media (max-width: 768px) {
@@ -867,6 +942,7 @@
       #om-mig { margin: 0 10px; border-radius: 24px; }
       .kontakt-grid { grid-template-columns: 1fr; gap: 48px; }
       footer { flex-direction: column; text-align: center; }
+      .footer-hoger { align-items: center; }
     }
   </style>
 </head>
@@ -878,9 +954,10 @@
   </a>
   <nav>
     <a href="#tjanster">Vad jag gör</a>
-    <a href="#scenen">Scenen</a>
-    <a href="#portfolio">Portfolio</a>
-    <a href="#om-mig">Om mig</a>
+    <a href="#scenen">Pärformance</a>
+    <a href="#portfolio">Pär review</a>
+    <a href="#om-mig">Pärspektiv</a>
+    <a href="#parsonligt">Pärsonligt</a>
     <a href="#kontakt">Kontakt</a>
   </nav>
   <div class="social-icons">
@@ -945,22 +1022,22 @@
       <p class="tjanst-etikett">Plund Media</p>
       <h3 class="tjanst-titel">Företagsvideo</h3>
       <p class="tjanst-text">
-        Jag kommer in på ert ställe, ställer frågor och spelar lite dum. Eller testar er produkt, frågar folk
+        Jag kommer in på ert ställe, ställer frågor och <span class="egg" data-egg="Det är inte alltid ett skådespel.">spelar lite dum</span>. Eller testar er produkt, frågar folk
         på stan, gör något ni inte tänkt på. Ni får en video som folk ser klart och minns. Inget manus,
         ingen reklamkänsla.
       </p>
       <div class="pris-lista">
         <div class="pris-rad">
-          <span class="pris-belopp">450 €</span>
+          <span class="pris-belopp"><span class="egg" data-egg="Ja, jag har tänkt igenom det. Nej, jag prutar inte.">450 €</span></span>
           <span class="pris-vad">En video. Från idé till färdig film. Ni behöver inte göra någonting.</span>
         </div>
         <div class="pris-rad">
           <span class="pris-belopp">1 600 € / mån</span>
-          <span class="pris-vad">Fyra videor i månaden. En dags filmning, en färdig video i veckan. Minst tre månader.</span>
+          <span class="pris-vad">Fyra videor i månaden. En dags filmning, en färdig video i veckan.</span>
         </div>
       </div>
       <div class="tjanst-knapp-rad">
-        <a href="mailto:plundcollab@gmail.com?subject=Företagsvideo" class="knapp-primär">Boka en video →</a>
+        <a href="#kontakt" class="knapp-primär">Boka en video →</a>
       </div>
     </div>
 
@@ -968,13 +1045,14 @@
       <p class="tjanst-etikett">Plund</p>
       <h3 class="tjanst-titel">Programledare &amp; föreläsare</h3>
       <p class="tjanst-text">
-        Jag leder er kväll eller er dag. Fest, gala, dimission, seminarium, konferens. Jag håller tempot,
-        snackar med publiken och ser till att ingen tittar på klockan. Går också att boka för att prata om
-        hur man bygger content.
+        Jag leder er kväll eller er dag. Fest, gala, dimission, seminarium, konferens. Berätta vad som ska
+        hända, vilka som är där och vad ni vill att folk ska sitta kvar för — sen planerar jag hur det hänger
+        ihop. Mitt jobb är att hålla publiken vaken, bjuda på mig själv och få de andra på scenen att våga
+        göra samma sak.
       </p>
       <div class="pris-lista">
         <div class="pris-rad">
-          <span class="pris-belopp">450 €</span>
+          <span class="pris-belopp"><span class="egg" data-egg="Ja, jag har tänkt igenom det. Nej, jag prutar inte.">450 €</span></span>
           <span class="pris-vad">En kväll. Fest, gala, dimission.</span>
         </div>
         <div class="pris-rad">
@@ -983,7 +1061,7 @@
         </div>
       </div>
       <div class="tjanst-knapp-rad">
-        <a href="mailto:plundcollab@gmail.com?subject=Programledare" class="knapp-primär">Boka mig för en kväll eller en dag →</a>
+        <a href="#kontakt" class="knapp-primär">Ta kontakt →</a>
       </div>
     </div>
 
@@ -992,11 +1070,11 @@
 
 <!-- SCENEN -->
 <section id="scenen" class="sektion">
-  <p class="sektion-rubrik reveal">Scenen</p>
+  <p class="sektion-rubrik reveal">Pärformance</p>
   <h2 class="sektion-titel reveal" style="transition-delay:.08s">På scen</h2>
   <p class="scen-ingress reveal" style="transition-delay:.14s">
-    Jag har lett program sen jag var sexton. Läger, fester, bröllop, dimissioner.
-    Det är det roligaste jag gör och det jag vill göra mer av.
+    Jag har lett program sen jag låg i vagga. Publiken bestod av mamma och pappa och recensionerna var
+    blandade. Tjugo år senare är salarna större.
   </p>
 
   <div class="scen-grid utan-video" id="scenGrid">
@@ -1021,7 +1099,7 @@
         <li>Stafettkarnevalen på Helsingfors Olympiastadion</li>
       </ul>
       <div class="scen-knapp-rad">
-        <a href="mailto:plundcollab@gmail.com?subject=Programledare" class="knapp-primär">Kolla om jag är ledig →</a>
+        <a href="#kontakt" class="knapp-primär">Ta kontakt →</a>
       </div>
     </div>
   </div>
@@ -1133,10 +1211,10 @@
 <section id="om-mig" class="sektion">
   <div class="om-grid">
     <div>
-      <p class="sektion-rubrik reveal">Vem är jag?</p>
+      <p class="sektion-rubrik reveal">Pärspektiv</p>
       <h2 class="om-titel reveal" style="transition-delay:.08s">Bakom kameran</h2>
       <div class="om-text reveal" style="transition-delay:.16s">
-        <p>Pär här hej. Jag är från Purmo, studerar socialpsykologi i Helsingfors och har gjort videor sen jag var tolv.</p>
+        <p>Pär här hej. Jag är från <span class="egg" data-egg="Ni hittar det inte på kartan. Jag lovar att det finns.">Purmo</span>, studerar socialpsykologi i Helsingfors och har gjort videor sen jag var tolv.</p>
         <p>Idag gör jag content för Svenska Kulturfonden och Yle Watt, driver Plund Media och står på scen så ofta jag får.</p>
         <p>Det jag är bäst på är att få folk att känna något. Ibland är det på film, ibland framför en sal.</p>
       </div>
@@ -1144,55 +1222,76 @@
     <!-- TODO: byt anka.JPG mot ny headshot när den finns -->
     <div class="om-foto-wrap reveal" style="transition-delay:.2s">
       <img src="anka.JPG" alt="Pär Lund" class="om-foto" />
-      <p class="om-citat">O jåå, ja kan no typ va seriös.</p>
+      <p class="om-citat"><span class="egg" data-egg="Bilden är tagen av min bror. Han tar bättre bilder än jag. Vi pratar inte om det.">O jåå, ja kan no typ va seriös.</span></p>
     </div>
   </div>
 </section>
 
-<!-- FÖLJ MIG -->
-<section id="folj" class="sektion">
-  <p class="sektion-rubrik reveal">Kanaler</p>
-  <h2 class="sektion-titel reveal" style="transition-delay:.08s">Följ med</h2>
-  <p class="sektion-beskrivning reveal" style="transition-delay:.14s">Här lägger jag upp resten. Det som inte är jobb.</p>
+<!-- PÄRSONLIGT -->
+<section id="parsonligt" class="sektion">
+  <p class="sektion-rubrik reveal">Pärsonligt</p>
+  <h2 class="sektion-titel reveal" style="transition-delay:.08s">Resten av mig</h2>
+  <p class="sektion-beskrivning reveal" style="transition-delay:.14s">
+    Studievloggar, tankar, kaos från Helsingfors. Inget av det är betalt av någon.
+    Det är bara jag som filmar mitt liv och lägger upp det.
+  </p>
 
   <div class="folj-grid">
-    <a href="https://www.instagram.com/prrlund" target="_blank" rel="noopener" class="folj-kort reveal" style="transition-delay:.18s">
-      <span class="folj-ikon">
-        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-      </span>
-      <span>
-        <span class="folj-namn">Instagram</span>
-        <span class="folj-handle">@prrlund</span>
-      </span>
-    </a>
-
-    <a href="https://www.tiktok.com/@prrlund" target="_blank" rel="noopener" class="folj-kort reveal" style="transition-delay:.22s">
-      <span class="folj-ikon">
-        <svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.79 1.54V6.79a4.85 4.85 0 01-1.02-.1z"/></svg>
-      </span>
-      <span>
-        <span class="folj-namn">TikTok</span>
-        <span class="folj-handle">@prrlund</span>
-      </span>
-    </a>
-
-    <!-- TODO: bekräfta att YouTube-kanalens URL är exakt denna -->
-    <a href="https://www.youtube.com/@prrlund" target="_blank" rel="noopener" class="folj-kort reveal" style="transition-delay:.26s">
+    <a href="https://www.youtube.com/@prrlund" target="_blank" rel="noopener" class="folj-kort reveal" style="transition-delay:.18s">
       <span class="folj-ikon">
         <svg viewBox="0 0 24 24"><path d="M23.5 6.2a3.02 3.02 0 00-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.51A3.02 3.02 0 00.5 6.2C0 8.09 0 12 0 12s0 3.91.5 5.8a3.02 3.02 0 002.12 2.14c1.88.51 9.38.51 9.38.51s7.5 0 9.38-.51a3.02 3.02 0 002.12-2.14C24 15.91 24 12 24 12s0-3.91-.5-5.8zM9.55 15.57V8.43L15.82 12l-6.27 3.57z"/></svg>
       </span>
       <span>
         <span class="folj-namn">YouTube</span>
-        <span class="folj-handle">@prrlund</span>
+        <span class="folj-handle">Längre vloggar</span>
+      </span>
+    </a>
+
+    <a href="https://discord.gg/n82XBDjBbE" target="_blank" rel="noopener" class="folj-kort reveal" style="transition-delay:.22s">
+      <span class="folj-ikon">
+        <svg viewBox="0 0 24 24"><path d="M20.32 4.57A19.8 19.8 0 0015.43 3c-.21.38-.46.89-.63 1.29a18.3 18.3 0 00-5.6 0C9.03 3.89 8.78 3.38 8.56 3a19.74 19.74 0 00-4.89 1.57C.57 9.2-.27 13.71.15 18.16a19.9 19.9 0 006.06 3.09c.49-.67.93-1.38 1.3-2.13-.71-.27-1.4-.6-2.04-.99.17-.13.34-.26.5-.4a14.2 14.2 0 0012.06 0c.16.14.33.27.5.4-.65.39-1.33.72-2.05.99.37.75.81 1.46 1.3 2.13a19.85 19.85 0 006.06-3.09c.5-5.16-.84-9.63-3.52-13.59zM8.02 15.44c-1.18 0-2.15-1.09-2.15-2.42s.95-2.42 2.15-2.42c1.21 0 2.18 1.09 2.16 2.42 0 1.33-.95 2.42-2.16 2.42zm7.96 0c-1.18 0-2.15-1.09-2.15-2.42s.95-2.42 2.15-2.42c1.21 0 2.18 1.09 2.16 2.42 0 1.33-.95 2.42-2.16 2.42z"/></svg>
+      </span>
+      <span>
+        <span class="folj-namn">Discord</span>
+        <span class="folj-handle">Häng med här</span>
+      </span>
+    </a>
+
+    <a href="https://www.linkedin.com/in/p%C3%A4rlund" target="_blank" rel="noopener" class="folj-kort reveal" style="transition-delay:.26s">
+      <span class="folj-ikon">
+        <svg viewBox="0 0 24 24"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.42v1.56h.05a3.75 3.75 0 013.37-1.85c3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 110-4.13 2.06 2.06 0 010 4.13zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+      </span>
+      <span>
+        <span class="folj-namn">LinkedIn</span>
+        <span class="folj-handle">pärlund</span>
+      </span>
+    </a>
+
+    <a href="https://www.instagram.com/prrlund" target="_blank" rel="noopener" class="folj-kort reveal" style="transition-delay:.3s">
+      <span class="folj-ikon">
+        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+      </span>
+      <span>
+        <span class="folj-namn">Instagram</span>
+        <span class="folj-handle">Vardagen, kortare</span>
+      </span>
+    </a>
+
+    <a href="https://www.tiktok.com/@prrlund" target="_blank" rel="noopener" class="folj-kort reveal" style="transition-delay:.34s">
+      <span class="folj-ikon">
+        <svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.79 1.54V6.79a4.85 4.85 0 01-1.02-.1z"/></svg>
+      </span>
+      <span>
+        <span class="folj-namn">TikTok</span>
+        <span class="folj-handle">Vardagen, kortare</span>
       </span>
     </a>
   </div>
 
-  <!-- Senaste YouTube-videon. Lazy-laddad: thumbnail först, iframe vid klick.
-       Byt VIDEO_ID nedan mot ID:t i youtube.com/watch?v=XXXXXXXXXXX
-       Så länge det står VIDEO_ID döljs rutan automatiskt. -->
-  <div class="yt-lazy reveal" id="ytLazy" data-yt="VIDEO_ID" hidden>
-    <img id="ytThumb" alt="Senaste videon på YouTube" loading="lazy" />
+  <!-- Senaste vloggen. Lazy-laddad: thumbnail först, iframe vid klick.
+       Byt ID:t i data-yt mot nyaste videon när du vill uppdatera. -->
+  <div class="yt-lazy reveal" id="ytLazy" data-yt="oPhDeKnQlIg" hidden>
+    <img id="ytThumb" alt="Senaste vloggen på YouTube" loading="lazy" />
     <span class="yt-play"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></span>
   </div>
 </section>
@@ -1226,6 +1325,9 @@
           </div>
         </a>
       </div>
+      <p class="kontakt-not reveal" style="transition-delay:.26s">
+        Svarar oftast inom en dag. Om jag inte filmar. Eller sover. Eller båda.
+      </p>
     </div>
     <div class="fakta-stack reveal" style="transition-delay:.25s">
       <div class="fakta-rad">
@@ -1233,8 +1335,8 @@
         <div class="fakta-etikett">Ingen inövad fras, ingen reklamkänsla. Det som händer är det som händer.</div>
       </div>
       <div class="fakta-rad">
-        <div class="fakta-siffra">Ni gör ingenting</div>
-        <div class="fakta-etikett">Jag planerar, filmar och klipper. Eller kommer och tar mikrofonen. Ni behöver inte förbereda något.</div>
+        <div class="fakta-siffra">Jag tar planeringen</div>
+        <div class="fakta-etikett">Jag kommer på vad vi gör och hur det hänger ihop. Ni berättar vad ni vill få sagt.</div>
       </div>
       <div class="fakta-rad">
         <div class="fakta-siffra">Folk stannar kvar</div>
@@ -1248,12 +1350,24 @@
   <a href="#" aria-label="Plund">
     <img src="plund-namn.svg" alt="Plund" class="footer-logo-svg" />
   </a>
-  <div class="footer-info">
-    <a href="mailto:plundcollab@gmail.com">plundcollab@gmail.com</a>
-    &nbsp;·&nbsp;
-    <a href="tel:+358442404042">+358 44 2404042</a>
+  <div class="footer-mitt">
+    <div class="footer-info">
+      <a href="mailto:plundcollab@gmail.com">plundcollab@gmail.com</a>
+      &nbsp;·&nbsp;
+      <a href="tel:+358442404042">+358 44 2404042</a>
+    </div>
+    <div class="footer-lankar">
+      <a href="https://www.instagram.com/prrlund" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://www.tiktok.com/@prrlund" target="_blank" rel="noopener">TikTok</a>
+      <a href="https://www.youtube.com/@prrlund" target="_blank" rel="noopener">YouTube</a>
+      <a href="https://discord.gg/n82XBDjBbE" target="_blank" rel="noopener">Discord</a>
+      <a href="https://www.linkedin.com/in/p%C3%A4rlund" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
   </div>
-  <div class="footer-copy">© 2026 Plund Media</div>
+  <div class="footer-hoger">
+    <div class="footer-copy">© 2026 Plund Media</div>
+    <div class="footer-egg">Pärkele.</div>
+  </div>
 </footer>
 
 <!-- VIDEO-MODAL -->
