@@ -743,6 +743,53 @@
       .egg::after { display: none; }
     }
 
+    /* Kakburk: smulor utanför, tom inuti */
+    .kakburk {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      background: none; border: 0; padding: 4px;
+      cursor: pointer;
+      opacity: .3;
+      transition: opacity .3s;
+    }
+    .kakburk:hover, .kakburk.oppen { opacity: .95; }
+    .kakburk svg { width: 52px; height: 52px; display: block; overflow: visible; }
+    .kb-burk { fill: none; stroke: var(--dim); stroke-width: 2.2; }
+    .kakburk:hover .kb-burk, .kakburk.oppen .kb-burk { stroke: var(--guld); }
+    .kb-etikett { fill: var(--dim); }
+    .kakburk:hover .kb-etikett, .kakburk.oppen .kb-etikett { fill: var(--guld); }
+    .kb-text {
+      fill: var(--bg); font-size: 5.4px; font-weight: 800;
+      letter-spacing: .3px; font-family: 'DM Sans', sans-serif;
+    }
+    .kb-smula { fill: var(--dim); }
+    .kakburk:hover .kb-smula, .kakburk.oppen .kb-smula { fill: var(--guld); }
+    .kb-lock {
+      transform-origin: 34px 15px;
+      transition: transform .45s cubic-bezier(.34,1.4,.5,1);
+    }
+    .kakburk.oppen .kb-lock { transform: rotate(-24deg) translate(-2px, -3px); }
+    .kb-rad {
+      position: absolute;
+      bottom: calc(100% + 12px);
+      right: 0;
+      background: #17170f;
+      color: var(--text);
+      border: 1px solid rgba(255,191,50,.3);
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-size: .8rem; line-height: 1.45;
+      width: max-content; max-width: 250px;
+      text-align: left;
+      opacity: 0; transform: translateY(6px);
+      pointer-events: none;
+      transition: opacity .3s ease, transform .3s ease;
+      box-shadow: 0 12px 30px rgba(0,0,0,.5);
+      z-index: 40;
+    }
+    .kakburk.oppen .kb-rad { opacity: 1; transform: translateY(0); }
+
     .kontakt-not {
       margin-top: 18px;
       font-size: .82rem;
@@ -946,6 +993,15 @@
       .kontakt-grid { grid-template-columns: 1fr; gap: 48px; }
       footer { flex-direction: column; text-align: center; }
       .footer-hoger { align-items: center; }
+      /* Sidfoten är centrerad på mobil: högerankra inte bubblan,
+         då hamnar den utanför skärmkanten. */
+      .kb-rad {
+        right: auto; left: 50%;
+        transform: translateX(-50%) translateY(6px);
+        max-width: min(250px, 78vw);
+        text-align: center;
+      }
+      .kakburk.oppen .kb-rad { transform: translateX(-50%) translateY(0); }
     }
   </style>
 </head>
@@ -1217,7 +1273,7 @@
       <p class="sektion-rubrik reveal">Pärspektiv</p>
       <h2 class="om-titel reveal" style="transition-delay:.08s">Bakom kameran</h2>
       <div class="om-text reveal" style="transition-delay:.16s">
-        <p>Pär här hej. Jag är från <span class="egg" data-egg="Ni hittar det inte på kartan. Jag lovar att det finns.">Purmo</span>, studerar socialpsykologi i Helsingfors och har gjort videor sen jag var tolv.</p>
+        <p>Pär här hej. Jag är från <span class="egg" data-egg="63.5222° N, 22.9593° E">Purmo</span>, studerar socialpsykologi i Helsingfors och har gjort videor sen jag var tolv.</p>
         <p>Idag gör jag content för Svenska Kulturfonden och Yle Watt, driver Plund Media och står på scen så ofta jag får.</p>
         <p>Det jag är bäst på är att få folk att känna något. Ibland är det på film, ibland framför en sal.</p>
       </div>
@@ -1235,8 +1291,7 @@
   <p class="sektion-rubrik reveal">Pärsonligt</p>
   <h2 class="sektion-titel reveal" style="transition-delay:.08s">Resten av mig</h2>
   <p class="sektion-beskrivning reveal" style="transition-delay:.14s">
-    Studievloggar, tankar, kaos från Helsingfors. Inget av det är betalt av någon.
-    Det är bara jag som filmar mitt liv och lägger upp det.
+    Studievloggar, tankar, kaos från Helsingfors. Jag filmar mitt liv och lägger upp det. Häng med.
   </p>
 
   <div class="folj-grid">
@@ -1367,6 +1422,21 @@
       <a href="https://www.linkedin.com/in/p%C3%A4rlund" target="_blank" rel="noopener">LinkedIn</a>
     </div>
   </div>
+  <button class="kakburk" id="kakburk" type="button" aria-label="Kakburk">
+    <svg viewBox="0 0 48 54" aria-hidden="true">
+      <g class="kb-lock">
+        <rect class="kb-burk" x="9" y="11" width="30" height="7" rx="3" fill="none"/>
+        <rect class="kb-burk" x="21" y="6" width="6" height="5" rx="2" fill="none"/>
+      </g>
+      <path class="kb-burk" d="M11 20 h26 a3 3 0 0 1 3 3 v18 a4 4 0 0 1 -4 4 h-24 a4 4 0 0 1 -4 -4 v-18 a3 3 0 0 1 3 -3 z"/>
+      <rect class="kb-etikett" x="14" y="27" width="20" height="10" rx="2.5"/>
+      <text class="kb-text" x="24" y="34" text-anchor="middle">KAKOR</text>
+      <circle class="kb-smula" cx="4" cy="48" r="1.7"/>
+      <circle class="kb-smula" cx="44" cy="49" r="1.3"/>
+      <circle class="kb-smula" cx="9.5" cy="50.5" r="1"/>
+    </svg>
+    <span class="kb-rad">Inga kakor. Varken sådana ni klickar bort eller sådana ni kan äta.</span>
+  </button>
   <div class="footer-hoger">
     <div class="footer-copy">© 2026 Plund Media</div>
     <div class="footer-egg">Pärkele.</div>
@@ -1798,6 +1868,40 @@
       kol.classList.add('synlig');
       grid.classList.remove('utan-video');
     }).catch(function() { /* filen finns inte ännu — behåll dolt */ });
+  })();
+
+  // ── KAKBURKEN ──────────────────────────────────────
+  (function() {
+    var burk = document.getElementById('kakburk');
+    if (!burk) return;
+    burk.addEventListener('click', function(e) {
+      e.stopPropagation();
+      burk.classList.toggle('oppen');
+    });
+    document.addEventListener('click', function() { burk.classList.remove('oppen'); });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') burk.classList.remove('oppen');
+    });
+  })();
+
+  // ── Kanalkorten smiter undan pekaren, men bara någon pixel ──
+  // Bara i Pärsonligt. Bokningsknapparna rör sig aldrig.
+  (function() {
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var MAX = 8;   // px — så lite att man alltid fångar kortet ändå
+    document.querySelectorAll('#parsonligt .folj-kort').forEach(function(kort) {
+      kort.addEventListener('mousemove', function(e) {
+        var r = kort.getBoundingClientRect();
+        var dx = e.clientX - (r.left + r.width / 2);
+        var dy = e.clientY - (r.top + r.height / 2);
+        var d = Math.sqrt(dx * dx + dy * dy) || 1;
+        var styrka = Math.min(1, 70 / d);       // starkast nära mitten
+        kort.style.transform = 'translate(' + (-dx / d * MAX * styrka).toFixed(1) + 'px,'
+                                            + (-dy / d * MAX * styrka).toFixed(1) + 'px)';
+      });
+      kort.addEventListener('mouseleave', function() { kort.style.transform = ''; });
+    });
   })();
 
   // ── FÖLJ: lazy YouTube — thumbnail först, iframe vid klick ──
