@@ -151,7 +151,10 @@
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
     }
-    section { scroll-margin-top: 80px; }
+    /* 0 = sektionens egen toppadding ger luft under den fasta headern.
+       Med ett påslag hamnade föregående sektions slut i bild och
+       nederdelen av innehållet klipptes bort. */
+    section { scroll-margin-top: 0; }
 
     /* ── HEADER ────────────────────────── */
     header {
@@ -329,7 +332,7 @@
     @keyframes ticka { to { transform: translateX(-50%); } }
 
     /* ── SEKTIONS-LAYOUT ───────────────── */
-    .sektion { padding: clamp(80px, 12vh, 140px) clamp(20px, 6vw, 110px); }
+    .sektion { padding: clamp(60px, 8.5vh, 104px) clamp(20px, 6vw, 110px); }
     .sektion-rubrik {
       font-size: .72rem;
       font-weight: 700;
@@ -514,6 +517,21 @@
       object-fit: contain;
       background: #000;
     }
+    /* Snurra medan filen laddar, försvinner när bilden rör sig */
+    .vm-ram.laddar::after {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 34px; height: 34px;
+      margin: -17px 0 0 -17px;
+      border: 2.5px solid rgba(255,255,255,.25);
+      border-top-color: var(--guld);
+      border-radius: 50%;
+      animation: snurr .8s linear infinite;
+      z-index: 3;
+      pointer-events: none;
+    }
+    @keyframes snurr { to { transform: rotate(360deg); } }
     .vm-stang {
       position: absolute;
       top: 18px; right: 18px;
@@ -980,7 +998,10 @@
       .karusell { margin: 0 -20px; }
       .kar-spar { gap: 12px; }
       .vg-kort { flex: 0 0 70vw; max-width: 320px; }
-      .kar-pil { display: none; }
+      /* Pilarna finns även på mobil: ett tryck ska alltid räcka till nästa video */
+      .kar-pil { opacity: .9; width: 38px; height: 38px; }
+      .kar-pil.vanster { left: 6px; }
+      .kar-pil.hoger { right: 6px; }
       .vm-stang { top: 12px; right: 12px; }
 
       /* Nya sektioner staplas på mobil */
@@ -1281,7 +1302,7 @@
     <!-- TODO: byt anka.JPG mot ny headshot när den finns -->
     <div class="om-foto-wrap reveal" style="transition-delay:.2s">
       <img src="anka.JPG" alt="Pär Lund" class="om-foto" />
-      <p class="om-citat"><span class="egg" data-egg="Bilden är tagen av min bror. Han tar bättre bilder än jag. Vi pratar inte om det.">O jåå, ja kan no typ va seriös.</span></p>
+      <p class="om-citat">O jåå, ja kan no typ va seriös.</p>
     </div>
   </div>
 </section>
@@ -1383,9 +1404,6 @@
           </div>
         </a>
       </div>
-      <p class="kontakt-not reveal" style="transition-delay:.26s">
-        Svarar oftast inom en dag. Om jag inte filmar. Eller sover. Eller båda.
-      </p>
     </div>
     <div class="fakta-stack reveal" style="transition-delay:.25s">
       <div class="fakta-rad">
@@ -1711,8 +1729,13 @@
         y: (window.innerHeight - m.h) / 2
       };
 
+      // Poster från kortets thumbnail: bilden syns direkt i stället för en
+      // svart ruta medan filen (15–25 MB) laddar.
+      var thumb = kort.querySelector('.vg-thumb');
+      if (thumb) vid.poster = thumb.getAttribute('src');
       vid.src = kort.getAttribute('data-video');
       titel.textContent = kort.getAttribute('data-namn') || '';
+      ram.classList.add('laddar');
       ram.style.width  = m.w + 'px';
       ram.style.height = m.h + 'px';
 
@@ -1738,7 +1761,6 @@
       }
 
       requestAnimationFrame(function() { modal.classList.add('synlig'); });
-      vid.currentTime = 0;
       var p = vid.play();
       if (p && p.catch) p.catch(function() {});
     }
@@ -1795,6 +1817,10 @@
       }
     });
 
+    ['playing', 'error'].forEach(function(ev) {
+      vid.addEventListener(ev, function() { ram.classList.remove('laddar'); });
+    });
+
     stang.addEventListener('click', stangModal);
     bakgrund.addEventListener('click', stangModal);
     document.addEventListener('keydown', function(e) {
@@ -1809,9 +1835,15 @@
       // Om karusellen ännu saknar bredd (dold flik, sen layout) blir stegen
       // fel och den fastnar. Vänta och försök igen istället.
       if (bredd < 40 || karusell.offsetWidth < 40) {
+        // Vänta tills den faktiskt får bredd (t.ex. flik som öppnats i bakgrunden)
+        if (window.ResizeObserver && !initiera._ro) {
+          initiera._ro = new ResizeObserver(function() { initiera(); });
+          initiera._ro.observe(karusell);
+        }
         setTimeout(initiera, 300);
         return;
       }
+      if (initiera._ro) { initiera._ro.disconnect(); initiera._ro = null; }
       startad = true;
       offset = offsetForSlot(antal);   // starta i mitten-varvet
       visa(true);
