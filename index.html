@@ -332,7 +332,18 @@
     @keyframes ticka { to { transform: translateX(-50%); } }
 
     /* ── SEKTIONS-LAYOUT ───────────────── */
-    .sektion { padding: clamp(60px, 8.5vh, 104px) clamp(20px, 6vw, 110px); }
+    .sektion { padding: clamp(48px, 7vh, 88px) clamp(20px, 6vw, 110px); }
+
+    /* Varje sektion man navigerar till fyller minst en skärm och centrerar
+       sitt innehåll. Då kan nästa sektion aldrig tjuvtitta fram i underkant
+       när man klickar i menyn. */
+    #tjanster, #scenen, #portfolio, #om-mig, #parsonligt, #kontakt {
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      justify-content: safe center;   /* klipper aldrig toppen om innehållet är högt */
+    }
     .sektion-rubrik {
       font-size: .72rem;
       font-weight: 700;
@@ -612,7 +623,7 @@
       background: var(--yta);
       border: 1px solid var(--kant);
       border-radius: 20px;
-      padding: clamp(26px, 3vw, 40px);
+      padding: clamp(22px, 2.4vw, 32px);
       display: flex;
       flex-direction: column;
       transition: border-color .3s, transform .3s;
@@ -640,7 +651,7 @@
     .pris-lista { border-top: 1px solid var(--kant); margin-bottom: 30px; }
     .pris-rad {
       display: grid; grid-template-columns: auto 1fr; gap: 20px;
-      padding: 15px 0; border-bottom: 1px solid var(--kant); align-items: baseline;
+      padding: 13px 0; border-bottom: 1px solid var(--kant); align-items: baseline;
     }
     .pris-rad:last-child { border-bottom: none; }
     .pris-belopp {
@@ -1095,9 +1106,9 @@
 <!-- TICKER -->
 <div class="ticker" aria-hidden="true">
   <div class="ticker-band">
-    <span>Bakom kulisserna</span><span>Riktiga människor</span><span>Folk ser klart</span><span>Underhållning</span>
-    <span>Bakom kulisserna</span><span>Riktiga människor</span><span>Folk ser klart</span><span>Underhållning</span>
-    <span>Bakom kulisserna</span><span>Riktiga människor</span><span>Folk ser klart</span><span>Underhållning</span>
+    <span>Bakom kulisserna</span><span>Autentiskt</span><span>Folk ser klart</span><span>Underhållning</span>
+    <span>Bakom kulisserna</span><span>Autentiskt</span><span>Folk ser klart</span><span>Underhållning</span>
+    <span>Bakom kulisserna</span><span>Autentiskt</span><span>Folk ser klart</span><span>Underhållning</span>
   </div>
 </div>
 
