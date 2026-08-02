@@ -596,6 +596,9 @@
       font-size: 1.05rem; font-weight: 800; letter-spacing: -.02em;
     }
     .resultat-namn { font-size: .85rem; color: var(--dim); }
+    /* Starkaste beviset på sidan ska läsas först */
+    .resultat-basta .resultat-siffra { color: var(--guld); }
+    .resultat-basta .resultat-namn strong { color: var(--text); font-weight: 700; display: block; }
 
     /* ── VAD JAG GÖR ───────────────────── */
     #tjanster { background: var(--bg); }
@@ -624,7 +627,16 @@
       font-weight: 800; letter-spacing: -.03em; line-height: 1.05;
       margin-bottom: 16px;
     }
-    .tjanst-text { color: var(--dim); font-size: .98rem; margin-bottom: 28px; }
+    .tjanst-text { color: var(--dim); font-size: .98rem; margin-bottom: 16px; }
+    .tjanst-text:last-of-type { margin-bottom: 28px; }
+    /* Vändningen i texten ska landa hårt */
+    .tjanst-slag {
+      color: var(--guld);
+      font-size: 1.12rem;
+      font-weight: 800;
+      letter-spacing: -.02em;
+      margin-bottom: 16px;
+    }
     .pris-lista { border-top: 1px solid var(--kant); margin-bottom: 30px; }
     .pris-rad {
       display: grid; grid-template-columns: auto 1fr; gap: 20px;
@@ -660,10 +672,6 @@
     }
     .scen-video-ram video { width: 100%; display: block; }
     .scen-bildtext { font-size: .82rem; color: var(--dim); margin-top: 12px; }
-    .merit-rubrik {
-      font-size: .7rem; font-weight: 700; letter-spacing: .2em;
-      text-transform: uppercase; color: var(--guld); margin-bottom: 18px;
-    }
     .merit-lista { list-style: none; }
     .merit-lista li {
       display: flex; gap: 14px; align-items: flex-start;
@@ -671,6 +679,12 @@
       font-size: .98rem;
     }
     .merit-lista li:last-child { border-bottom: none; }
+    /* Tyngsta meriten först */
+    .merit-lista li.merit-tung {
+      font-size: 1.08rem;
+      font-weight: 700;
+      color: var(--text);
+    }
     .merit-lista li::before {
       content: ''; width: 6px; height: 6px; border-radius: 50%;
       background: var(--guld); margin-top: .62em; flex-shrink: 0;
@@ -679,28 +693,28 @@
 
     /* ── PÄRSONLIGT ────────────────────── */
     #parsonligt { background: var(--bg); }
+    /* Tät rad i stället för stora kort: sektionen ska inte konkurrera
+       med kontaktsektionen om utrymmet. */
     .folj-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 16px; margin-top: clamp(32px, 4vw, 44px);
+      display: flex; flex-wrap: wrap;
+      gap: 10px; margin-top: clamp(22px, 3vw, 30px);
     }
     .folj-kort {
-      display: flex; align-items: center; gap: 16px;
+      display: inline-flex; align-items: center; gap: 10px;
       background: var(--yta); border: 1px solid var(--kant);
-      border-radius: 16px; padding: 22px 24px;
+      border-radius: 100px; padding: 9px 18px 9px 10px;
       text-decoration: none; color: var(--text);
       transition: border-color .25s, transform .25s;
     }
-    .folj-kort:hover { border-color: var(--guld); transform: translateY(-3px); }
+    .folj-kort:hover { border-color: var(--guld); }
     .folj-ikon {
-      width: 44px; height: 44px; border-radius: 12px;
+      width: 30px; height: 30px; border-radius: 50%;
       background: var(--guld-mjuk);
       display: flex; align-items: center; justify-content: center;
       flex-shrink: 0;
     }
-    .folj-ikon svg { width: 20px; height: 20px; fill: var(--guld); }
-    .folj-namn { font-weight: 800; letter-spacing: -.01em; }
-    .folj-handle { font-size: .85rem; color: var(--dim); }
+    .folj-ikon svg { width: 15px; height: 15px; fill: var(--guld); }
+    .folj-namn { font-weight: 700; font-size: .9rem; letter-spacing: -.01em; }
 
     /* Lazy YouTube: thumbnail först, iframe vid klick */
     .yt-lazy {
@@ -1007,7 +1021,12 @@
       /* Nya sektioner staplas på mobil */
       .tjanst-grid { grid-template-columns: 1fr; gap: 16px; }
       .scen-grid { grid-template-columns: 1fr; gap: 36px; }
-      .folj-grid { grid-template-columns: 1fr; gap: 12px; }
+      /* Mindre chips så de fem länkarna ryms på två rader */
+      .folj-grid { gap: 8px; }
+      .folj-kort { padding: 7px 14px 7px 7px; gap: 8px; }
+      .folj-ikon { width: 26px; height: 26px; }
+      .folj-ikon svg { width: 13px; height: 13px; }
+      .folj-namn { font-size: .82rem; }
 
       .om-grid { grid-template-columns: 1fr; gap: 44px; }
       #om-mig { margin: 0 10px; border-radius: 24px; }
@@ -1035,9 +1054,9 @@
   <nav>
     <a href="#tjanster">Vad jag gör</a>
     <a href="#scenen">Pärformance</a>
-    <a href="#portfolio">Pär review</a>
-    <a href="#om-mig">Pärspektiv</a>
-    <a href="#parsonligt">Pärsonligt</a>
+    <a href="#portfolio">Portfolio</a>
+    <a href="#om-mig">Om mig</a>
+    <a href="#parsonligt">Resten av mig</a>
     <a href="#kontakt">Kontakt</a>
   </nav>
   <div class="social-icons">
@@ -1052,8 +1071,10 @@
 
 <!-- HERO -->
 <section id="hero">
-  <video id="hero-video" autoplay muted loop playsinline poster="Kaffia.png">
-    <source src="Website%20prewview%2025mb.mp4" type="video/mp4">
+  <video id="hero-video" autoplay muted loop playsinline preload="metadata" poster="hero-poster.jpg">
+    <source src="hero-preview.webm" type="video/webm">
+    <source src="hero-preview.mp4" type="video/mp4">
+    Din webbläsare stöder inte video.
   </video>
   <div id="hero-gradient"></div>
   <div class="hero-inner">
@@ -1063,8 +1084,8 @@
       <span class="tunn">Mer</span> <em>Pär</em>sonlighet.
     </h1>
     <p class="hero-text reveal" style="transition-delay:.2s">
-      Traditionell företagsreklam är tråkig. Därför gör jag något annat — jag kommer in, ställer frågor,
-      spelar lite dum och gör content folk faktiskt skrattar åt och minns.
+      Traditionell företagsreklam är tråkig. Jag gör något annat: kommer in på er arbetsplats,
+      ställer frågorna era kunder aldrig vågar, och gör content folk faktiskt skrattar åt och minns.
     </p>
     <a href="#kontakt" class="knapp-primär reveal" style="transition-delay:.3s">Ta kontakt →</a>
   </div>
@@ -1074,9 +1095,9 @@
 <!-- TICKER -->
 <div class="ticker" aria-hidden="true">
   <div class="ticker-band">
-    <span>Bakom kulisserna</span><span>Inget manus</span><span>Ingen reklam-känsla</span><span>Underhållning</span>
-    <span>Bakom kulisserna</span><span>Inget manus</span><span>Ingen reklam-känsla</span><span>Underhållning</span>
-    <span>Bakom kulisserna</span><span>Inget manus</span><span>Ingen reklam-känsla</span><span>Underhållning</span>
+    <span>Bakom kulisserna</span><span>Riktiga människor</span><span>Folk ser klart</span><span>Underhållning</span>
+    <span>Bakom kulisserna</span><span>Riktiga människor</span><span>Folk ser klart</span><span>Underhållning</span>
+    <span>Bakom kulisserna</span><span>Riktiga människor</span><span>Folk ser klart</span><span>Underhållning</span>
   </div>
 </div>
 
@@ -1087,7 +1108,7 @@
     <li><span class="resultat-siffra">35 000</span><span class="resultat-namn">Widetoes</span></li>
     <li><span class="resultat-siffra">31 000</span><span class="resultat-namn">Kaffia</span></li>
     <li><span class="resultat-siffra">17 000</span><span class="resultat-namn">Pavis</span></li>
-    <li><span class="resultat-siffra">13 800</span><span class="resultat-namn">Görans — deras mest sedda video på Instagram</span></li>
+    <li class="resultat-basta"><span class="resultat-siffra">13 800</span><span class="resultat-namn">Görans <strong>deras mest sedda video på Instagram</strong></span></li>
   </ul>
 </section>
 
@@ -1102,9 +1123,11 @@
       <p class="tjanst-etikett">Plund Media</p>
       <h3 class="tjanst-titel">Företagsvideo</h3>
       <p class="tjanst-text">
-        Jag kommer in på ert ställe, ställer frågor och <span class="egg" data-egg="Det är inte alltid ett skådespel.">spelar lite dum</span>. Eller testar er produkt, frågar folk
-        på stan, gör något ni inte tänkt på. Ni får en video som folk ser klart och minns. Inget manus,
-        ingen reklamkänsla.
+        Jag kommer och <span class="egg" data-egg="Det är inte alltid ett skådespel.">gör bort mig</span> på er arbetsplats. Testar produkten fel, ställer frågorna era kunder
+        aldrig vågar, får er personal att vara roligare än de tror att de är.
+      </p>
+      <p class="tjanst-text">
+        Ni får en video folk ser klart, skickar vidare, och kommer ihåg att ni finns.
       </p>
       <div class="pris-lista">
         <div class="pris-rad">
@@ -1125,10 +1148,14 @@
       <p class="tjanst-etikett">Plund</p>
       <h3 class="tjanst-titel">Programledare &amp; föreläsare</h3>
       <p class="tjanst-text">
-        Jag leder er kväll eller er dag. Fest, gala, dimission, seminarium, konferens. Berätta vad som ska
-        hända, vilka som är där och vad ni vill att folk ska sitta kvar för — sen planerar jag hur det hänger
-        ihop. Mitt jobb är att hålla publiken vaken, bjuda på mig själv och få de andra på scenen att våga
-        göra samma sak.
+        Ni har varit på den kvällen. Programmet drar över, någon läser innantill från en lapp, och halva
+        salen är i telefonen vid nio.
+      </p>
+      <p class="tjanst-slag">Det blir inte er kväll.</p>
+      <p class="tjanst-text">
+        Jag tar reda på vad som ska hända och vilka som är där, bygger ihop kvällen så den hänger ihop,
+        och håller den uppe från scen. Skämt när det behövs, tyst när det behövs. Om tekniken lägger av
+        eller talaren drar tio minuter över så märker ingen i salen det.
       </p>
       <div class="pris-lista">
         <div class="pris-rad">
@@ -1137,7 +1164,7 @@
         </div>
         <div class="pris-rad">
           <span class="pris-belopp">Offert</span>
-          <span class="pris-vad">Hela dagar, konferenser och föreläsningar. Beror på längd och plats.</span>
+          <span class="pris-vad">Föreläsning, halvdag, heldag, konferens. Beror på upplägg, längd och plats.</span>
         </div>
       </div>
       <div class="tjanst-knapp-rad">
@@ -1169,14 +1196,10 @@
     </div>
 
     <div class="reveal" style="transition-delay:.1s">
-      <p class="merit-rubrik">Meriter</p>
       <ul class="merit-lista">
-        <li>Tal inför över 200 personer</li>
-        <li>Programledare på bröllop</li>
-        <li>Programledare på julfest</li>
-        <li>Programkvällar på sommarläger, SLEF</li>
-        <li>Tutor vid Soc&amp;Kom, introveckan för nya studerande</li>
-        <li>Stafettkarnevalen på Helsingfors Olympiastadion</li>
+        <li class="merit-tung">Dimission, Pedersöre gymnasium 2026. Improviserat tal inför fylld gymnastiksal, ca 300 personer.</li>
+        <li>Stafettkarnevalen, Helsingfors Olympiastadion.</li>
+        <li>Bröllop, julfester och programkvällar på SLEF:s sommarläger.</li>
       </ul>
       <div class="scen-knapp-rad">
         <a href="#kontakt" class="knapp-primär">Ta kontakt →</a>
@@ -1291,7 +1314,7 @@
 <section id="om-mig" class="sektion">
   <div class="om-grid">
     <div>
-      <p class="sektion-rubrik reveal">Pärspektiv</p>
+      <p class="sektion-rubrik reveal">Om mig</p>
       <h2 class="om-titel reveal" style="transition-delay:.08s">Bakom kameran</h2>
       <div class="om-text reveal" style="transition-delay:.16s">
         <p>Pär här hej. Jag är från <span class="egg" data-egg="63.5222° N, 22.9593° E">Purmo</span>, studerar socialpsykologi i Helsingfors och har gjort videor sen jag var tolv.</p>
@@ -1309,8 +1332,8 @@
 
 <!-- PÄRSONLIGT -->
 <section id="parsonligt" class="sektion">
-  <p class="sektion-rubrik reveal">Pärsonligt</p>
-  <h2 class="sektion-titel reveal" style="transition-delay:.08s">Resten av mig</h2>
+  <p class="sektion-rubrik reveal">Resten av mig</p>
+  <h2 class="sektion-titel reveal" style="transition-delay:.08s">Häng med</h2>
   <p class="sektion-beskrivning reveal" style="transition-delay:.14s">
     Studievloggar, tankar, kaos från Helsingfors. Jag filmar mitt liv och lägger upp det. Häng med.
   </p>
@@ -1322,7 +1345,6 @@
       </span>
       <span>
         <span class="folj-namn">YouTube</span>
-        <span class="folj-handle">Längre vloggar</span>
       </span>
     </a>
 
@@ -1332,7 +1354,6 @@
       </span>
       <span>
         <span class="folj-namn">Discord</span>
-        <span class="folj-handle">Häng med här</span>
       </span>
     </a>
 
@@ -1342,7 +1363,6 @@
       </span>
       <span>
         <span class="folj-namn">LinkedIn</span>
-        <span class="folj-handle">pärlund</span>
       </span>
     </a>
 
@@ -1352,7 +1372,6 @@
       </span>
       <span>
         <span class="folj-namn">Instagram</span>
-        <span class="folj-handle">Vardagen, kortare</span>
       </span>
     </a>
 
@@ -1362,7 +1381,6 @@
       </span>
       <span>
         <span class="folj-namn">TikTok</span>
-        <span class="folj-handle">Vardagen, kortare</span>
       </span>
     </a>
   </div>
@@ -1407,8 +1425,8 @@
     </div>
     <div class="fakta-stack reveal" style="transition-delay:.25s">
       <div class="fakta-rad">
-        <div class="fakta-siffra">Inget manus</div>
-        <div class="fakta-etikett">Ingen inövad fras, ingen reklamkänsla. Det som händer är det som händer.</div>
+        <div class="fakta-siffra">Det som händer, händer</div>
+        <div class="fakta-etikett">Jag kommer utan färdiga repliker och fångar det som faktiskt sker på plats. Det blir alltid roligare än något jag kunnat planera.</div>
       </div>
       <div class="fakta-rad">
         <div class="fakta-siffra">Jag tar planeringen</div>
@@ -1457,7 +1475,6 @@
   </button>
   <div class="footer-hoger">
     <div class="footer-copy">© 2026 Plund Media</div>
-    <div class="footer-egg">Pärkele.</div>
   </div>
 </footer>
 
@@ -1917,7 +1934,7 @@
   })();
 
   // ── Kanalkorten smiter undan pekaren, men bara någon pixel ──
-  // Bara i Pärsonligt. Bokningsknapparna rör sig aldrig.
+  // Bara i Resten av mig. Bokningsknapparna rör sig aldrig.
   (function() {
     if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
