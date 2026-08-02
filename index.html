@@ -595,21 +595,21 @@
       max-width: 22ch;
     }
     .resultat-stor strong { color: var(--guld); font-weight: 800; }
+    .resultat-under { color: var(--dim); margin-top: 10px; font-size: .98rem; }
+    /* Jämnt rutnät: alla fyra siffror lika breda, inga extra bildtexter */
     .resultat-lista {
       list-style: none;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px 40px;
-      margin-top: 26px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px 24px;
+      margin-top: 28px;
+      max-width: 720px;
     }
     .resultat-lista li { display: flex; flex-direction: column; }
     .resultat-siffra {
       font-size: 1.05rem; font-weight: 800; letter-spacing: -.02em;
     }
     .resultat-namn { font-size: .85rem; color: var(--dim); }
-    /* Starkaste beviset på sidan ska läsas först */
-    .resultat-basta .resultat-siffra { color: var(--guld); }
-    .resultat-basta .resultat-namn strong { color: var(--text); font-weight: 700; display: block; }
 
     /* ── VAD JAG GÖR ───────────────────── */
     #tjanster { background: var(--bg); }
@@ -676,13 +676,14 @@
       align-items: start;
       margin-top: clamp(36px, 5vw, 56px);
     }
-    .scen-grid.utan-video { grid-template-columns: 1fr; max-width: 640px; }
     .scen-video-ram {
       border-radius: 18px; overflow: hidden;
       border: 1px solid var(--kant); background: #000;
+      /* Klippet är filmat stående. Utan tak blir det nästan tusen pixlar
+         högt och spränger sektionen. */
+      max-width: 280px;
     }
     .scen-video-ram video { width: 100%; display: block; }
-    .scen-bildtext { font-size: .82rem; color: var(--dim); margin-top: 12px; }
     .merit-lista { list-style: none; }
     .merit-lista li {
       display: flex; gap: 14px; align-items: flex-start;
@@ -729,7 +730,9 @@
 
     /* Lazy YouTube: thumbnail först, iframe vid klick */
     .yt-lazy {
-      position: relative; margin-top: clamp(28px, 4vw, 40px);
+      position: relative; margin-top: clamp(24px, 3vw, 32px);
+      /* Lika bred som länkraden, så hela videon får plats i sektionen */
+      max-width: 560px;
       border-radius: 18px; overflow: hidden;
       border: 1px solid var(--kant); background: #000;
       aspect-ratio: 16/9; cursor: pointer;
@@ -946,22 +949,6 @@
     .kontakt-rad-text small { font-size: .72rem; color: var(--dim); display: block; letter-spacing: .08em; text-transform: uppercase; }
     .kontakt-rad-text span { font-weight: 700; font-size: .98rem; }
 
-    .fakta-stack { display: flex; flex-direction: column; gap: 0; }
-    .fakta-rad {
-      padding: 28px 0;
-      border-bottom: 1px solid var(--kant);
-    }
-    .fakta-rad:first-child { padding-top: 8px; }
-    .fakta-rad:last-child { border-bottom: none; }
-    .fakta-siffra {
-      font-size: clamp(1.6rem, 2.6vw, 2.2rem);
-      font-weight: 800;
-      letter-spacing: -.03em;
-      color: var(--guld);
-      line-height: 1.15;
-      margin-bottom: 6px;
-    }
-    .fakta-etikett { font-size: .92rem; color: var(--dim); max-width: 340px; }
 
     /* ── FOOTER ────────────────────────── */
     footer {
@@ -1089,14 +1076,14 @@
   </video>
   <div id="hero-gradient"></div>
   <div class="hero-inner">
-    <div class="hero-etikett reveal">PÄR UTFORSKAR FÖRETAG</div>
+    <div class="hero-etikett reveal">PÄR LUND · VIDEO &amp; SCEN</div>
     <h1 class="hero-rubrik reveal" style="transition-delay:.1s">
       <span class="tunn">Mindre</span> reklam.<br>
       <span class="tunn">Mer</span> <em>Pär</em>sonlighet.
     </h1>
     <p class="hero-text reveal" style="transition-delay:.2s">
-      Traditionell företagsreklam är tråkig. Jag gör något annat: kommer in på er arbetsplats,
-      ställer frågorna era kunder aldrig vågar, och gör content folk faktiskt skrattar åt och minns.
+      Jag gör videor åt företag och står på scen. Samma grej egentligen: jag kommer dit,
+      är mig själv, och det brukar bli Pärfekt.
     </p>
     <a href="#kontakt" class="knapp-primär reveal" style="transition-delay:.3s">Ta kontakt →</a>
   </div>
@@ -1114,18 +1101,19 @@
 
 <!-- RESULTAT -->
 <section id="resultat">
-  <p class="resultat-stor reveal"><strong>Över 120 000</strong> organiska visningar på sju videor.</p>
-  <ul class="resultat-lista reveal" style="transition-delay:.1s">
+  <p class="resultat-stor reveal">Görans mest sedda video på Instagram. <strong>Någonsin.</strong></p>
+  <p class="resultat-under reveal" style="transition-delay:.06s">Över 120 000 organiska visningar på sju videor.</p>
+  <ul class="resultat-lista reveal" style="transition-delay:.12s">
     <li><span class="resultat-siffra">35 000</span><span class="resultat-namn">Widetoes</span></li>
     <li><span class="resultat-siffra">31 000</span><span class="resultat-namn">Kaffia</span></li>
     <li><span class="resultat-siffra">17 000</span><span class="resultat-namn">Pavis</span></li>
-    <li class="resultat-basta"><span class="resultat-siffra">13 800</span><span class="resultat-namn">Görans <strong>deras mest sedda video på Instagram</strong></span></li>
+    <li><span class="resultat-siffra">13 800</span><span class="resultat-namn">Görans</span></li>
   </ul>
 </section>
 
 <!-- VAD JAG GÖR -->
 <section id="tjanster" class="sektion">
-  <p class="sektion-rubrik reveal">Tjänster</p>
+  <p class="sektion-rubrik reveal">Vad jag gör</p>
   <h2 class="sektion-titel reveal" style="transition-delay:.08s">Framför kameran eller framför publiken</h2>
 
   <div class="tjanst-grid">
@@ -1134,11 +1122,11 @@
       <p class="tjanst-etikett">Plund Media</p>
       <h3 class="tjanst-titel">Företagsvideo</h3>
       <p class="tjanst-text">
-        Jag kommer och <span class="egg" data-egg="Det är inte alltid ett skådespel.">gör bort mig</span> på er arbetsplats. Testar produkten fel, ställer frågorna era kunder
-        aldrig vågar, får er personal att vara roligare än de tror att de är.
+        Jag kommer till er arbetsplats som en <span class="egg" data-egg="Det är inte alltid ett skådespel.">nyfiken utomstående</span>. Frågar det ingen annan skulle fråga,
+        och får er personal att vara roligare än de tror att de är.
       </p>
       <p class="tjanst-text">
-        Ni får en video folk ser klart, skickar vidare, och kommer ihåg att ni finns.
+        Resultatet är en video som inte känns som reklam.
       </p>
       <div class="pris-lista">
         <div class="pris-rad">
@@ -1159,14 +1147,11 @@
       <p class="tjanst-etikett">Plund</p>
       <h3 class="tjanst-titel">Programledare &amp; föreläsare</h3>
       <p class="tjanst-text">
-        Ni har varit på den kvällen. Programmet drar över, någon läser innantill från en lapp, och halva
-        salen är i telefonen vid nio.
+        Ni har varit på det programmet där energin sjunker efter en timme och halva rummet är i telefonen.
       </p>
-      <p class="tjanst-slag">Det blir inte er kväll.</p>
+      <p class="tjanst-slag">Det blir inte ert.</p>
       <p class="tjanst-text">
-        Jag tar reda på vad som ska hända och vilka som är där, bygger ihop kvällen så den hänger ihop,
-        och håller den uppe från scen. Skämt när det behövs, tyst när det behövs. Om tekniken lägger av
-        eller talaren drar tio minuter över så märker ingen i salen det.
+        Jag har koll på tider och ordning, men läser aldrig innantill.
       </p>
       <div class="pris-lista">
         <div class="pris-rad">
@@ -1191,26 +1176,25 @@
   <p class="sektion-rubrik reveal">Pärformance</p>
   <h2 class="sektion-titel reveal" style="transition-delay:.08s">På scen</h2>
   <p class="scen-ingress reveal" style="transition-delay:.14s">
-    Jag har lett program sen jag låg i vagga. Publiken bestod av mamma och pappa och recensionerna var
-    blandade. Tjugo år senare är salarna större.
+    Jag är 20, så jag pratar till en yngre publik utan att låtsas.
   </p>
 
-  <div class="scen-grid utan-video" id="scenGrid">
-    <!-- Dimissionsklippet. Visas automatiskt så fort filen dimission.mp4
-         finns i mappen — annars döljs den här kolumnen av sig själv.
-         Max ~12 s, ljudlöst, komprimerat under 5 MB. -->
-    <div class="reveal" id="scenVideoKol" hidden>
+  <div class="scen-grid" id="scenGrid">
+    <!-- Dimissionen, Pedersöre gymnasium. Tyst kort loop. Byts när bättre material finns. -->
+    <div class="reveal" id="scenVideoKol">
       <div class="scen-video-ram">
-        <video id="scenVideo" autoplay muted loop playsinline></video>
+        <video id="scenVideo" autoplay muted loop playsinline preload="metadata" poster="dimi-poster.jpg">
+          <source src="dimi.webm" type="video/webm">
+          <source src="dimi.mp4" type="video/mp4">
+        </video>
       </div>
-      <p class="scen-bildtext">Dimission. Studenter och familjer.</p>
     </div>
 
     <div class="reveal" style="transition-delay:.1s">
       <ul class="merit-lista">
-        <li class="merit-tung">Dimission, Pedersöre gymnasium 2026. Improviserat tal inför fylld gymnastiksal, ca 300 personer.</li>
-        <li>Stafettkarnevalen, Helsingfors Olympiastadion.</li>
-        <li>Bröllop, julfester och programkvällar på SLEF:s sommarläger.</li>
+        <li><strong>Koll på tider och ordning.</strong> Skrivet och planerat i förväg.</li>
+        <li><strong>Anteckningarna är förberedda, blicken är inte det.</strong> Jag pratar till publiken, inte till pappret.</li>
+        <li><strong>Rummet avgör tonen.</strong> Manuset är inte skrivet innan jag vet vem som sitter där eller hur stämningen är.</li>
       </ul>
       <div class="scen-knapp-rad">
         <a href="#kontakt" class="knapp-primär">Ta kontakt →</a>
@@ -1410,9 +1394,9 @@
     <div>
       <p class="sektion-rubrik reveal">Kom igång</p>
       <h2 class="kontakt-titel reveal" style="transition-delay:.08s">
-        Vill ni boka en video, en kväll eller <em>en hel dag?</em>
+        Hör av <em>er.</em>
       </h2>
-      <p class="kontakt-undertext reveal" style="transition-delay:.14s">Hör av er så pratar vi om hur det kan se ut.</p>
+      <p class="kontakt-undertext reveal" style="transition-delay:.14s">Så pratar vi om vad ni behöver.</p>
       <div class="kontakt-lista reveal" style="transition-delay:.2s">
         <a href="mailto:plundcollab@gmail.com" class="kontakt-rad">
           <div class="kontakt-ikon">
@@ -1434,19 +1418,6 @@
         </a>
       </div>
     </div>
-    <div class="fakta-stack reveal" style="transition-delay:.25s">
-      <div class="fakta-rad">
-        <div class="fakta-siffra">Det som händer, händer</div>
-        <div class="fakta-etikett">Jag kommer utan färdiga repliker och fångar det som faktiskt sker på plats. Det blir alltid roligare än något jag kunnat planera.</div>
-      </div>
-      <div class="fakta-rad">
-        <div class="fakta-siffra">Jag tar planeringen</div>
-        <div class="fakta-etikett">Jag kommer på vad vi gör och hur det hänger ihop. Ni berättar vad ni vill få sagt.</div>
-      </div>
-      <div class="fakta-rad">
-        <div class="fakta-siffra">Folk stannar kvar</div>
-        <div class="fakta-etikett">Videor som ses klart och delas. Kvällar där ingen tittar på klockan.</div>
-      </div>
     </div>
   </div>
 </section>
@@ -1913,22 +1884,6 @@
     });
   })();
 
-  // ── SCENEN: visa dimissionsklippet så fort filen finns ──
-  // Ingen fil = kolumnen döljs och texten tar hela bredden.
-  (function() {
-    var kol  = document.getElementById('scenVideoKol');
-    var vid  = document.getElementById('scenVideo');
-    var grid = document.getElementById('scenGrid');
-    if (!kol || !vid || !grid) return;
-    var fil = 'dimission.mp4';
-    fetch(fil, { method: 'HEAD' }).then(function(r) {
-      if (!r.ok) return;
-      vid.src = fil;
-      kol.hidden = false;
-      kol.classList.add('synlig');
-      grid.classList.remove('utan-video');
-    }).catch(function() { /* filen finns inte ännu — behåll dolt */ });
-  })();
 
   // ── KAKBURKEN ──────────────────────────────────────
   (function() {
