@@ -687,58 +687,116 @@
       max-width: 330px;
     }
     .scen-video-ram video { width: 100%; display: block; }
-    /* ── STRECKGUBBE (liten detalj under fotot) ── */
-    .scen-gubbe { margin-top: 18px; max-width: 330px; }
-    .scen-gubbe svg { width: 100%; height: auto; display: block; overflow: visible; }
-    .g-linje { stroke: var(--dim); stroke-width: 3.2; stroke-linecap: round; fill: none; }
-    .g-scen { fill: var(--guld); opacity: .85; }
-    .gubbe { transform: translate(-34px, 128px); }
-    .gubbe-bubbla { opacity: 0; transform-origin: 158px 52px; }
-    .b-ruta { fill: #17170f; stroke: rgba(255,191,50,.5); stroke-width: 2; }
+    /* ── STRECKGUBBE PÅ SCEN (liten detalj under klippet) ── */
+    .scen-gubbe { margin-top: 14px; max-width: 330px; cursor: pointer; }
+    .scen-gubbe svg { width: 100%; height: auto; display: block; overflow: hidden; }
+    /* SVG roterar annars kring viewBoxens mitt. Nolläget är det vi vill ha,
+       så varje rörlig del sitter i en egen grupp som redan är flyttad dit. */
+    .scen-gubbe * { transform-origin: 0 0; }
+
+    .g-linje     { stroke: var(--dim); stroke-width: 3.6; stroke-linecap: round; fill: none; }
+    .g-golv      { stroke: rgba(255,255,255,.09); stroke-width: 2; }
+    .g-truss     { stroke: rgba(255,255,255,.15); stroke-width: 1.8; fill: none; }
+    .g-plank     { fill: var(--guld); }
+    .g-kjol      { fill: rgba(255,191,50,.12); stroke: rgba(255,191,50,.28); stroke-width: 1.4; }
+    .g-lada      { fill: #131311; stroke: rgba(255,255,255,.15); stroke-width: 2; }
+    .g-hogtalare { fill: none; stroke: rgba(255,255,255,.22); stroke-width: 2; }
+    .g-hus       { fill: #26231f; stroke: rgba(255,255,255,.2); stroke-width: 1.6; }
+    .g-lampa     { fill: var(--guld); }
+    .g-ramp      { fill: #fff3d0; }
+    .g-stralke   { fill: url(#gubbeLjus); }
+    .g-skugga    { fill: #000; opacity: .32; }
+    .g-mik       { fill: var(--dim); }
+    .g-mik-huvud { fill: var(--guld); }
+    .g-sladd     { stroke: var(--dim); stroke-width: 1.7; fill: none; opacity: .45; }
+    .b-ruta      { fill: #17170f; stroke: rgba(255,191,50,.5); stroke-width: 2; }
     .b-text {
       fill: var(--guld); font-family: 'DM Sans', sans-serif;
-      font-size: 13px; font-weight: 800; letter-spacing: .04em;
+      font-size: 10.5px; font-weight: 800;
     }
 
-    /* Spelas en gång när sektionen scrollas in */
-    .scen-gubbe.igang .gubbe { animation: g-spring 2.4s cubic-bezier(.4,0,.3,1) forwards; }
-    .scen-gubbe.igang .g-ben-v { animation: g-ben-v .34s steps(2) 0s 4 alternate; }
-    .scen-gubbe.igang .g-ben-h { animation: g-ben-h .34s steps(2) 0s 4 alternate; }
-    .scen-gubbe.igang .g-arm-v { animation: g-arm-v 2.4s cubic-bezier(.4,0,.3,1) forwards; }
-    .scen-gubbe.igang .g-arm-h { animation: g-arm-h 2.4s cubic-bezier(.4,0,.3,1) forwards; }
-    .scen-gubbe.igang .gubbe-bubbla { animation: g-bubbla 2.9s ease 2.3s forwards; }
+    /* Grundläge, gäller utan JS och vid reducerad rörelse: gubben står
+       färdig på scenen med mikrofonen uppe, ingenting rör sig. */
+    .g-entre { transform: translate(163px, 132px); }
+    .scen-gubbe .g-bubbla { opacity: 0; transform-origin: 102px 30px; }
 
-    @keyframes g-spring {
-      0%   { transform: translate(-34px, 128px); }
-      46%  { transform: translate(96px, 128px); }
-      62%  { transform: translate(126px, 88px); }
-      76%  { transform: translate(152px, 104px); }
-      84%  { transform: translate(152px, 99px); }
-      100% { transform: translate(152px, 104px); }
+    @media (prefers-reduced-motion: no-preference) {
+      .scen-gubbe.igang .g-podium     { animation: g-res .8s cubic-bezier(.2,.9,.3,1.25) both; }
+      .scen-gubbe.igang .g-ljus       { animation: g-tandas .7s ease .3s both,
+                                                   g-svaj 5.5s ease-in-out 1s infinite alternate; }
+      .scen-gubbe.igang .g-ljus-h     { animation-name: g-tandas, g-svaj-h; }
+      .scen-gubbe.igang .g-lampa,
+      .scen-gubbe.igang .g-ramp       { animation: g-blink .85s ease-in-out .5s infinite alternate; }
+      .scen-gubbe.igang .g-lada-grupp { animation: g-tryck .43s ease-in-out 2.2s infinite alternate; }
+      .scen-gubbe.igang .g-entre      { animation: g-entre 2.2s cubic-bezier(.35,0,.3,1) both; }
+      .scen-gubbe.igang .g-hopp       { animation: g-hopp 2.6s ease-in-out 2.2s infinite; }
+      .scen-gubbe.igang .g-kropp      { animation: g-studs 1.3s ease-in-out 2.2s infinite; }
+      .scen-gubbe.igang .g-skugga     { animation: g-skuggflytt 2.6s ease-in-out 2.2s infinite; }
+      .scen-gubbe.igang .g-ben-v      { animation: g-ben .32s ease-in-out infinite alternate; }
+      .scen-gubbe.igang .g-ben-h      { animation: g-ben .32s ease-in-out -.32s infinite alternate; }
+      .scen-gubbe.igang .g-arm-fri    { animation: g-arm-fri .43s ease-in-out infinite alternate; }
+      .scen-gubbe.igang .g-arm-mik    { animation: g-arm-mik .86s ease-in-out infinite alternate; }
+      .scen-gubbe.igang .g-huvud      { animation: g-nick .43s ease-in-out infinite alternate; }
+      .scen-gubbe.igang .g-bubbla     { animation: g-bubbla 6.5s ease 2.6s infinite; }
     }
-    .g-arm-v, .g-arm-h { transform-origin: 0px -32px; }
-    @keyframes g-arm-v { 0%,72% { transform: rotate(0deg); } 88%,100% { transform: rotate(58deg); } }
-    @keyframes g-arm-h { 0%,72% { transform: rotate(0deg); } 88%,100% { transform: rotate(-58deg); } }
-    .g-ben-v, .g-ben-h { transform-origin: 0px -14px; }
-    @keyframes g-ben-v { from { transform: rotate(-16deg); } to { transform: rotate(16deg); } }
-    @keyframes g-ben-h { from { transform: rotate(16deg); } to { transform: rotate(-16deg); } }
+
+    /* Scenen åker upp underifrån och strålkastarna tänds */
+    @keyframes g-res    { from { transform: translateY(54px); opacity: 0; } to { transform: none; opacity: 1; } }
+    @keyframes g-tandas { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes g-svaj   { from { transform: rotate(-3.5deg); } to { transform: rotate(2.5deg); } }
+    @keyframes g-svaj-h { from { transform: rotate(3.5deg); }  to { transform: rotate(-2.5deg); } }
+    @keyframes g-blink  { from { opacity: 1; } to { opacity: .35; } }
+    @keyframes g-tryck  { from { transform: none; } to { transform: scale(1.03, .96); } }
+
+    /* Springer in från vänster, tar sats och landar på scenen */
+    @keyframes g-entre {
+      0%, 10% { transform: translate(-36px, 154px); }
+      48%     { transform: translate(100px, 154px); }
+      62%     { transform: translate(130px, 104px); }
+      75%     { transform: translate(156px, 132px); }
+      83%     { transform: translate(156px, 126px); }
+      100%    { transform: translate(163px, 132px); }
+    }
+    /* Sedan hoppar han fram och tillbaka över scenen, för alltid */
+    @keyframes g-hopp {
+      0%, 50%, 100% { transform: none; }
+      12%  { transform: translate(-11px, -26px); }
+      25%  { transform: translate(-20px, 0); }
+      37%  { transform: translate(-10px, -24px); }
+      63%  { transform: translate(12px, -28px); }
+      75%  { transform: translate(20px, 0); }
+      88%  { transform: translate(11px, -24px); }
+    }
+    @keyframes g-skuggflytt {
+      0%, 50%, 100% { transform: none; opacity: .32; }
+      12%  { transform: translateX(-11px) scale(.6); opacity: .16; }
+      25%  { transform: translateX(-20px); opacity: .32; }
+      37%  { transform: translateX(-10px) scale(.62); opacity: .16; }
+      63%  { transform: translateX(12px) scale(.58); opacity: .15; }
+      75%  { transform: translateX(20px); opacity: .32; }
+      88%  { transform: translateX(11px) scale(.62); opacity: .16; }
+    }
+    /* Klämmer ihop sig i landningen och sträcker ut sig i luften */
+    @keyframes g-studs {
+      0%, 100% { transform: none; }
+      18% { transform: scale(.93, 1.08); }
+      50% { transform: scale(1.08, .9); }
+      70% { transform: scale(.96, 1.05); }
+    }
+    /* Benen står 23 grader isär. Slår de ut mer än så korsar de
+       varandra och gubben ser ut att ha ett enda ben. */
+    @keyframes g-ben     { from { transform: rotate(-19deg); } to { transform: rotate(19deg); } }
+    /* Samma sak med den fria armen: för stort utslag och den
+       lägger sig rakt ovanpå bålen. */
+    @keyframes g-arm-fri { from { transform: rotate(-26deg); } to { transform: rotate(30deg); } }
+    @keyframes g-arm-mik { from { transform: rotate(8deg); }   to { transform: rotate(-22deg); } }
+    @keyframes g-nick    { from { transform: none; } to { transform: translateY(-2px); } }
     @keyframes g-bubbla {
-      0%   { opacity: 0; transform: scale(.7); }
-      10%  { opacity: 1; transform: scale(1); }
-      78%  { opacity: 1; transform: scale(1); }
-      100% { opacity: 0; transform: scale(1); }
-    }
-
-    /* Utan rörelse: gubben står redan på scenen, inget hoppar */
-    @media (prefers-reduced-motion: reduce) {
-      .scen-gubbe .gubbe { transform: translate(152px, 104px); }
-      .scen-gubbe .g-arm-v { transform: rotate(58deg); }
-      .scen-gubbe .g-arm-h { transform: rotate(-58deg); }
-      .scen-gubbe.igang .gubbe,
-      .scen-gubbe.igang .g-ben-v, .scen-gubbe.igang .g-ben-h,
-      .scen-gubbe.igang .g-arm-v, .scen-gubbe.igang .g-arm-h,
-      .scen-gubbe.igang .gubbe-bubbla { animation: none; }
-      .scen-gubbe .gubbe-bubbla { opacity: 0; }
+      0%   { opacity: 0; transform: scale(.35); }
+      5%   { opacity: 1; transform: scale(1.08); }
+      9%, 40% { opacity: 1; transform: none; }
+      48%  { opacity: 0; transform: scale(.92); }
+      100% { opacity: 0; transform: scale(.35); }
     }
 
     .merit-lista { list-style: none; }
@@ -1265,23 +1323,90 @@
         </video>
       </div>
 
-      <!-- Liten detalj: streckgubben springer upp på scenen en gång -->
-      <div class="scen-gubbe" id="scenGubbe" aria-hidden="true">
-        <svg viewBox="0 0 230 150" role="presentation">
-          <rect class="g-scen" x="120" y="118" width="96" height="12" rx="4"/>
-          <g class="gubbe">
-            <circle class="g-linje" cx="0" cy="-48" r="9"/>
-            <line class="g-linje" x1="0" y1="-39" x2="0" y2="-14"/>
-            <line class="g-linje g-arm-v" x1="0" y1="-32" x2="-14" y2="-19"/>
-            <line class="g-linje g-arm-h" x1="0" y1="-32" x2="14" y2="-19"/>
-            <line class="g-linje g-ben-v" x1="0" y1="-14" x2="-9" y2="0"/>
-            <line class="g-linje g-ben-h" x1="0" y1="-14" x2="9" y2="0"/>
+      <!-- Liten detalj: streckgubben springer upp på scenen och hoppar runt.
+           Varje rörlig del ligger i en egen grupp, för en CSS-transform
+           skriver över SVG:ns egen transform-attribut helt. -->
+      <div class="scen-gubbe" id="scenGubbe" aria-hidden="true" title="Klicka så tar han det igen">
+        <svg viewBox="0 0 300 162" role="presentation">
+          <defs>
+            <linearGradient id="gubbeLjus" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#ffbf32" stop-opacity=".17"/>
+              <stop offset="1" stop-color="#ffbf32" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+
+          <!-- Ljusrigg att hänga lamporna i -->
+          <g class="g-truss">
+            <line x1="52" y1="5" x2="268" y2="5"/>
+            <line x1="52" y1="14" x2="268" y2="14"/>
+            <path d="M52 14 L66 5 L80 14 L94 5 L108 14 L122 5 L136 14 L150 5 L164 14
+                     L178 5 L192 14 L206 5 L220 14 L234 5 L248 14 L262 5 L268 9"/>
           </g>
-          <g class="gubbe-bubbla">
-            <rect class="b-ruta" x="120" y="16" width="104" height="34" rx="10"/>
-            <path class="b-ruta" d="M150 50 l-9 12 l19 -12 z"/>
-            <text class="b-text" id="gubbeText" x="172" y="38" text-anchor="middle">TACK!</text>
+
+          <!-- Två strålkastare som svajar över scenen -->
+          <g transform="translate(100,14)"><g class="g-ljus">
+            <path class="g-stralke" d="M0 11 L30 118 L96 118 Z"/>
+            <path class="g-hus" d="M-9 -2 L9 -2 L6 10 L-6 10 Z"/>
+            <circle class="g-lampa" cx="0" cy="10" r="3.2"/>
+          </g></g>
+          <g transform="translate(224,14)"><g class="g-ljus g-ljus-h">
+            <path class="g-stralke" d="M0 11 L-96 118 L-30 118 Z"/>
+            <path class="g-hus" d="M-9 -2 L9 -2 L6 10 L-6 10 Z"/>
+            <circle class="g-lampa" cx="0" cy="10" r="3.2"/>
+          </g></g>
+
+          <line class="g-golv" x1="26" y1="154" x2="274" y2="154"/>
+
+          <!-- Högtalare som pumpar i takt -->
+          <g transform="translate(54,154)"><g class="g-lada-grupp">
+            <rect class="g-lada" x="-13" y="-46" width="26" height="46" rx="3"/>
+            <circle class="g-hogtalare" cx="0" cy="-30" r="7.5"/>
+            <circle class="g-hogtalare" cx="0" cy="-12" r="4"/>
+          </g></g>
+          <g transform="translate(262,154)"><g class="g-lada-grupp">
+            <rect class="g-lada" x="-13" y="-46" width="26" height="46" rx="3"/>
+            <circle class="g-hogtalare" cx="0" cy="-30" r="7.5"/>
+            <circle class="g-hogtalare" cx="0" cy="-12" r="4"/>
+          </g></g>
+
+          <!-- Scenen åker upp underifrån -->
+          <g class="g-podium">
+            <rect class="g-kjol" x="98" y="141" width="130" height="13" rx="2"/>
+            <rect class="g-plank" x="92" y="132" width="142" height="9" rx="4.5"/>
+            <circle class="g-ramp" cx="114" cy="131" r="2.8"/>
+            <circle class="g-ramp" cx="163" cy="131" r="2.8" style="animation-delay:.68s"/>
+            <circle class="g-ramp" cx="212" cy="131" r="2.8" style="animation-delay:.34s"/>
           </g>
+
+          <g class="g-entre">
+            <ellipse class="g-skugga" cx="0" cy="3" rx="15" ry="3.4"/>
+            <g class="g-hopp"><g class="g-kropp">
+              <g transform="translate(0,-24)">
+                <line class="g-linje g-ben-v" x1="0" y1="0" x2="-10" y2="24"/>
+                <line class="g-linje g-ben-h" x1="0" y1="0" x2="10" y2="24"/>
+              </g>
+              <line class="g-linje" x1="0" y1="-24" x2="0" y2="-52"/>
+              <g transform="translate(0,-47)">
+                <g class="g-arm-fri"><line class="g-linje" x1="0" y1="0" x2="-18" y2="13"/></g>
+                <g class="g-arm-mik">
+                  <line class="g-linje" x1="0" y1="0" x2="17" y2="-4"/>
+                  <!-- Mikrofonen: kapsel överst, smalt skaft, sladd som hänger -->
+                  <g transform="translate(17,-4) rotate(-8)">
+                    <path class="g-sladd" d="M0 1 q 6 7 0 12 q -6 5 0 10"/>
+                    <rect class="g-mik" x="-1.8" y="-9" width="3.6" height="10" rx="1.8"/>
+                    <rect class="g-mik-huvud" x="-3.6" y="-16.5" width="7.2" height="9.5" rx="3.6"/>
+                  </g>
+                </g>
+              </g>
+              <g class="g-huvud"><circle class="g-linje" cx="0" cy="-64" r="10"/></g>
+            </g></g>
+          </g>
+
+          <g transform="translate(14,28)"><g class="g-bubbla">
+            <path class="b-ruta" d="M84 30 L132 51 L104 30 Z"/>
+            <rect class="b-ruta" x="0" y="0" width="110" height="32" rx="11"/>
+            <text class="b-text" id="gubbeText" x="55" y="20" text-anchor="middle">TACK!</text>
+          </g></g>
         </svg>
       </div>
     </div>
@@ -1981,21 +2106,41 @@
   })();
 
 
-  // ── STRECKGUBBEN: spelas en gång när sektionen syns ──
+  // ── STRECKGUBBEN: entrén spelas när han syns, sen hoppar han vidare ──
   (function() {
     var ruta = document.getElementById('scenGubbe');
     var text = document.getElementById('gubbeText');
     if (!ruta || !text) return;
+
     var rader = ['TACK!', 'ÄR NI MED?', 'APPLÅD TACK', 'EN SISTA GREJ...'];
-    text.textContent = rader[Math.floor(Math.random() * rader.length)];
+    var i = Math.floor(Math.random() * rader.length);
+    text.textContent = rader[i];
+
+    // Ny replik varje gång bubblan har varit inne ett varv
+    var bubbla = ruta.querySelector('.g-bubbla');
+    if (bubbla) bubbla.addEventListener('animationiteration', function() {
+      i = (i + 1) % rader.length;
+      text.textContent = rader[i];
+    });
+
+    function kor() {
+      ruta.classList.remove('igang');
+      void ruta.offsetWidth;       // tvingar fram en omstart av animationerna
+      ruta.classList.add('igang');
+    }
+
+    // Kräver att han är rejält i bild, annars hinner entrén spelas
+    // klart nere under klippet innan man har scrollat dit.
     var obs = new IntersectionObserver(function(poster) {
       poster.forEach(function(p) {
         if (!p.isIntersecting) return;
-        ruta.classList.add('igang');
-        obs.disconnect();          // en gång, aldrig mer
+        kor();
+        obs.disconnect();
       });
-    }, { threshold: 0.4 });
+    }, { threshold: 0.75 });
     obs.observe(ruta);
+
+    ruta.addEventListener('click', kor);   // klick spelar entrén igen
   })();
 
   // ── KAKBURKEN ──────────────────────────────────────
