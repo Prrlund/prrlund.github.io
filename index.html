@@ -2125,8 +2125,10 @@
     var text = document.getElementById('gubbeText');
     if (!ruta || !text) return;
 
-    var rader = ['TACK!', 'PÄR HÄR, HEJ', 'APPLÅD TACK', 'EN SISTA GREJ...'];
-    var i = Math.floor(Math.random() * rader.length);
+    // Presentationen han håller, i ordning. Hälsningen ligger först
+    // och ska alltid vara den man ser när gubben kommer in.
+    var rader = ['PÄR HÄR, HEJ', 'HALLÅ HALLÅ', 'EN VARM APPLÅD', 'BOKA MIG', 'TACK OCH HEJ'];
+    var i = 0;
     text.textContent = rader[i];
 
     // Ny replik varje gång bubblan har varit inne ett varv
@@ -2137,6 +2139,8 @@
     });
 
     function kor() {
+      i = 0;                       // entrén börjar alltid om från hälsningen
+      text.textContent = rader[i];
       ruta.classList.remove('igang');
       void ruta.offsetWidth;       // tvingar fram en omstart av animationerna
       ruta.classList.add('igang');
