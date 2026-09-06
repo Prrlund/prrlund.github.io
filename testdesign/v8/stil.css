@@ -338,7 +338,7 @@ main { max-width: var(--bredd); margin-inline: auto; }
   --accent-text: #8a5321;
   --yta: #ffffff;
   --band-mork: #141210;
-  --kantfarg: #e2dbcc;
+  --kantfarg: #ded8d0;
   --kant-falt: #918878;
   --ph-botten: #f0eade;
   --ph-strimma: rgba(20,18,16,.06);
@@ -566,3 +566,4 @@ main { max-width: none; padding-inline: 0; }
   .modul-cta { margin-top: 7px; }
   .kanalrad-lank { width: 40px; height: 40px; }
 }
+
