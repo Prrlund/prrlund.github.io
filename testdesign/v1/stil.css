@@ -1,0 +1,460 @@
+/* v1  Filmrulle  ·  Neutral chrome, mörk */
+
+/* ── GRUND ───────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  background: var(--botten);
+  color: var(--text);
+  font-family: var(--brod);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+img, svg, video, iframe { display: block; max-width: 100%; }
+img { height: auto; }
+a { color: inherit; }
+h1, h2, h3 { font-family: var(--rubrik); line-height: 1.08; font-weight: 700; }
+ul, ol, dl { list-style: none; padding: 0; }
+button, input, textarea { font: inherit; color: inherit; }
+
+/* Tangentbord ska alltid synas */
+:focus-visible {
+  outline: 3px solid var(--accent-text);
+  outline-offset: 3px;
+}
+
+.hoppa {
+  position: absolute; left: -9999px;
+  background: var(--accent-text); color: var(--botten);
+  padding: 12px 20px; z-index: 100; border-radius: 6px;
+}
+.hoppa:focus { left: 12px; top: 12px; }
+
+/* ── SIDBREDD ────────────────────────────────────────────── */
+.topp, main, .sidfot { padding-inline: var(--kant); }
+main { max-width: var(--bredd); margin-inline: auto; }
+.sektion-smal { max-width: 620px; margin-inline: auto; }
+
+/* ── TOPP ────────────────────────────────────────────────── */
+.topp {
+  max-width: var(--bredd); margin-inline: auto;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; padding-block: 14px;
+}
+.logo {
+  font-family: var(--rubrik); font-weight: 800;
+  font-size: 1.25rem; letter-spacing: -.03em; text-decoration: none;
+}
+.topp-nav { display: flex; gap: 4px; }
+.topp-nav a {
+  text-decoration: none; font-size: .85rem; font-weight: 600;
+  padding: 8px 12px; border-radius: var(--rund-liten);
+  color: var(--dampat);
+}
+.topp-nav a[aria-current] { color: var(--text); }
+
+/* ── PLATSHÅLLARE ────────────────────────────────────────── */
+.ph-bild {
+  position: relative; aspect-ratio: var(--fh, 16 / 9);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 6px;
+  text-align: center; padding: 14px;
+  background:
+    repeating-linear-gradient(135deg,
+      var(--ph-strimma) 0 6px, transparent 6px 14px),
+    var(--ph-botten);
+  border: 1px dashed var(--ph-kant);
+  border-radius: var(--rund);
+  overflow: hidden;
+}
+.ph-rund { border-radius: 50%; }
+/* En liten rund ram rymmer varken pillret eller texten. Märkningen
+   flyttas ut under bilden i stället för att klippas sönder. */
+.ph-rund .ph-tagg, .ph-rund .ph-text { display: none; }
+.ph-under {
+  margin-top: 6px; text-align: center;
+  font-size: .5rem; font-weight: 800; letter-spacing: .05em;
+  text-transform: uppercase; color: var(--accent-text);
+}
+.ph-text { font-size: .78rem; color: var(--dampat); max-width: 90%; }
+.ph-tagg {
+  font-size: .58rem; font-weight: 800; letter-spacing: .16em;
+  text-transform: uppercase;
+  padding: 4px 9px; border-radius: 100px;
+  background: var(--accent-text); color: var(--botten);
+}
+.ph-tagg-liten {
+  display: inline-block; margin-left: 8px;
+  font-size: .52rem; padding: 3px 7px; vertical-align: 2px;
+}
+
+/* ── HERO ────────────────────────────────────────────────── */
+.hero { padding-block: var(--luft-hero); }
+.etikett {
+  font-size: .7rem; font-weight: 800; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--accent-text);
+  margin-bottom: 14px;
+}
+.hero-titel { font-size: var(--h1); letter-spacing: -.035em; }
+.hero-ingress {
+  margin-top: 18px; color: var(--dampat);
+  font-size: 1.02rem; max-width: 46ch;
+}
+
+/* ── SEKTIONER ───────────────────────────────────────────── */
+.sektion { padding-block: var(--luft); }
+.sektion-huvud { margin-bottom: var(--luft-huvud); }
+.sektion-etikett {
+  font-size: .7rem; font-weight: 800; letter-spacing: .2em;
+  text-transform: uppercase; color: var(--accent-text); margin-bottom: 10px;
+}
+.sektion-titel { font-size: var(--h2); letter-spacing: -.03em; }
+.sektion-ingress { margin-top: 12px; color: var(--dampat); max-width: 52ch; }
+
+/* ── FÖRSTORINGSGLAS ─────────────────────────────────────── */
+.lins {
+  width: 100%; height: 100%;
+  fill: none; stroke: currentColor;
+  stroke-width: 2; stroke-linecap: round;
+}
+
+/* ── KNAPPAR ─────────────────────────────────────────────── */
+.knapp {
+  display: inline-block; text-decoration: none;
+  font-weight: 700; font-size: .92rem;
+  padding: 14px 26px; border-radius: var(--rund-knapp);
+  border: 1px solid var(--kant-falt);
+  cursor: pointer; background: transparent;
+  transition: transform .18s ease, background .18s ease,
+              border-color .18s ease, color .18s ease;
+}
+.knapp-primar {
+  background: var(--accent-text); color: var(--botten);
+  border-color: var(--accent-text);
+}
+
+/* ── FORMULÄR ────────────────────────────────────────────── */
+.kontakt-form { display: grid; gap: 16px; }
+.falt { display: grid; gap: 7px; }
+.falt label { font-size: .78rem; font-weight: 700; color: var(--dampat); }
+.falt input, .falt textarea {
+  background: var(--yta); border: 1px solid var(--kant-falt);
+  border-radius: var(--rund-liten); padding: 13px 15px;
+  width: 100%; resize: vertical;
+}
+.falt input:focus, .falt textarea:focus { border-color: var(--accent-text); }
+.form-not { font-size: .76rem; color: var(--dampat); }
+.kontakt-form .knapp { justify-self: start; }
+
+/* ── VLOGG ───────────────────────────────────────────────── */
+.vlogg {
+  position: relative; aspect-ratio: 16 / 9;
+  border-radius: var(--rund); overflow: hidden;
+  background: #000; border: 1px solid var(--kantfarg);
+}
+.vlogg img, .vlogg iframe { width: 100%; height: 100%; object-fit: cover; border: 0; }
+.vlogg-spela {
+  position: absolute; inset: 0; margin: auto;
+  width: 68px; height: 68px; border-radius: 50%;
+  border: 0; cursor: pointer;
+  background: var(--accent-text); color: var(--botten);
+  display: grid; place-items: center;
+  transition: transform .2s ease;
+}
+.vlogg-spela svg { width: 26px; height: 26px; fill: currentColor; margin-left: 3px; }
+.vlogg-titel { margin-top: 14px; font-weight: 700; }
+
+/* ── SIDFOT ──────────────────────────────────────────────── */
+.sidfot {
+  max-width: var(--bredd); margin-inline: auto;
+  margin-top: var(--luft); padding-block: 28px;
+  border-top: 1px solid var(--kantfarg);
+  display: flex; flex-wrap: wrap; gap: 12px 22px;
+  align-items: center; justify-content: space-between;
+  font-size: .8rem; color: var(--dampat);
+}
+.sidfot-rad { display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: baseline; }
+.sidfot-namn { font-family: var(--rubrik); font-weight: 800; color: var(--text); }
+.sidfot-nav { display: flex; gap: 18px; }
+.sidfot-nav a { text-decoration: none; }
+
+/* ── RÖRELSE ─────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+
+
+:root {
+  --botten: #0a0a0a;
+  --text: #f5f3ef;
+  --dampat: #9a9691;
+  --accent: #c1602f;
+  --accent-text: #d97a45;
+  --yta: #141312;
+  --kantfarg: rgba(245,243,239,.15);
+  --kant-falt: #6e6963;
+  --ph-botten: #131211;
+  --ph-strimma: rgba(245,243,239,.05);
+  --ph-kant: rgba(245,243,239,.22);
+
+  --rubrik: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
+  --brod: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
+
+  --bredd: 1060px;
+  --kant: 20px;
+  --rund: 4px;
+  --rund-liten: 3px;
+  --rund-knapp: 2px;
+
+  --h1: clamp(1.95rem, 7.6vw, 3.7rem);
+  --h2: clamp(1.55rem, 5vw, 2.5rem);
+  --luft: clamp(56px, 9vw, 100px);
+  --luft-hero: clamp(22px, 5vw, 52px);
+  --luft-huvud: clamp(26px, 4vw, 44px);
+}
+
+h1, h2, .logo { font-variation-settings: 'wdth' 90; }
+.hero-titel { text-wrap: balance; }
+
+.topp { border-bottom: 1px solid var(--kantfarg); }
+.topp-nav a { letter-spacing: .06em; text-transform: uppercase; font-size: .74rem; }
+.topp-nav a:hover { color: var(--accent-text); }
+
+/* Hero: litet porträtt, texten bär */
+.hero { display: grid; gap: 18px; }
+.hero-portratt { width: 84px; }
+.hero-portratt .ph-bild { border-style: solid; border-color: var(--kantfarg); }
+.etikett::before {
+  content: ''; display: inline-block; vertical-align: middle;
+  width: 26px; height: 1px; background: var(--accent); margin-right: 10px;
+}
+
+/* Två vägar */
+.vagar { display: grid; gap: 14px; padding-bottom: var(--luft); }
+.modul {
+  display: block; text-decoration: none;
+  border: 1px solid var(--kantfarg); border-radius: var(--rund);
+  padding: 16px; transition: border-color .2s ease, background .2s ease;
+}
+.modul:hover { border-color: var(--accent); background: var(--yta); }
+.modul-etikett {
+  display: block; font-size: .66rem; font-weight: 800;
+  letter-spacing: .2em; text-transform: uppercase;
+  color: var(--accent-text); margin-bottom: 12px;
+}
+.modul-bild {
+  position: relative; border-radius: var(--rund);
+  overflow: hidden; margin-bottom: 14px; background: #000;
+}
+.modul-bild img { width: 100%; aspect-ratio: 16/9; object-fit: cover; }
+.modul-bild::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,.55));
+}
+.modul-spela {
+  position: absolute; inset: 0; margin: auto; z-index: 2;
+  width: 54px; height: 54px; border-radius: 50%;
+  background: var(--accent-text); color: #0a0a0a;
+  display: grid; place-items: center;
+}
+.modul-spela svg { width: 20px; height: 20px; fill: currentColor; margin-left: 3px; }
+.modul-titel { font-size: 1.3rem; letter-spacing: -.02em; }
+.modul-liten .modul-titel { font-size: 1.12rem; }
+.modul-text { margin-top: 8px; color: var(--dampat); font-size: .92rem; }
+.modul-cta {
+  display: inline-block; margin-top: 14px;
+  font-size: .82rem; font-weight: 700; color: var(--accent-text);
+}
+.modul-cta::after { content: ' →'; }
+
+/* Sektioner delas av hårlinjer */
+.sektion + .sektion { border-top: 1px solid var(--kantfarg); }
+.sektion-titel { text-wrap: balance; }
+
+/* Process som en numrerad remsa */
+.process { display: grid; gap: 0; }
+.steg {
+  position: relative; padding: 20px 0 20px 54px;
+  border-top: 1px solid var(--kantfarg);
+}
+.steg:last-child { border-bottom: 1px solid var(--kantfarg); }
+.steg-nr {
+  position: absolute; left: 0; top: 20px;
+  font-size: .72rem; font-weight: 800; letter-spacing: .1em;
+  color: var(--accent-text);
+}
+.steg-lins {
+  position: absolute; left: 26px; top: 19px;
+  width: 15px; height: 15px; color: var(--dampat);
+}
+.steg-titel { font-size: 1.12rem; margin-bottom: 5px; }
+.steg-text { color: var(--dampat); font-size: .93rem; }
+
+/* Portfolio: filmremsa som rullar i sidled */
+.portfolio {
+  display: grid; grid-auto-flow: column;
+  grid-auto-columns: 63%; gap: 12px;
+  overflow-x: auto; scroll-snap-type: x mandatory;
+  padding-bottom: 14px; margin-inline: calc(var(--kant) * -1);
+  padding-inline: var(--kant);
+  scrollbar-width: thin;
+}
+.jobb { scroll-snap-align: start; }
+.jobb-bild {
+  position: relative; border-radius: var(--rund);
+  overflow: hidden; border: 1px solid var(--kantfarg);
+}
+.jobb-info { padding-top: 12px; }
+.jobb-namn { font-size: 1.02rem; }
+.jobb-typ {
+  font-size: .68rem; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--dampat); margin-top: 4px;
+}
+.jobb-siffra { margin-top: 8px; font-size: .86rem; color: var(--dampat); }
+.jobb-siffra strong {
+  font-family: var(--rubrik); font-size: 1.35rem;
+  color: var(--accent-text); margin-right: 5px;
+  font-variation-settings: 'wdth' 90;
+}
+
+/* Paket */
+.paket { display: grid; gap: 14px; }
+.paket-kort {
+  position: relative; border: 1px solid var(--kantfarg);
+  border-radius: var(--rund); padding: 24px 20px;
+}
+.paket-kort-markerad { border-color: var(--accent); }
+.paket-flagga {
+  position: absolute; top: -9px; left: 20px;
+  font-size: .58rem; font-weight: 800; letter-spacing: .16em;
+  text-transform: uppercase; padding: 3px 10px;
+  background: var(--accent); color: #0a0a0a;
+}
+.paket-namn { font-size: 1.15rem; }
+.paket-pris { margin-top: 6px; color: var(--dampat); font-size: .88rem; }
+.paket-pris strong {
+  font-family: var(--rubrik); font-size: 1.9rem; color: var(--text);
+  font-variation-settings: 'wdth' 90; margin-right: 4px;
+}
+.paket-lista { margin: 18px 0 22px; display: grid; gap: 9px; }
+.paket-lista li {
+  position: relative; padding-left: 18px;
+  font-size: .91rem; color: var(--dampat);
+}
+.paket-lista li::before {
+  content: ''; position: absolute; left: 0; top: .62em;
+  width: 7px; height: 1px; background: var(--accent);
+}
+
+/* Status */
+.status {
+  display: flex; gap: 12px; align-items: flex-start;
+  border: 1px solid var(--kantfarg); border-left: 2px solid var(--accent);
+  padding: 18px 20px;
+}
+.status-prick {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--accent); margin-top: .5em; flex-shrink: 0;
+}
+.status-text { font-size: .93rem; color: var(--dampat); }
+.status-text strong { color: var(--text); }
+
+/* Journey */
+.vlogg { border-radius: var(--rund); }
+.tidslinje { display: grid; gap: 0; }
+.tid {
+  position: relative; padding: 20px 0 20px 26px;
+  border-top: 1px solid var(--kantfarg);
+}
+.tid:last-child { border-bottom: 1px solid var(--kantfarg); }
+.tid-punkt {
+  position: absolute; left: 0; top: 27px;
+  width: 9px; height: 9px; border-radius: 50%;
+  border: 1px solid var(--accent);
+}
+.tid:last-child .tid-punkt { background: var(--accent); }
+.tid-ar {
+  font-size: .66rem; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--accent-text); margin-bottom: 5px;
+}
+.tid-plats { font-size: 1.2rem; margin-bottom: 5px; }
+.tid-text { color: var(--dampat); font-size: .93rem; }
+
+.lexikon { display: grid; gap: 0; }
+.ord { padding: 16px 0; border-top: 1px solid var(--kantfarg); }
+.ord:last-child { border-bottom: 1px solid var(--kantfarg); }
+.ord-namn { font-family: var(--rubrik); font-weight: 800; font-size: 1.05rem; }
+.ord-def { color: var(--dampat); font-size: .93rem; margin-top: 3px; }
+
+.folj { display: grid; gap: 10px; }
+.folj-lank {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 14px; text-decoration: none;
+  padding: 15px 18px; border: 1px solid var(--kantfarg);
+  border-radius: var(--rund);
+  transition: border-color .2s ease, background .2s ease;
+}
+.folj-lank:hover { border-color: var(--accent); background: var(--yta); }
+.folj-namn { font-family: var(--rubrik); font-weight: 700; }
+.folj-handle { font-size: .84rem; color: var(--dampat); }
+
+.knapp:hover { border-color: var(--accent-text); color: var(--accent-text); }
+.knapp-primar:hover { background: var(--accent); border-color: var(--accent); color: #0a0a0a; }
+
+/* ── STÖRRE SKÄRMAR ──────────────────────────────────────── */
+@media (min-width: 700px) {
+  .hero { grid-template-columns: 108px 1fr; align-items: center; gap: 28px; }
+  .hero-portratt { width: 108px; }
+  .vagar { grid-template-columns: 1.55fr 1fr; align-items: start; }
+  .modul { padding: 20px; }
+  .modul-liten { align-self: stretch; display: flex; flex-direction: column; }
+  .modul-liten .modul-cta { margin-top: auto; padding-top: 20px; }
+  .process { grid-template-columns: 1fr 1fr; column-gap: 40px; }
+  .portfolio {
+    grid-auto-flow: row; grid-template-columns: repeat(4, 1fr);
+    overflow: visible; margin-inline: 0; padding-inline: 0;
+  }
+  .paket { grid-template-columns: 1fr 1fr; }
+  .lexikon { grid-template-columns: 1fr 1fr; column-gap: 40px; }
+  .folj { grid-template-columns: 1fr 1fr; }
+  .hero-sida { grid-template-columns: 1fr .8fr; gap: 40px; }
+  .hero-sida .hero-portratt { width: 100%; }
+  .hero-journey { grid-template-columns: 1fr; }
+}
+
+
+/* ── MOBIL: får plats ovanför vecket ────────────────────── */
+@media (max-width: 699px) {
+  .topp { padding-block: 8px; }
+
+  .hero:not(.hero-sida) {
+    grid-template-columns: 76px 1fr;
+    column-gap: 14px; row-gap: 10px;
+    align-items: center;
+    padding-block: 14px 18px;
+  }
+  .hero:not(.hero-sida) .hero-text { display: contents; }
+  .hero:not(.hero-sida) .hero-portratt { grid-column: 1; grid-row: 1; width: 76px; }
+  .hero:not(.hero-sida) .etikett { grid-column: 2; grid-row: 1; margin-bottom: 0; }
+  /* Rubriken ska rymmas på två rader oavsett typsnitt, annars
+     trycks den andra modulen under vecket. */
+  .hero:not(.hero-sida) .hero-titel {
+    grid-column: 1 / -1; grid-row: 2;
+    font-size: clamp(1.45rem, 6.5vw, 1.75rem);
+  }
+
+  .vagar { gap: 8px; }
+  .modul { padding: 12px; }
+  .modul-etikett { margin-bottom: 7px; }
+  .modul-bild { margin-bottom: 9px; }
+  .modul-bild img { aspect-ratio: 2.15 / 1; }
+  .modul-titel { font-size: 1.14rem; }
+  .modul-text { margin-top: 6px; font-size: .88rem; }
+  .modul-cta { margin-top: 8px; }
+}
