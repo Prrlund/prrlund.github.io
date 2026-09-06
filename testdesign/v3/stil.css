@@ -317,8 +317,9 @@ main { max-width: var(--bredd); margin-inline: auto; }
   .sidfot-kaknot { grid-column: 1 / -1; margin-top: -14px; }
 }
 
-/* Fast list längs kanten, som på riktigt stora skärmar */
-@media (min-width: 1180px) {
+/* Fast list längs kanten. Först vid 1320 px finns marginal nog
+   att lägga den där utan att den täcker innehållet. */
+@media (min-width: 1320px) {
   .kanallist {
     display: flex; flex-direction: column; gap: 4px;
     position: fixed; left: 10px; top: 50%; transform: translateY(-50%);
